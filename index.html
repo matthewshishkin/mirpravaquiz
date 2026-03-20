@@ -1,0 +1,464 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Майнур Мир Права — Юридическая защита медицинских клиник</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <!-- ╔══════════════════════════════╗ -->
+  <!-- ║          HEADER              ║ -->
+  <!-- ╚══════════════════════════════╝ -->
+  <header class="site-header" id="siteHeader">
+    <div class="container header-inner">
+      <div class="header-logo">МИР ПРАВА</div>
+      <button class="btn btn-header" onclick="openModal()">Выявить риски</button>
+    </div>
+  </header>
+
+  <!-- ╔══════════════════════════════╗ -->
+  <!-- ║        БЛОК 1: HERO          ║ -->
+  <!-- ╚══════════════════════════════╝ -->
+  <section class="hero hero--video">
+    <!-- Фоновое видео -->
+    <video class="hero-video" autoplay muted loop playsinline>
+      <source src="hero15.mp4" type="video/mp4">
+    </video>
+    <!-- Тёмный оверлей + шум -->
+    <div class="hero-overlay"></div>
+    <!-- Контент -->
+    <div class="container hero-content-wrap">
+      <div class="hero-content">
+        <h1 class="hero-title">Запишитесь на разбор рисков клиники<br>и узнайте, как избежать штрафа в 10,000,000&#8376;<br>с учётом законодательства 2026 года,<br>даже если у вас уже есть юрист:</h1>
+<button class="btn hero-btn" onclick="openModal()">Выявить риски</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ╔══════════════════════════════════════╗ -->
+  <!-- ║  БЛОК 2: ЧАСТОТА ПОПРАВОК           ║ -->
+  <!-- ╚══════════════════════════════════════╝ -->
+  <section class="section law-section">
+    <div class="container">
+      <h2 class="section-title">Вот как меняется законодательство в&nbsp;РК<br>в&nbsp;сфере медицины</h2>
+      <p class="section-sub">Работа с контрагентами, договоры с врачами и проверки регуляторов — всё это регулярно обновляется</p>
+      <div class="law-cards">
+        <div class="law-card" data-delay="0">
+          <div class="law-freq">1 раз в квартал</div>
+          <h3>Контрагенты</h3>
+          <p>Изменения в требованиях к договорам с поставщиками и подрядчиками медицинских услуг</p>
+        </div>
+        <div class="law-card" data-delay="150">
+          <div class="law-freq">1 раз в квартал</div>
+          <h3>Договоры с врачами</h3>
+          <p>Обновление трудового законодательства в части оформления медицинского персонала</p>
+        </div>
+        <div class="law-card" data-delay="300">
+          <div class="law-freq">≥ 1 раза в год</div>
+          <h3>Проверки инстанций</h3>
+          <p>От 1 инстанции ежегодно: ДКЗПП, Минздрав, трудовая инспекция и иные органы</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ╔══════════════════════════════════╗ -->
+  <!-- ║  БЛОК 3: РИСКИ КЛИНИК           ║ -->
+  <!-- ╚══════════════════════════════════╝ -->
+  <section class="section risk-section">
+    <div class="container">
+      <h2 class="section-title">Какие риски несут медицинские клиники,<br>оперативно не внедряя новое законодательство</h2>
+      <p class="section-sub">Вот что вас ждёт, если не внести своевременно изменения во все договоры</p>
+      <div class="risk-cards">
+
+        <div class="risk-card">
+          <div class="risk-label">Риск 1</div>
+          <h3>Проверка ДКЗПП без подготовки</h3>
+          <div class="risk-fine">ШТРАФ: до 3&nbsp;000 МРП ≈ 10&nbsp;млн&nbsp;₸</div>
+          <p>Документация не соответствует требованиям — предписание, штраф, приостановка работы кабинетов. Проверка может прийти в любой момент без предупреждения.</p>
+          <div class="risk-consequence">→ Риск приостановки или отзыва лицензии</div>
+        </div>
+
+        <div class="risk-card">
+          <div class="risk-label">Риск 2</div>
+          <h3>Иск пациента за врачебную ошибку</h3>
+          <div class="risk-fine">УБЫТОК: 1–15&nbsp;млн&nbsp;₸ + судебные издержки</div>
+          <p>Пациент подаёт претензию → клиника отвечает сама → усугубляет ситуацию. Одна неправильная фраза в ответе на претензию — и суд на стороне пациента.</p>
+          <div class="risk-consequence">→ Компенсация + репутационный удар</div>
+        </div>
+
+        <div class="risk-card">
+          <div class="risk-label">Риск 3</div>
+          <h3>Незаконное увольнение медработника</h3>
+          <div class="risk-fine">УБЫТОК: до 8&nbsp;400&nbsp;000&nbsp;₸</div>
+          <p>Суд восстанавливает сотрудника, обязывает выплатить зарплату за всё время вынужденного прогула плюс моральный вред. Чаще всего — ошибки в кадровых документах.</p>
+          <div class="risk-consequence">→ Принудительное восстановление + выплата</div>
+        </div>
+
+        <div class="risk-card">
+          <div class="risk-label">Риск 4</div>
+          <h3>Договоры с пациентами не защищают клинику</h3>
+          <div class="risk-fine">РИСК: проигрыш 9 из 10 споров</div>
+          <p>Типовой договор из интернета не учитывает законодательство РК 2025 года. Суд встаёт на сторону пациента из-за пробелов и некорректных формулировок.</p>
+          <div class="risk-consequence">→ Любой иск пациента — потенциальный проигрыш</div>
+        </div>
+
+        <div class="risk-card">
+          <div class="risk-label">Риск 5</div>
+          <h3>Нарушения в кадровой документации</h3>
+          <div class="risk-fine">ШТРАФ: до 1&nbsp;500 МРП за каждое нарушение</div>
+          <p>Сменные графики, переработки, медкнижки, трудовые договоры — каждый документ под риском проверки. Нарушения систематические, штрафы накапливаются.</p>
+          <div class="risk-consequence">→ Регулярные штрафы + судебные иски от персонала</div>
+        </div>
+
+        <div class="risk-card">
+          <div class="risk-label">Риск 6</div>
+          <h3>Работа по ОСМС без правовой поддержки</h3>
+          <div class="risk-fine">РИСК: возврат выплат + штрафные санкции</div>
+          <p>Изменения 2025 года в условиях работы с ФОМС — большинство клиник ещё не адаптировали документы. Фонд требует возврата уже выплаченных средств.</p>
+          <div class="risk-consequence">→ Претензии от фонда + финансовые потери</div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ╔══════════════════════════════════════╗ -->
+  <!-- ║  БЛОК 5: ТЕХНОЛОГИЯ МОНИТОРИНГА     ║ -->
+  <!-- ╚══════════════════════════════════════╝ -->
+  <section class="section monitoring-section">
+    <div class="container">
+      <h2 class="section-title monitoring-big-title">За счёт чего мы оперативно<br>отслеживаем изменения в&nbsp;законодательстве?</h2>
+      <p class="section-sub">У нас выстроена автоматическая выгрузка обновлений законодательства, которая через 10 минут поступает в нашу CRM&nbsp;— как только закон вышел, мы его сразу внедряем в вашу юридическую систему</p>
+      <div class="flow">
+        <div class="flow-step">
+          <div class="flow-icon">📜</div>
+          <div class="flow-text">Вступили изменения в законодательство</div>
+        </div>
+        <div class="flow-arrow">→</div>
+        <div class="flow-step">
+          <div class="flow-icon">⚡</div>
+          <div class="flow-text">Через 10 минут мы об этом узнали</div>
+        </div>
+        <div class="flow-arrow">→</div>
+        <div class="flow-step">
+          <div class="flow-icon">🔔</div>
+          <div class="flow-text">Предварительно уведомили вас</div>
+        </div>
+        <div class="flow-arrow">→</div>
+        <div class="flow-step">
+          <div class="flow-icon">⚙️</div>
+          <div class="flow-text">В течение 24 часов внедрили изменения в ваш проект</div>
+        </div>
+        <div class="flow-arrow">→</div>
+        <div class="flow-step">
+          <div class="flow-icon">✅</div>
+          <div class="flow-text">Дополнительно уведомили о внесённых изменениях</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ╔══════════════════════════════════╗ -->
+  <!-- ║  БЛОК 6: КОМАНДА И СОБСТВЕННИК  ║ -->
+  <!-- ╚══════════════════════════════════╝ -->
+  <section class="section owner-section">
+    <div class="container">
+      <div class="owner-inner">
+        <div class="owner-photo-col">
+          <img src="hero.jpeg" alt="Майнура — собственник юридической компании" class="owner-img" />
+        </div>
+        <div class="owner-text-col">
+          <div class="owner-name">Майнура</div>
+          <div class="owner-role">Собственник юридической компании «Майнур Мир Права»</div>
+          <div class="owner-stats">
+            <div class="stat">
+              <div class="stat-num">30+</div>
+              <div class="stat-label">лет опыта</div>
+            </div>
+            <div class="stat">
+              <div class="stat-num">500 млн ₸</div>
+              <div class="stat-label">сэкономлено клиентам</div>
+            </div>
+            <div class="stat">
+              <div class="stat-num">50+</div>
+              <div class="stat-label">клиник в портфолио</div>
+            </div>
+          </div>
+          <blockquote>
+            «Клиенты выбирают нас в основном за экономию средств на многомиллионных штрафах и многолетнюю экспертизу в узкой нише медицинских клиник. Я со своей командой уже более 30&nbsp;лет работаю на благо клиник, и у нас это хорошо получается&nbsp;— наверное потому, что мы сэкономили более 500&nbsp;000&nbsp;000 тенге нашим клиентам.»
+          </blockquote>
+        </div>
+      </div>
+
+      <!-- Карусель -->
+      <div class="carousel">
+        <button class="carousel-btn prev" onclick="moveCarousel(-1)" aria-label="Предыдущее фото">&#8592;</button>
+        <div class="carousel-track">
+          <div class="carousel-slide active">
+            <img src="hero20.jpeg" alt="Майнура с командой" class="carousel-img" />
+          </div>
+          <div class="carousel-slide">
+            <img src="hero21.jpeg" alt="Подписание документов с Айнурой" class="carousel-img" />
+          </div>
+        </div>
+        <button class="carousel-btn next" onclick="moveCarousel(1)" aria-label="Следующее фото">&#8594;</button>
+        <div class="carousel-dots">
+          <span class="dot active" onclick="goToSlide(0)"></span>
+          <span class="dot" onclick="goToSlide(1)"></span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ╔══════════════════════════════╗ -->
+  <!-- ║  БЛОК 7: ПАРТНЁРЫ            ║ -->
+  <!-- ╚══════════════════════════════╝ -->
+  <section class="partners-section dark-section">
+    <div class="container">
+      <h2 class="section-title section-title--light">Клиники, которые нам доверяют</h2>
+      <p class="section-sub section-sub--light">Работаем с ведущими медицинскими учреждениями Казахстана</p>
+    </div>
+    <div class="marquee-outer">
+      <div class="marquee-track">
+        <!-- Set 1 -->
+        <div class="marquee-item"><img src="hero2.jpeg" alt="Клиника 1"></div>
+        <span class="marquee-dot">•</span>
+        <div class="marquee-item"><img src="hero3.jpeg" alt="Клиника 2"></div>
+        <span class="marquee-dot">•</span>
+        <div class="marquee-item"><img src="hero4.jpeg" alt="Клиника 3"></div>
+        <span class="marquee-dot">•</span>
+        <div class="marquee-item"><img src="hero5.jpeg" alt="Клиника 4"></div>
+        <span class="marquee-dot">•</span>
+        <div class="marquee-item"><img src="hero6.jpeg" alt="Клиника 5"></div>
+        <span class="marquee-dot">•</span>
+        <div class="marquee-item"><img src="hero7.jpeg" alt="Клиника 6"></div>
+        <span class="marquee-dot">•</span>
+        <div class="marquee-item"><img src="hero8.jpeg" alt="Клиника 7"></div>
+        <span class="marquee-dot">•</span>
+        <div class="marquee-item"><img src="hero9.jpeg" alt="Клиника 8"></div>
+        <span class="marquee-dot">•</span>
+        <div class="marquee-item"><img src="hero10.jpeg" alt="Клиника 9"></div>
+        <span class="marquee-dot">•</span>
+        <div class="marquee-item"><img src="hero11.jpeg" alt="Клиника 10"></div>
+        <span class="marquee-dot">•</span>
+        <div class="marquee-item"><img src="hero12.jpeg" alt="Клиника 11"></div>
+        <span class="marquee-dot">•</span>
+        <!-- Set 2 (дублируем для бесшовного зацикливания) -->
+        <div class="marquee-item"><img src="hero2.jpeg" alt="Клиника 1"></div>
+        <span class="marquee-dot">•</span>
+        <div class="marquee-item"><img src="hero3.jpeg" alt="Клиника 2"></div>
+        <span class="marquee-dot">•</span>
+        <div class="marquee-item"><img src="hero4.jpeg" alt="Клиника 3"></div>
+        <span class="marquee-dot">•</span>
+        <div class="marquee-item"><img src="hero5.jpeg" alt="Клиника 4"></div>
+        <span class="marquee-dot">•</span>
+        <div class="marquee-item"><img src="hero6.jpeg" alt="Клиника 5"></div>
+        <span class="marquee-dot">•</span>
+        <div class="marquee-item"><img src="hero7.jpeg" alt="Клиника 6"></div>
+        <span class="marquee-dot">•</span>
+        <div class="marquee-item"><img src="hero8.jpeg" alt="Клиника 7"></div>
+        <span class="marquee-dot">•</span>
+        <div class="marquee-item"><img src="hero9.jpeg" alt="Клиника 8"></div>
+        <span class="marquee-dot">•</span>
+        <div class="marquee-item"><img src="hero10.jpeg" alt="Клиника 9"></div>
+        <span class="marquee-dot">•</span>
+        <div class="marquee-item"><img src="hero11.jpeg" alt="Клиника 10"></div>
+        <span class="marquee-dot">•</span>
+        <div class="marquee-item"><img src="hero12.jpeg" alt="Клиника 11"></div>
+        <span class="marquee-dot">•</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ╔══════════════════════════════╗ -->
+  <!-- ║  БЛОК 8: ЦЕНА / ЭКОНОМИЯ    ║ -->
+  <!-- ╚══════════════════════════════╝ -->
+  <section class="section pricing-section">
+    <div class="container pricing-inner">
+      <h2 class="section-title">Сколько ваша компания по факту экономит с нами?</h2>
+      <div class="tariff-grid">
+        <div class="tariff-card tariff-card--outline">
+          <h3 class="tariff-title">Юрист в штате</h3>
+          <ul class="tariff-list">
+            <li>Ограниченная экспертиза в медицинском праве</li>
+            <li>Риск пропуска изменений законодательства</li>
+            <li>Ошибки в договорах и кадровых документах</li>
+            <li>Высокая нагрузка на одного специалиста</li>
+          </ul>
+          <button class="btn tariff-btn tariff-btn--outline" type="button" onclick="openModal()">600&nbsp;000₸</button>
+        </div>
+        <div class="tariff-card tariff-card--filled">
+          <h3 class="tariff-title">С нами</h3>
+          <ul class="tariff-list">
+            <li>Команда профильных юристов по медицине</li>
+            <li>Быстрое внедрение законодательных обновлений</li>
+            <li>Снижение рисков штрафов и судебных споров</li>
+            <li>Регулярная поддержка и готовые решения</li>
+          </ul>
+          <button class="btn tariff-btn tariff-btn--filled" type="button" onclick="openModal()">от&nbsp;240&nbsp;000₸</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ╔══════════════════════════════╗ -->
+  <!-- ║  БЛОК 9: CTA                 ║ -->
+  <!-- ╚══════════════════════════════╝ -->
+  <section class="section cta-section">
+    <div class="container cta-inner">
+      <div class="cta-content">
+        <h2>Оставьте заявку и&nbsp;узнайте, как избежать штрафа в&nbsp;10&nbsp;000&nbsp;000₸ и&nbsp;защитить клинику с&nbsp;учётом обновлений законодательства РК в&nbsp;марте 2026&nbsp;года</h2>
+        <p class="cta-sub">На консультации выявим риски вашей клиники за 30 минут на основе опыта работы с 50+ клиниками Казахстана</p>
+        <button class="btn btn-primary" onclick="openModal()">Выявить риски</button>
+
+      </div>
+      <div class="cta-photo-col">
+        <img src="hero.jpeg" alt="Майнура — юрист по медицинскому праву" class="cta-img" />
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-top">
+        <div class="footer-left">
+          <span class="logo-main">ИП Мир Права</span>
+          <div class="footer-contacts">
+            <div class="footer-contact-item"><span>Алматы, Казахстан</span></div>
+            <div class="footer-contact-item"><a href="tel:+77001234567">+7 (700) 123-45-67</a></div>
+            <div class="footer-contact-item"><a href="mailto:info@mirprava.kz">info@mirprava.kz</a></div>
+            <div class="footer-contact-item"><span>Пн–Пт 9:00–18:00 &nbsp;|&nbsp; Сб 10:00–14:00</span></div>
+          </div>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p class="footer-copy">&copy; 2025 ИП Мир Права. Все права защищены.</p>
+        <a href="#" class="footer-policy">Политика конфиденциальности</a>
+      </div>
+    </div>
+  </footer>
+
+  <!-- ╔══════════════════════════════════════╗ -->
+  <!-- ║  КВИЗ-МОДАЛ (единый для всей стр.)  ║ -->
+  <!-- ╚══════════════════════════════════════╝ -->
+  <div id="quizModal" class="quiz-modal" role="dialog" aria-modal="true" aria-label="Квиз">
+    <div class="quiz-backdrop" onclick="closeModal()"></div>
+    <div class="quiz-container">
+      <button class="quiz-close" onclick="closeModal()" aria-label="Закрыть">×</button>
+
+      <!-- ── Квиз ── -->
+      <div id="quizFormScreen">
+        <div class="quiz-stepper" id="quizStepper">
+          <div class="stepper-step active" id="sp1"><div class="stepper-dot">1</div><div class="stepper-label">Бизнес</div></div>
+          <div class="stepper-line" id="sl1"></div>
+          <div class="stepper-step" id="sp2"><div class="stepper-dot">2</div><div class="stepper-label">Масштаб</div></div>
+          <div class="stepper-line" id="sl2"></div>
+          <div class="stepper-step" id="sp3"><div class="stepper-dot">3</div><div class="stepper-label">Задачи</div></div>
+          <div class="stepper-line" id="sl3"></div>
+          <div class="stepper-step" id="sp4"><div class="stepper-dot">4</div><div class="stepper-label">Риски</div></div>
+          <div class="stepper-line" id="sl4"></div>
+          <div class="stepper-step" id="sp5"><div class="stepper-dot">✓</div><div class="stepper-label">Контакт</div></div>
+        </div>
+
+        <!-- Шаг 1 -->
+        <div class="q-step active" id="step1">
+          <h3>Какой тип медицинской организации вы представляете?</h3>
+          <p class="q-hint">Выберите один вариант</p>
+          <div class="q-options">
+            <button class="q-opt single" data-step="1" data-val="clinic">Многопрофильная клиника</button>
+            <button class="q-opt single" data-step="1" data-val="dental">Стоматология</button>
+            <button class="q-opt single" data-step="1" data-val="cosmo">Косметология / эстетическая медицина</button>
+            <button class="q-opt single" data-step="1" data-val="diagnostic">Диагностический центр / лаборатория</button>
+          </div>
+          <div class="q-nav">
+            <button class="q-btn-back" onclick="prevStep()">Назад</button>
+            <button class="q-btn-next" onclick="nextStep()">Далее</button>
+          </div>
+        </div>
+
+        <!-- Шаг 2 -->
+        <div class="q-step" id="step2">
+          <h3>Как давно работает ваша клиника?</h3>
+          <p class="q-hint">Это поможет оценить накопленные риски</p>
+          <div class="q-options">
+            <button class="q-opt single" data-step="2" data-val="new">Менее 1 года</button>
+            <button class="q-opt single" data-step="2" data-val="mid">1–3 года</button>
+            <button class="q-opt single" data-step="2" data-val="old">Более 3 лет</button>
+            <button class="q-opt single" data-step="2" data-val="network">Сеть клиник</button>
+          </div>
+          <div class="q-nav">
+            <button class="q-btn-back" onclick="prevStep()">Назад</button>
+            <button class="q-btn-next" onclick="nextStep()">Далее</button>
+          </div>
+        </div>
+
+        <!-- Шаг 3 -->
+        <div class="q-step" id="step3">
+          <h3>С какими проблемами вы уже сталкивались?</h3>
+          <p class="q-hint">Можно выбрать несколько</p>
+          <div class="q-options">
+            <button class="q-opt multi" data-step="3" data-val="checks">Проверки госорганов и МСЭК</button>
+            <button class="q-opt multi" data-step="3" data-val="patients">Жалобы пациентов</button>
+            <button class="q-opt multi" data-step="3" data-val="license">Вопросы по лицензии</button>
+            <button class="q-opt multi" data-step="3" data-val="none">Пока не сталкивался</button>
+          </div>
+          <div class="q-nav">
+            <button class="q-btn-back" onclick="prevStep()">Назад</button>
+            <button class="q-btn-next" onclick="nextStep()">Далее</button>
+          </div>
+        </div>
+
+        <!-- Шаг 4 -->
+        <div class="q-step" id="step4">
+          <h3>Что сейчас беспокоит больше всего?</h3>
+          <p class="q-hint">Можно выбрать несколько</p>
+          <div class="q-options">
+            <button class="q-opt multi" data-step="4" data-val="fines">Риск крупных штрафов</button>
+            <button class="q-opt multi" data-step="4" data-val="docs">Оформление документов и договоров</button>
+            <button class="q-opt multi" data-step="4" data-val="staff">Кадровые вопросы и трудовые споры</button>
+            <button class="q-opt multi" data-step="4" data-val="general">Общее юридическое сопровождение</button>
+          </div>
+          <div class="q-nav">
+            <button class="q-btn-back" onclick="prevStep()">Назад</button>
+            <button class="q-btn-next" onclick="nextStep()">Далее</button>
+          </div>
+        </div>
+
+        <!-- Шаг 5: контакты -->
+        <div class="q-step" id="step5">
+          <h3>Отлично! Оставьте контакт</h3>
+          <p class="q-hint">Юрист свяжется с вами в течение 30 минут</p>
+          <form class="q-contact-form" onsubmit="submitQuiz(event)">
+            <input type="text" name="name" placeholder="Ваше имя" required autocomplete="name" />
+            <input type="tel" name="phone" placeholder="Телефон или WhatsApp" required autocomplete="tel" />
+            <input type="text" name="city" placeholder="Город" required />
+            <div class="q-nav q-nav-submit">
+              <button type="button" class="q-btn-back" onclick="prevStep()">Назад</button>
+              <button type="submit" class="btn btn-primary q-submit-btn">Выявить риски</button>
+            </div>
+          </form>
+        </div>
+      </div>
+
+      <!-- ── Успех ── -->
+      <div class="quiz-success hidden" id="quizSuccess">
+        <div class="quiz-success-top">
+          <div class="success-check" aria-hidden="true">✓</div>
+          <div class="quiz-success-copy">
+            <h3>Заявка принята!</h3>
+            <p>Юрист свяжется с вами в&nbsp;течение 30&nbsp;минут</p>
+            <p class="quiz-whatsapp-note">Если вы не сможете ответить в течение 30 минут и будете заняты — нажмите на кнопку ниже, мы обработаем вашу заявку вне очереди через WhatsApp.</p>
+          </div>
+        </div>
+        <a class="btn quiz-whatsapp-btn" href="https://wa.me/77001234567" target="_blank" rel="noopener">Связаться вне очереди</a>
+      </div>
+    </div>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
