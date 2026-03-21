@@ -37,7 +37,6 @@ $url = "https://api.telegram.org/bot{$token}/sendMessage";
 $payload = json_encode([
   'chat_id' => $chat_id,
   'text' => $data['text'],
-  'parse_mode' => 'HTML',
 ], JSON_UNESCAPED_UNICODE);
 
 if (function_exists('curl_init')) {

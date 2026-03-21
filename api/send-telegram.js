@@ -73,7 +73,6 @@ async function handler(req, res) {
     body: JSON.stringify({
       chat_id: CHAT_ID,
       text,
-      parse_mode: 'HTML',
     }),
   });
 

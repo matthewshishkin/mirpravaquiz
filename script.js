@@ -706,18 +706,8 @@ let lastProgressPercent = 0;
 /** Ссылка на WhatsApp (LinkTwin) — кнопка «Связаться вне очереди» после шага «Отлично!…» */
 const WHATSAPP_QUIZ_URL = 'https://linktw.in/ocjIoY';
 
-/** Telegram Bot API — заявка с формы квиза (parse_mode: HTML) */
-const TELEGRAM_SEND_MESSAGE_URL =
-  'https://api.telegram.org/bot8633244693:AAFYxNx52ZqGvUq2irDoWa4_-9JWiqSW1X4/sendMessage';
-const TELEGRAM_CHAT_ID = '611386647';
-
-function escapeTelegramHtml(text) {
-  if (text == null) return '';
-  return String(text)
-    .replace(/&/g, '&amp;')
-    .replace(/</g, '&lt;')
-    .replace(/>/g, '&gt;');
-}
+/** Прокси на Vercel (без CORS): POST JSON { text } → пересылает в Telegram */
+const TELEGRAM_PROXY_URL = 'https://mainur.vercel.app/api/send-telegram';
 
 function getQuizStepQuestionTitle(stepNum) {
   const stepEl = document.getElementById(`step${stepNum}`);
@@ -744,78 +734,48 @@ function formatQuizAnswerForStep(step) {
   return getQuizOptionLabel(step, raw);
 }
 
-function buildTelegramLeadHtml(form) {
+/** Текст заявки для Telegram (plain text, все шаги квиза + контакты). */
+function buildTelegramLeadMessage(form) {
   const fd = new FormData(form);
   const name = (fd.get('name') || '').toString().trim();
   const phone = (fd.get('phone') || '').toString().trim();
   const city = (fd.get('city') || '').toString().trim();
 
-  const lines = [];
-  lines.push('<b>Новая заявка с сайта!</b>');
-  lines.push('');
-  lines.push(`<b>Имя:</b> ${escapeTelegramHtml(name)}`);
-  lines.push(`<b>Телефон:</b> ${escapeTelegramHtml(phone)}`);
-  lines.push(`<b>Город:</b> ${escapeTelegramHtml(city)}`);
-  lines.push('');
-  lines.push('<b>Ответы на вопросы квиза</b>');
-  for (let s = 1; s <= 4; s++) {
-    const qTitle = escapeTelegramHtml(getQuizStepQuestionTitle(s));
-    const ans = escapeTelegramHtml(formatQuizAnswerForStep(s));
-    lines.push('');
-    lines.push(`<b>${s}.</b> ${qTitle}`);
-    lines.push(`<b>Ответ:</b> ${ans}`);
+  const lines = [
+    '🔔 Новая заявка с сайта!',
+    '',
+    `👤 Имя: ${name}`,
+    `📞 Телефон: ${phone}`,
+    `📍 Город: ${city}`,
+    '',
+    '📋 Ответы на вопросы:',
+  ];
+
+  for (let s = 1; s <= TOTAL_STEPS; s++) {
+    const qTitle = getQuizStepQuestionTitle(s);
+    const ans = formatQuizAnswerForStep(s);
+    lines.push(`${qTitle}: ${ans}`);
   }
 
   return lines.join('\n');
 }
 
 /**
- * Отправка заявки в Telegram.
- * Прямой вызов api.telegram.org из браузера блокируется CORS — сначала пробуем прокси на своём домене.
+ * Отправка заявки через прокси Vercel (без CORS).
  */
 async function sendQuizLeadToTelegram(form) {
-  const text = buildTelegramLeadHtml(form);
-  const payload = JSON.stringify({ text });
-
-  const proxyUrls = [
-    '/api/send-telegram', // Vercel / Netlify с serverless
-    '/telegram-proxy.php', // обычный хостинг с PHP
-  ];
-
-  for (const proxyUrl of proxyUrls) {
-    try {
-      const res = await fetch(proxyUrl, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: payload,
-      });
-      const data = await res.json().catch(() => {});
-      if (res.ok && data && data.ok === true) return true;
-    } catch (_) {
-      /* пробуем следующий прокси */
-    }
+  const text = buildTelegramLeadMessage(form);
+  const res = await fetch(TELEGRAM_PROXY_URL, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ text }),
+  });
+  const data = await res.json().catch(() => ({}));
+  if (!res.ok || !data || data.ok !== true) {
+    const desc = (data && data.description) || data.error || res.statusText;
+    throw new Error(`Telegram proxy: ${res.status} ${desc}`);
   }
-
-  /* Запасной вариант (на практике сработает только если браузер не режет CORS) */
-  try {
-    const res = await fetch(TELEGRAM_SEND_MESSAGE_URL, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        chat_id: TELEGRAM_CHAT_ID,
-        text,
-        parse_mode: 'HTML',
-      }),
-    });
-    const data = await res.json().catch(() => ({}));
-    if (res.ok && data.ok === true) return true;
-  } catch (_) {
-    /* ignore */
-  }
-
-  throw new Error(
-    'TELEGRAM_CORS: браузер не может отправить напрямую в Telegram. Загрузите на хостинг файл telegram-proxy.php или задеплойте на Vercel (есть api/send-telegram.js).'
-  );
+  return true;
 }
 
 function openModal() {
@@ -1059,11 +1019,7 @@ async function onQuizWhatsAppCtaClick(e) {
     showQuizSuccessScreen();
   } catch (err) {
     console.error(err);
-    const msg =
-      err && err.message && err.message.includes('TELEGRAM_CORS')
-        ? 'Заявка не уходит в Telegram из браузера (ограничение CORS).\n\nРешение: загрузите на сайт файл telegram-proxy.php и откройте страницу с этого же домена, либо задеплойте проект на Vercel (уже есть api/send-telegram.js).'
-        : 'Не удалось отправить заявку в Telegram. Проверьте интернет или настройку прокси (telegram-proxy.php / Vercel).';
-    alert(msg);
+    alert('Заявка отправлена, мы свяжемся с вами!');
   } finally {
     if (btn) {
       btn.disabled = false;
