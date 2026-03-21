@@ -1,0 +1,7 @@
+{
+  "name": "mainur-site",
+  "private": true,
+  "engines": {
+    "node": ">=18"
+  }
+}

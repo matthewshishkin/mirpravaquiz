@@ -706,6 +706,118 @@ let lastProgressPercent = 0;
 /** Ссылка на WhatsApp (LinkTwin) — кнопка «Связаться вне очереди» после шага «Отлично!…» */
 const WHATSAPP_QUIZ_URL = 'https://linktw.in/ocjIoY';
 
+/** Telegram Bot API — заявка с формы квиза (parse_mode: HTML) */
+const TELEGRAM_SEND_MESSAGE_URL =
+  'https://api.telegram.org/bot8633244693:AAFYxNx52ZqGvUq2irDoWa4_-9JWiqSW1X4/sendMessage';
+const TELEGRAM_CHAT_ID = '611386647';
+
+function escapeTelegramHtml(text) {
+  if (text == null) return '';
+  return String(text)
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;');
+}
+
+function getQuizStepQuestionTitle(stepNum) {
+  const stepEl = document.getElementById(`step${stepNum}`);
+  if (!stepEl) return `Вопрос ${stepNum}`;
+  const h3 = stepEl.querySelector('h3');
+  if (!h3) return `Вопрос ${stepNum}`;
+  return h3.textContent.replace(/\s+/g, ' ').trim();
+}
+
+function getQuizOptionLabel(step, val) {
+  const list = document.querySelectorAll(`.q-opt[data-step="${step}"]`);
+  const btn = Array.from(list).find((b) => b.dataset.val === String(val));
+  if (!btn) return val;
+  return btn.textContent.replace(/\s+/g, ' ').trim();
+}
+
+function formatQuizAnswerForStep(step) {
+  const raw = answers[step];
+  if (raw == null || raw === '') return '—';
+  if (Array.isArray(raw)) {
+    if (raw.length === 0) return '—';
+    return raw.map((v) => getQuizOptionLabel(step, v)).join(', ');
+  }
+  return getQuizOptionLabel(step, raw);
+}
+
+function buildTelegramLeadHtml(form) {
+  const fd = new FormData(form);
+  const name = (fd.get('name') || '').toString().trim();
+  const phone = (fd.get('phone') || '').toString().trim();
+  const city = (fd.get('city') || '').toString().trim();
+
+  const lines = [];
+  lines.push('<b>Новая заявка с сайта!</b>');
+  lines.push('');
+  lines.push(`<b>Имя:</b> ${escapeTelegramHtml(name)}`);
+  lines.push(`<b>Телефон:</b> ${escapeTelegramHtml(phone)}`);
+  lines.push(`<b>Город:</b> ${escapeTelegramHtml(city)}`);
+  lines.push('');
+  lines.push('<b>Ответы на вопросы квиза</b>');
+  for (let s = 1; s <= 4; s++) {
+    const qTitle = escapeTelegramHtml(getQuizStepQuestionTitle(s));
+    const ans = escapeTelegramHtml(formatQuizAnswerForStep(s));
+    lines.push('');
+    lines.push(`<b>${s}.</b> ${qTitle}`);
+    lines.push(`<b>Ответ:</b> ${ans}`);
+  }
+
+  return lines.join('\n');
+}
+
+/**
+ * Отправка заявки в Telegram.
+ * Прямой вызов api.telegram.org из браузера блокируется CORS — сначала пробуем прокси на своём домене.
+ */
+async function sendQuizLeadToTelegram(form) {
+  const text = buildTelegramLeadHtml(form);
+  const payload = JSON.stringify({ text });
+
+  const proxyUrls = [
+    '/api/send-telegram', // Vercel / Netlify с serverless
+    '/telegram-proxy.php', // обычный хостинг с PHP
+  ];
+
+  for (const proxyUrl of proxyUrls) {
+    try {
+      const res = await fetch(proxyUrl, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: payload,
+      });
+      const data = await res.json().catch(() => {});
+      if (res.ok && data && data.ok === true) return true;
+    } catch (_) {
+      /* пробуем следующий прокси */
+    }
+  }
+
+  /* Запасной вариант (на практике сработает только если браузер не режет CORS) */
+  try {
+    const res = await fetch(TELEGRAM_SEND_MESSAGE_URL, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        chat_id: TELEGRAM_CHAT_ID,
+        text,
+        parse_mode: 'HTML',
+      }),
+    });
+    const data = await res.json().catch(() => ({}));
+    if (res.ok && data.ok === true) return true;
+  } catch (_) {
+    /* ignore */
+  }
+
+  throw new Error(
+    'TELEGRAM_CORS: браузер не может отправить напрямую в Telegram. Загрузите на хостинг файл telegram-proxy.php или задеплойте на Vercel (есть api/send-telegram.js).'
+  );
+}
+
 function openModal() {
   // Компенсируем ширину скроллбара, чтобы страница не прыгала
   const scrollbarWidth = window.innerWidth - document.documentElement.clientWidth;
@@ -723,7 +835,7 @@ function openModal() {
   currentStep = 1;
   lastProgressPercent = 0;
   showStep(1);
-  // Сбрасываем выбранные ответы
+  Object.keys(answers).forEach((k) => delete answers[k]);
   document.querySelectorAll('.q-opt.selected').forEach(b => b.classList.remove('selected'));
   document.querySelectorAll('.q-consent input[type="checkbox"]').forEach(c => {
     c.checked = false;
@@ -759,6 +871,7 @@ function openQuizContact(e) {
   lastProgressPercent = 0;
   currentStep = 5;
   showStep(5);
+  Object.keys(answers).forEach((k) => delete answers[k]);
   document.querySelectorAll('.q-opt.selected').forEach(b => b.classList.remove('selected'));
   document.querySelectorAll('.q-consent input[type="checkbox"]').forEach(c => {
     c.checked = false;
@@ -930,12 +1043,33 @@ function showQuizSuccessScreen() {
   }
 }
 
-function onQuizWhatsAppCtaClick(e) {
+async function onQuizWhatsAppCtaClick(e) {
   e.preventDefault();
   const form = document.querySelector('.q-contact-form');
   if (!form || !validateQuizContactForm(form)) return;
-  /* Только экран успеха; WhatsApp — отдельной кнопкой на этом экране */
-  showQuizSuccessScreen();
+
+  const btn = document.getElementById('quizWhatsAppCta');
+  if (btn) {
+    btn.disabled = true;
+    btn.setAttribute('aria-busy', 'true');
+  }
+
+  try {
+    await sendQuizLeadToTelegram(form);
+    showQuizSuccessScreen();
+  } catch (err) {
+    console.error(err);
+    const msg =
+      err && err.message && err.message.includes('TELEGRAM_CORS')
+        ? 'Заявка не уходит в Telegram из браузера (ограничение CORS).\n\nРешение: загрузите на сайт файл telegram-proxy.php и откройте страницу с этого же домена, либо задеплойте проект на Vercel (уже есть api/send-telegram.js).'
+        : 'Не удалось отправить заявку в Telegram. Проверьте интернет или настройку прокси (telegram-proxy.php / Vercel).';
+    alert(msg);
+  } finally {
+    if (btn) {
+      btn.disabled = false;
+      btn.removeAttribute('aria-busy');
+    }
+  }
 }
 
 // Close on Escape
