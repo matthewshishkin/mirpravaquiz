@@ -444,6 +444,7 @@ window.addEventListener('pageshow', updateHeaderCtaAfterSecondBlock);
 
 /* =============================================
    MOBILE LOADING OVERLAY + REALISH PROGRESS
+   (быстрый выход; к скрытию оверлея hero-видео уже в playback, насколько позволяет браузер)
    ============================================= */
 (function () {
   const mqMobile = window.matchMedia('(max-width: 700px)');
@@ -456,24 +457,28 @@ window.addEventListener('pageshow', updateHeaderCtaAfterSecondBlock);
   let displayedPercent = 0;
   let timeoutId = null;
   let safetyTimeoutId = null;
+  let imageStallId = null;
+  let fontStallId = null;
+  let videoBufFallbackId = null;
+  let videoPlayFallbackId = null;
   let targetPercent = 0;
 
   let loadedImages = 0;
   let totalImages = 1;
   let fontsReady = false;
-  let videoReady = false;
+  /** Достаточно данных для отображения кадра (canplay / loadeddata) — вес в прогресс-баре */
+  let videoBuffered = false;
+  /** Реальное воспроизведение — условие снятия оверлея (или таймаут ниже) */
+  let heroVideoPlaying = false;
   let isDone = false;
 
-  // Скорость анимации прогресса:
-  // в начале чуть медленнее, ближе к 100 быстрее
-  // Ускорение: ~в 1.4 раза (время ~= задержки) => умножаем на 0.71
-  // Ускоряем оверлей ещё быстрее: в ~1.5 раза относительно текущих настроек
-  const START_DELAY_MS = 7;
-  const END_DELAY_MS = 4;
+  // Быстрее тики счётчика %
+  const START_DELAY_MS = 4;
+  const END_DELAY_MS = 2;
 
   const calcDelay = (p) => {
     const t = Math.max(0, Math.min(100, p)) / 100; // 0..1
-    return Math.max(3, Math.round(START_DELAY_MS - (START_DELAY_MS - END_DELAY_MS) * t));
+    return Math.max(2, Math.round(START_DELAY_MS - (START_DELAY_MS - END_DELAY_MS) * t));
   };
 
   const setDisplayedPercent = (p) => {
@@ -481,13 +486,18 @@ window.addEventListener('pageshow', updateHeaderCtaAfterSecondBlock);
     percentNum.textContent = String(displayedPercent);
   };
 
+  /** Веса: видео — приоритет (1-й экран), картинки и шрифты не блокируют надолго */
+  const W_IMG = 0.30;
+  const W_FONT = 0.08;
+  const W_VID = 0.62;
+
   const computeRealState = () => {
     const imgPart = totalImages > 0 ? loadedImages / totalImages : 1;
     const fontPart = fontsReady ? 1 : 0;
-    const videoPart = videoReady ? 1 : 0;
-    const overall = Math.min(1, imgPart * 0.70 + fontPart * 0.15 + videoPart * 0.15);
+    const videoPart = videoBuffered ? 1 : 0;
+    const overall = Math.min(1, imgPart * W_IMG + fontPart * W_FONT + videoPart * W_VID);
     const realPercent = Math.floor(overall * 100);
-    isDone = imgPart >= 1 && fontsReady && videoReady;
+    isDone = imgPart >= 1 && fontsReady && heroVideoPlaying;
     return { realPercent, imgPart, isDone };
   };
 
@@ -499,6 +509,22 @@ window.addEventListener('pageshow', updateHeaderCtaAfterSecondBlock);
     if (safetyTimeoutId != null) {
       clearTimeout(safetyTimeoutId);
       safetyTimeoutId = null;
+    }
+    if (imageStallId != null) {
+      clearTimeout(imageStallId);
+      imageStallId = null;
+    }
+    if (fontStallId != null) {
+      clearTimeout(fontStallId);
+      fontStallId = null;
+    }
+    if (videoBufFallbackId != null) {
+      clearTimeout(videoBufFallbackId);
+      videoBufFallbackId = null;
+    }
+    if (videoPlayFallbackId != null) {
+      clearTimeout(videoPlayFallbackId);
+      videoPlayFallbackId = null;
     }
     overlay.classList.remove('show');
     overlay.setAttribute('aria-hidden', 'true');
@@ -546,10 +572,8 @@ window.addEventListener('pageshow', updateHeaderCtaAfterSecondBlock);
   const update = () => {
     const imgPart = totalImages > 0 ? loadedImages / totalImages : 1;
     const fontPart = fontsReady ? 1 : 0;
-    const videoPart = videoReady ? 1 : 0;
-
-    // Вес: картинки 70%, шрифты 15%, видео 15%
-    const overall = Math.min(1, imgPart * 0.70 + fontPart * 0.15 + videoPart * 0.15);
+    const videoPart = videoBuffered ? 1 : 0;
+    const overall = Math.min(1, imgPart * W_IMG + fontPart * W_FONT + videoPart * W_VID);
     const p = Math.floor(overall * 100);
     const state = computeRealState();
     isDone = state.isDone;
@@ -564,6 +588,7 @@ window.addEventListener('pageshow', updateHeaderCtaAfterSecondBlock);
   };
 
   const init = () => {
+    const startLoadingUi = () => {
     show();
 
     // Не трогаем видео принудительно: полагаемся на autoplay (muted + playsinline).
@@ -577,8 +602,8 @@ window.addEventListener('pageshow', updateHeaderCtaAfterSecondBlock);
       // Доп. попытки запуска, пока показываем оверлей.
       // На некоторых моб. браузерах autoplay может сработать только при нескольких попытках подряд.
       let attempts = 0;
-      const MAX_ATTEMPTS = 16;
-      const RETRY_MS = 220;
+      const MAX_ATTEMPTS = 32;
+      const RETRY_MS = 100;
       const tryPlay = () => {
         attempts++;
         if (!v.paused && !v.ended) return;
@@ -611,7 +636,7 @@ window.addEventListener('pageshow', updateHeaderCtaAfterSecondBlock);
       img.addEventListener('error', markImg, { once: true });
     });
 
-    // Fonts progress
+    // Fonts: не держим оверлей из‑за шрифтов
     if (document.fonts && document.fonts.ready) {
       document.fonts.ready.then(() => {
         fontsReady = true;
@@ -623,35 +648,78 @@ window.addEventListener('pageshow', updateHeaderCtaAfterSecondBlock);
     } else {
       fontsReady = true;
     }
+    fontStallId = window.setTimeout(() => {
+      fontStallId = null;
+      if (!fontsReady) {
+        fontsReady = true;
+        update();
+      }
+    }, 380);
 
-    // Video progress
+    // Картинки: не ждём «вечный хвост» ниже экрана
+    imageStallId = window.setTimeout(() => {
+      imageStallId = null;
+      if (totalImages > 0 && loadedImages < totalImages) {
+        loadedImages = totalImages;
+        update();
+      }
+    }, 2200);
+
+    // Видео: буфер для %; «playing» — для снятия оверлея
     const v2 = document.querySelector('.hero-video');
-    let videoFallbackId = null;
+
+    const markVideoBuffered = () => {
+      if (videoBufFallbackId != null) {
+        clearTimeout(videoBufFallbackId);
+        videoBufFallbackId = null;
+      }
+      if (!videoBuffered) {
+        videoBuffered = true;
+        update();
+      }
+    };
+
+    const markHeroPlaying = () => {
+      if (videoPlayFallbackId != null) {
+        clearTimeout(videoPlayFallbackId);
+        videoPlayFallbackId = null;
+      }
+      if (!heroVideoPlaying) {
+        heroVideoPlaying = true;
+        update();
+      }
+    };
+
     if (v2) {
       if (v2.readyState >= 2) {
-        videoReady = true;
-      } else {
-        const markVideo = () => {
-          if (videoFallbackId != null) {
-            clearTimeout(videoFallbackId);
-            videoFallbackId = null;
-          }
-          videoReady = true;
-          update();
-        };
-        v2.addEventListener('loadeddata', markVideo, { once: true });
-        v2.addEventListener('canplay', markVideo, { once: true });
-        // Если события не пришли (сеть / iOS), не блокируем сайт бесконечно
-        videoFallbackId = window.setTimeout(() => {
-          videoFallbackId = null;
-          if (!videoReady) {
-            videoReady = true;
-            update();
-          }
-        }, 8000);
+        videoBuffered = true;
       }
+      if (!v2.paused && !v2.ended) {
+        heroVideoPlaying = true;
+      }
+
+      v2.addEventListener('playing', markHeroPlaying, { once: true });
+      v2.addEventListener('loadeddata', markVideoBuffered, { once: true });
+      v2.addEventListener('canplay', markVideoBuffered, { once: true });
+      v2.addEventListener('error', () => {
+        markVideoBuffered();
+        markHeroPlaying();
+      }, { once: true });
+
+      // буфер: если события задержались
+      videoBufFallbackId = window.setTimeout(() => {
+        videoBufFallbackId = null;
+        markVideoBuffered();
+      }, 4200);
+
+      // воспроизведение: если autoplay упирается в политику — не висим вечно
+      videoPlayFallbackId = window.setTimeout(() => {
+        videoPlayFallbackId = null;
+        markHeroPlaying();
+      }, 4200);
     } else {
-      videoReady = true;
+      videoBuffered = true;
+      heroVideoPlaying = true;
     }
 
     update();
@@ -662,12 +730,13 @@ window.addEventListener('pageshow', updateHeaderCtaAfterSecondBlock);
       if (!overlay.classList.contains('show')) return;
       targetPercent = 100;
       fontsReady = true;
-      videoReady = true;
+      videoBuffered = true;
+      heroVideoPlaying = true;
       if (totalImages > 0) loadedImages = totalImages;
       update();
       setDisplayedPercent(100);
       doHideAndPlayFromStart();
-    }, 12000);
+    }, 7200);
 
     const tick = () => {
       timeoutId = null;
@@ -686,6 +755,16 @@ window.addEventListener('pageshow', updateHeaderCtaAfterSecondBlock);
     };
 
     timeoutId = window.setTimeout(tick, calcDelay(displayedPercent));
+    };
+
+    /* Оверлей с процентами — только после Playfair (как у hero), иначе сначала Arial. Макс. ожидание 900 ms. */
+    const fontWait =
+      document.fonts && document.fonts.load
+        ? document.fonts.load('500 80px PlayfairDisplay').catch(() => {})
+        : Promise.resolve();
+    Promise.race([fontWait, new Promise((r) => setTimeout(r, 900))]).then(() => {
+      startLoadingUi();
+    });
   };
 
   if (document.readyState === 'loading') {

@@ -4,10 +4,14 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Майнур Мир Права — Юридическая защита медицинских клиник</title>
+  <!-- Тот же шрифт, что у заголовка hero — без смены начертания на экране загрузки -->
+  <link rel="preload" href="PlayfairDisplay-Regular.e3c63bea.otf" as="font" type="font/otf" crossorigin />
+  <!-- Ранний старт загрузки фона 1-го экрана (быстрее к autoplay) -->
+  <link rel="preload" href="hero27.mp4" as="video" type="video/mp4" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@200;300;400;500&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="style.css?v=169" />
+  <link rel="stylesheet" href="style.css?v=170" />
 </head>
 <body>
   <div id="siteLoadingOverlay" class="site-loading-overlay" aria-hidden="true">
@@ -37,8 +41,8 @@
   <!-- ╚══════════════════════════════╝ -->
   <section class="hero hero--video" id="hero">
     <!-- Фоновое видео -->
-    <video class="hero-video" autoplay muted loop playsinline>
-      <source src="hero27.mp4" type="video/mp4">
+    <video class="hero-video" autoplay muted loop playsinline preload="auto">
+      <source src="hero27.mp4" type="video/mp4" />
     </video>
     <!-- Тёмный оверлей + шум -->
     <div class="hero-overlay"></div>
@@ -249,7 +253,7 @@
     <div class="container">
       <h2 class="section-title" data-i18n="team_h2">Наша команда</h2>
       <div class="team-photo-wrap">
-        <img src="./hero30.jpg?v=1" alt="Наша команда — юристы «Мир Права»" class="team-photo" loading="lazy" data-i18n-alt="team_alt" />
+        <img src="./hero30.jpg?v=2" alt="Наша команда — юристы «Мир Права»" class="team-photo" loading="lazy" data-i18n-alt="team_alt" />
       </div>
     </div>
   </section>
@@ -513,6 +517,6 @@
   </div>
 
   <script src="i18n.js?v=5"></script>
-  <script src="script.js?v=57"></script>
+  <script src="script.js?v=59"></script>
 </body>
 </html>

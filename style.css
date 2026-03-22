@@ -46,13 +46,18 @@ a     { color: inherit; text-decoration: none; }
   z-index: 20000;
   pointer-events: none; /* не мешаем видео/тачам */
   color: #fff;
+  /* Как .hero-title: Playfair + тот же вес (в файле только Regular — без синтетического жирного) */
   font-family: 'PlayfairDisplay', Arial, Helvetica, sans-serif;
+  font-weight: 500;
+  font-synthesis: none;
 }
 .site-loading-overlay.show { display: flex; }
 .site-loading-percent {
   font-size: clamp(2.2rem, 9vw, 5rem);
-  font-weight: 700;
+  font-weight: 500;
   line-height: 1;
+  font-family: inherit;
+  font-synthesis: none;
 }
 
 @media (min-width: 701px) {
