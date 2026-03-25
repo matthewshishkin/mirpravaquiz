@@ -898,8 +898,11 @@ function resetQuizToEmptyContactStep() {
   document.querySelectorAll('.q-consent').forEach((l) => l.classList.remove('quiz-consent-invalid'));
 }
 
-/** Ссылка на WhatsApp (LinkTwin) — кнопка «Связаться вне очереди» после шага «Отлично!…» */
-const WHATSAPP_QUIZ_URL = 'https://linktw.in/ocjIoY';
+/** Ссылка на WhatsApp — кнопка «Связаться вне очереди» после шага «Отлично!…» */
+const WHATSAPP_QUIZ_PHONE = '77077705005';
+const WHATSAPP_QUIZ_TEXT =
+  'Добрый день! Пишу вам с сайта. Мне было бы удобнее прямо сейчас созвониться, потому что через 1 час я уже буду занят(а). Подскажите, юрист на связи в данный момент?';
+const WHATSAPP_QUIZ_URL = `https://wa.me/${WHATSAPP_QUIZ_PHONE}?text=${encodeURIComponent(WHATSAPP_QUIZ_TEXT)}`;
 
 /** Прокси на Vercel (без CORS): POST JSON { text } → пересылает в Telegram */
 const TELEGRAM_PROXY_URL = 'https://mainur.vercel.app/api/send-telegram';
