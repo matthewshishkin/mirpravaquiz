@@ -127,7 +127,7 @@ h3 { font-weight: normal; font-size: 1.05rem; }
   position: fixed;
   top: 0; left: 0; right: 0;
   z-index: 999;
-  background: var(--sand);
+  background: #fff;
   border-bottom: 1px solid rgba(0, 0, 0, 0.10);
   transition:
     box-shadow 0.7s cubic-bezier(.22,.68,0,1),
@@ -140,7 +140,7 @@ h3 { font-weight: normal; font-size: 1.05rem; }
   box-shadow: 0 2px 18px rgba(0, 0, 0, 0.40);
 }
 .site-header.glass {
-  background: rgba(234, 216, 184, 0.86);
+  background: rgba(255, 255, 255, 0.86);
   backdrop-filter: blur(10px);
   -webkit-backdrop-filter: blur(10px);
 }
