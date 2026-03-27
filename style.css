@@ -196,6 +196,17 @@ h3 { font-weight: normal; font-size: 1.05rem; }
   mask-position: center;
   mask-size: contain;
 }
+
+@media (max-width: 700px) {
+  .header-logo {
+    font-size: 0.78rem;
+    gap: 6px;
+  }
+  .header-logo-img{
+    height: 0.9em;
+    width: 0.9em;
+  }
+}
 .btn-header {
   padding: 6px 8px;
   background: transparent;
