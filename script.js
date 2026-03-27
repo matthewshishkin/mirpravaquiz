@@ -924,7 +924,7 @@ function resetQuizToEmptyContactStep() {
 const WHATSAPP_QUIZ_URL = 'https://linktw.in/ocjIoY';
 
 /** Прокси на Vercel (без CORS): POST JSON { text } → пересылает в Telegram */
-const TELEGRAM_PROXY_URL = 'https://mainur.vercel.app/api/send-telegram';
+const TELEGRAM_PROXY_URL = '/api/send-telegram';
 
 function getQuizStepQuestionTitle(stepNum) {
   const stepEl = document.getElementById(`step${stepNum}`);

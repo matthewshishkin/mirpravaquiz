@@ -1,6 +1,6 @@
 /**
  * Vercel Serverless (Node): прокси к Telegram Bot API.
- * Должен открываться: GET https://mainur.vercel.app/api/send-telegram
+ * Должен открываться: GET /api/send-telegram
  */
 const TELEGRAM_BOT_TOKEN = process.env.TELEGRAM_BOT_TOKEN;
 const TELEGRAM_CHAT_ID = process.env.TELEGRAM_CHAT_ID;
