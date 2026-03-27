@@ -226,7 +226,7 @@ h3 { font-weight: normal; font-size: 1.05rem; }
   overflow: hidden;
   isolation: isolate;
 }
-.btn-header:hover { background: #000; color: var(--sand); }
+.btn-header:hover { background: #000; color: #fff; }
 
 /* Переключатель RU/KZ: текст строго по центру обводки (перебивает .btn { display: inline-block }) */
 #langToggle.btn-header {
@@ -304,7 +304,7 @@ h3 { font-weight: normal; font-size: 1.05rem; }
 .hero-overlay {
   position: absolute;
   inset: 0;
-  background: rgba(0, 0, 0, 0.30);
+  background: rgba(0, 0, 0, 0.60);
   z-index: 1;
 }
 
