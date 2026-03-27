@@ -299,6 +299,28 @@ h3 { font-weight: normal; font-size: 1.05rem; }
   object-fit: cover;
   object-position: center;
   z-index: 0;
+  opacity: 0;
+  will-change: opacity;
+}
+
+.hero-video--a {
+  animation: heroSwapA 10s infinite ease-in-out;
+}
+
+.hero-video--b {
+  animation: heroSwapB 10s infinite ease-in-out;
+}
+
+@keyframes heroSwapA {
+  0%, 45% { opacity: 1; }
+  50%, 95% { opacity: 0; }
+  100% { opacity: 1; }
+}
+
+@keyframes heroSwapB {
+  0%, 45% { opacity: 0; }
+  50%, 95% { opacity: 1; }
+  100% { opacity: 0; }
 }
 
 .hero-overlay {
