@@ -1,8 +1,6 @@
 :root {
   --text: #111827;
   --muted: #6b7280;
-  --sand: #EAD8B8;
-  --sand-80: rgba(234, 216, 184, 0.80);
 }
 * { box-sizing: border-box; }
 html, body { margin: 0; padding: 0; }
@@ -14,12 +12,11 @@ body {
 }
 .ty-card {
   width: min(520px, 100%);
-  background: #000;
+  background: #fff;
   border-radius: 16px;
   padding: 48px 40px 40px;
   box-shadow: 0 28px 80px rgba(0, 0, 0, 0.22);
   text-align: center;
-  color: var(--sand);
 }
 /* Иконка галочки — берётся из style.css (success-check). */
 .ty-card h1 {
@@ -30,11 +27,11 @@ body {
 }
 .ty-sub {
   margin: 0;
-  color: var(--sand-80);
+  color: var(--muted);
 }
 .ty-note {
   margin: 26px 0 34px;
-  color: var(--sand-80);
+  color: var(--muted);
   font-size: 0.95rem;
   line-height: 1.45;
 }
@@ -43,13 +40,13 @@ body {
   text-decoration: none;
   border-radius: 3px;
   padding: 14px 36px;
-  background: var(--sand);
-  color: #000;
+  background: #000;
+  color: #fff;
   font-size: 0.95rem;
   font-weight: 600;
   transition: background .2s ease;
 }
-.ty-btn:hover { background: #e1cca6; }
+.ty-btn:hover { background: #222; }
 
 /* Выравнивание карточки как в модальном квизе */
 .thankyou-page {
