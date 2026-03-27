@@ -111,7 +111,7 @@
       tar_in_5: 'Персональный юрист на связи в рабочие часы',
       tar_in_6: 'Прочные договоры с пациентами и врачами',
       tar_in_7: 'Доп. защита при проверках минздрава и прокураторы',
-      tar_in_btn: 'от&nbsp;240&nbsp;000₸',
+      tar_in_btn: '450&nbsp;тыс.&nbsp;₸&nbsp;/&nbsp;за&nbsp;3&nbsp;месяца&nbsp;(-10%)',
 
       cta_h2:
         '<span class="cta-title-text"><span class="title-desktop-only">Исключим риск <span class="cta-title-keyword">штрафов</span> свыше 10,000,000 тенге<br>и <span class="cta-title-keyword">уголовных исков</span> от врачей и пациентов</span><span class="title-mobile-only">Исключим риск<br><span class="cta-title-keyword">штрафов</span> свыше<br>10,000,000 тенге<br>и <span class="cta-title-keyword">уголовных исков</span><br>от врачей и пациентов</span></span>',
@@ -286,7 +286,7 @@
       tar_in_5: 'Жұмыс уақытында байланыста жеке заңгер',
       tar_in_6: 'Пациенттер мен дәрігерлерге мықты шарттар',
       tar_in_7: 'Минздрав мен прокуратура тексерісінде қосымша қорғаныс',
-      tar_in_btn: 'бастап&nbsp;240&nbsp;000₸',
+      tar_in_btn: '450&nbsp;мың&nbsp;₸&nbsp;/&nbsp;3&nbsp;айға&nbsp;(-10%)',
 
       cta_h2:
         '<span class="cta-title-text"><span class="title-desktop-only"><span class="cta-title-keyword">10,000,000 теңгеден асатын айыппұлдар</span> тәуекелін болдырмаймыз<br>және дәрігерлер мен пациенттерден болатын <span class="cta-title-keyword">қылмыстық талап-арыздар</span></span><span class="title-mobile-only">Тәуекелді болдырмаймыз<br><span class="cta-title-keyword">10,000,000 теңгеден асатын айыппұлдар</span><br>және <span class="cta-title-keyword">қылмыстық талап-арыздар</span><br>дәрігерлер мен пациенттерден</span></span>',
