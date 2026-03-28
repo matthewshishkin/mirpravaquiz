@@ -856,6 +856,19 @@ function quizApplySelectedFromAnswers() {
     q1Inp.value = '';
     q1Inp.classList.remove('q-other-input--invalid');
   }
+  const q3Other = document.getElementById('q3OtherWrap');
+  const q3Inp = document.getElementById('q3OtherInput');
+  const a3 = answers[3];
+  const has3other = Array.isArray(a3) && a3.includes('other');
+  if (has3other && q3Other && q3Inp) {
+    q3Other.classList.remove('q-other-field--hidden');
+    q3Inp.value = answers['3_other'] || '';
+    q3Inp.classList.remove('q-other-input--invalid');
+  } else if (q3Other && q3Inp) {
+    q3Other.classList.add('q-other-field--hidden');
+    q3Inp.value = '';
+    q3Inp.classList.remove('q-other-input--invalid');
+  }
 }
 
 /** Восстанавливает ответы и поля формы из localStorage. Не меняет видимый шаг — вызывайте showStep(6) после. */
@@ -919,6 +932,13 @@ function resetQuizToEmptyContactStep() {
     q1Inp.value = '';
     q1Inp.classList.remove('q-other-input--invalid');
   }
+  const q3Other = document.getElementById('q3OtherWrap');
+  const q3Inp = document.getElementById('q3OtherInput');
+  if (q3Other) q3Other.classList.add('q-other-field--hidden');
+  if (q3Inp) {
+    q3Inp.value = '';
+    q3Inp.classList.remove('q-other-input--invalid');
+  }
 }
 
 /** Ссылка на WhatsApp (LinkTwin) — кнопка «Связаться вне очереди» после шага «Отлично!…» */
@@ -947,7 +967,17 @@ function formatQuizAnswerForStep(step) {
   if (raw == null || raw === '') return '—';
   if (Array.isArray(raw)) {
     if (raw.length === 0) return '—';
-    return raw.map((v) => getQuizOptionLabel(step, v)).join(', ');
+    const kk = typeof window !== 'undefined' && window.SiteI18n && window.SiteI18n.getLang() === 'kk';
+    return raw
+      .map((v) => {
+        if (step === 3 && v === 'other') {
+          const detail = (answers['3_other'] || document.getElementById('q3OtherInput')?.value || '').trim();
+          if (detail) return kk ? `Өз нұсқа: ${detail}` : `Свой вариант: ${detail}`;
+          return kk ? 'Өз нұсқа (көрсетілмеген)' : 'Свой вариант (не указано)';
+        }
+        return getQuizOptionLabel(step, v);
+      })
+      .join(', ');
   }
   if (step === 1 && raw === 'other') {
     const detail = (answers['1_other'] || document.getElementById('q1OtherInput')?.value || '').trim();
@@ -1203,6 +1233,13 @@ function openModal() {
       q1Inp.value = '';
       q1Inp.classList.remove('q-other-input--invalid');
     }
+    const q3Other = document.getElementById('q3OtherWrap');
+    const q3Inp = document.getElementById('q3OtherInput');
+    if (q3Other) q3Other.classList.add('q-other-field--hidden');
+    if (q3Inp) {
+      q3Inp.value = '';
+      q3Inp.classList.remove('q-other-input--invalid');
+    }
   }
 }
 
@@ -1311,6 +1348,21 @@ function nextStep() {
       }
       answers['1_other'] = t;
       if (inp) inp.classList.remove('q-other-input--invalid');
+    }
+
+    // Шаг 3 «Свой вариант» в мультивыборе: нужен непустой ввод
+    if (currentStep === 3 && Array.isArray(answers[3]) && answers[3].includes('other')) {
+      const inp3 = document.getElementById('q3OtherInput');
+      const t3 = inp3 && inp3.value.trim();
+      if (!t3) {
+        if (inp3) {
+          inp3.classList.add('q-other-input--invalid');
+          inp3.focus();
+        }
+        return;
+      }
+      answers['3_other'] = t3;
+      if (inp3) inp3.classList.remove('q-other-input--invalid');
     }
 
     // На шагах 1–5 нельзя переходить без выбора ответа.
@@ -1524,33 +1576,21 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
+  const q3OtherInput = document.getElementById('q3OtherInput');
+  if (q3OtherInput) {
+    q3OtherInput.addEventListener('input', () => {
+      if (Array.isArray(answers[3]) && answers[3].includes('other')) {
+        answers['3_other'] = q3OtherInput.value.trim();
+        quizSaveDraft();
+      }
+    });
+  }
+
   // Multi-choice: toggle
   document.querySelectorAll('.q-opt.multi').forEach(btn => {
     btn.addEventListener('click', () => {
       const step = btn.dataset.step;
       const val = btn.dataset.val;
-
-      // Правило для шага 3:
-      // если выбраны какие-то из первых трех или все 3,
-      // то "none" ("Пока не сталкивался") выбрать нельзя.
-      if (step === '3') {
-        const noneVal = 'none';
-        const noneBtn = document.querySelector(`.q-opt.multi[data-step="${step}"][data-val="${noneVal}"]`);
-        const otherBtns = Array.from(document.querySelectorAll(`.q-opt.multi[data-step="${step}"]:not([data-val="${noneVal}"])`));
-        const otherSelected = otherBtns.filter(b => b.classList.contains('selected'));
-        const wasSelected = btn.classList.contains('selected');
-
-        // Пытаемся выбрать "none", но уже выбраны другие варианты
-        if (val === noneVal && !wasSelected && otherSelected.length > 0) {
-          return;
-        }
-
-        // Выбираем любой из первых вариантов -> снимаем "none" если он был выбран
-        if (val !== noneVal && !wasSelected && noneBtn && noneBtn.classList.contains('selected')) {
-          noneBtn.classList.remove('selected');
-          if (answers[step]) answers[step] = answers[step].filter(v => v !== noneVal);
-        }
-      }
 
       // Toggle selected
       btn.classList.toggle('selected');
@@ -1560,6 +1600,28 @@ document.addEventListener('DOMContentLoaded', () => {
       } else {
         answers[step] = answers[step].filter(v => v !== val);
       }
+
+      if (step === '3') {
+        const wrap = document.getElementById('q3OtherWrap');
+        const inp = document.getElementById('q3OtherInput');
+        const hasOther = (answers[step] || []).includes('other');
+        if (hasOther) {
+          if (wrap) wrap.classList.remove('q-other-field--hidden');
+          if (val === 'other' && btn.classList.contains('selected') && inp) {
+            delete answers['3_other'];
+            inp.classList.remove('q-other-input--invalid');
+            setTimeout(() => inp.focus(), 0);
+          }
+        } else {
+          if (wrap) wrap.classList.add('q-other-field--hidden');
+          if (inp) {
+            inp.value = '';
+            inp.classList.remove('q-other-input--invalid');
+          }
+          delete answers['3_other'];
+        }
+      }
+
       quizSaveDraft();
     });
   });
