@@ -3143,7 +3143,7 @@ a.q-submit-btn {
   min-height: 0;
   padding-bottom: 10px;
 }
-/* Обе кнопки на экране «спасибо» — одна ширина (как самая широкая из двух) */
+/* Обе кнопки на экране «спасибо» — одна ширина и одна высота (эталон — «Скачать PDF») */
 .quiz-success-bottom .quiz-whatsapp-btn,
 .quiz-success-bottom .quiz-download-pdf-btn {
   width: 100%;
@@ -3151,6 +3151,32 @@ a.q-submit-btn {
   align-self: stretch;
   box-sizing: border-box;
   text-align: center;
+  height: 52px;
+  padding: 0 36px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.95rem;
+  font-weight: 600;
+  font-family: Arial, Helvetica, sans-serif;
+  line-height: 1.25;
+  border-radius: 3px;
+  margin-top: 0;
+  margin-bottom: 0;
+  cursor: pointer;
+  text-decoration: none;
+}
+.quiz-success-bottom .quiz-whatsapp-btn {
+  background: #000;
+  color: #fff;
+  border: 1.5px solid transparent;
+  transition: background 0.22s ease, transform 0.22s ease;
+}
+.quiz-success-bottom .quiz-download-pdf-btn {
+  border: 1.5px dashed rgba(0, 0, 0, 0.35);
+  background: transparent;
+  color: #000;
+  transition: background 0.18s ease, border-color 0.18s ease, transform 0.18s ease;
 }
 .quiz-whatsapp-btn {
   display: inline-block;
@@ -3170,14 +3196,9 @@ a.q-submit-btn {
   text-decoration: none;
   transition: background 0.22s ease, transform 0.22s ease;
 }
-.quiz-success-bottom .quiz-whatsapp-btn {
-  align-self: stretch;
-  /* Та же толщина рамки, что у пунктира PDF — одинаковая общая высота кнопки */
-  border: 1.5px solid transparent;
-}
 .quiz-whatsapp-btn:hover { background: #222; transform: translateY(-1px); }
 
-/* Экран «Спасибо»: скачать PDF — пунктир как у risk-bonus, размеры как у .quiz-whatsapp-btn */
+/* Кнопка PDF вне экрана «спасибо» не используется; базовые стили — fallback */
 .quiz-download-pdf-btn {
   display: inline-block;
   align-self: center;
