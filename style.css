@@ -242,7 +242,7 @@ h3 { font-weight: normal; font-size: 1.05rem; }
 
 /* После прохолжения 2-го блока — бордовая кнопка, белый текст */
 .btn-header.btn-header--solid {
-  background: #000;
+  background: #722f37;
   color: #fff;
   /* убираем обводку, чтобы осталась только заливка */
   border-color: transparent;
@@ -252,7 +252,7 @@ h3 { font-weight: normal; font-size: 1.05rem; }
     border-color 1.35s cubic-bezier(0.4, 0, 0.2, 1);
 }
 .btn-header.btn-header--solid:hover {
-  background: #111;
+  background: #5c262d;
   color: #fff;
   transition: background 0.2s ease, color 0.2s ease;
 }

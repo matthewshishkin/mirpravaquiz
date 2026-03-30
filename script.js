@@ -1161,11 +1161,11 @@ function quizPriorityRender() {
         const dict = (window.SiteI18n.STRINGS && window.SiteI18n.STRINGS[lang]) || window.SiteI18n.STRINGS.ru || {};
         return quizPriorityExpired
           ? (dict.q_timer_expired || 'Приоритет вашей заявке недоступен.<br>Ваша заявка будет обработа в порядке очереди')
-          : (dict.q_timer_label || 'Сгорает: приоритет вашей заявке');
+          : (dict.q_timer_label || '<span class="q-timer-accent">Сгорает</span>: <span class="q-timer-muted">PDF 11 актуальных штрафов 2026</span>');
       })())
     : (quizPriorityExpired
         ? 'Приоритет вашей заявке недоступен.<br>Ваша заявка будет обработа в порядке очереди'
-        : 'Сгорает: приоритет вашей заявке');
+        : '<span class="q-timer-accent">Сгорает</span>: <span class="q-timer-muted">PDF 11 актуальных штрафов 2026</span>');
   const time = quizPriorityExpired ? '00:00' : formatMmSs(quizPriorityRemainingMs);
 
   document.querySelectorAll('.q-timer').forEach((wrap) => {
