@@ -869,6 +869,16 @@ function quizApplySelectedFromAnswers() {
     q3Inp.value = '';
     q3Inp.classList.remove('q-other-input--invalid');
   }
+
+  // Шаг 3: блокировка «Свой вариант», если выбраны первые варианты
+  const a3 = answers[3];
+  const firstVals = ['san_tax', 'suppliers', 'guests_hr'];
+  const anyFirstSelected = Array.isArray(a3) && a3.some((v) => firstVals.includes(String(v)));
+  const otherBtn = document.querySelector('.q-opt.multi[data-step="3"][data-val="other"]');
+  if (otherBtn) {
+    otherBtn.disabled = !!anyFirstSelected;
+    otherBtn.setAttribute('aria-disabled', anyFirstSelected ? 'true' : 'false');
+  }
 }
 
 /** Восстанавливает ответы и поля формы из localStorage. Не меняет видимый шаг — вызывайте showStep(6) после. */
@@ -1592,6 +1602,21 @@ document.addEventListener('DOMContentLoaded', () => {
       const step = btn.dataset.step;
       const val = btn.dataset.val;
 
+      // Шаг 3: если выбран любой из первых трех вариантов — «Свой вариант» недоступен
+      if (step === '3') {
+        const firstVals = ['san_tax', 'suppliers', 'guests_hr'];
+        const otherVal = 'other';
+        const selectedNow = Array.isArray(answers[step]) ? answers[step] : [];
+        const anyFirstSelected = selectedNow.some((v) => firstVals.includes(String(v)));
+        const isOtherClick = String(val) === otherVal;
+        const willSelectOther = isOtherClick && !btn.classList.contains('selected');
+
+        if (willSelectOther && anyFirstSelected) {
+          // Не даём выбрать «Свой вариант», если уже выбраны первые варианты
+          return;
+        }
+      }
+
       // Toggle selected
       btn.classList.toggle('selected');
       if (!answers[step]) answers[step] = [];
@@ -1602,6 +1627,22 @@ document.addEventListener('DOMContentLoaded', () => {
       }
 
       if (step === '3') {
+        const firstVals = ['san_tax', 'suppliers', 'guests_hr'];
+        const otherBtn = document.querySelector('.q-opt.multi[data-step="3"][data-val="other"]');
+        const anyFirstSelected = (answers[step] || []).some((v) => firstVals.includes(String(v)));
+
+        // Если выбрали любой из первых трех — автоматически снимаем «Свой вариант»
+        if (anyFirstSelected && Array.isArray(answers[step]) && answers[step].includes('other')) {
+          answers[step] = answers[step].filter((v) => String(v) !== 'other');
+          if (otherBtn) otherBtn.classList.remove('selected');
+        }
+
+        // Визуально/семантически блокируем кнопку «Свой вариант» при выбранных первых вариантах
+        if (otherBtn) {
+          otherBtn.disabled = anyFirstSelected;
+          otherBtn.setAttribute('aria-disabled', anyFirstSelected ? 'true' : 'false');
+        }
+
         const wrap = document.getElementById('q3OtherWrap');
         const inp = document.getElementById('q3OtherInput');
         const hasOther = (answers[step] || []).includes('other');
