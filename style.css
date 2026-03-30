@@ -752,10 +752,10 @@ h3 { font-weight: normal; font-size: 1.05rem; }
 }
 .risk-bonus-preview-img{
   position: absolute;
-  right: -18px;
-  bottom: -22px;
-  width: 168px;
-  height: 206px;
+  right: -28px;
+  bottom: -34px;
+  width: 206px;
+  height: 254px;
   object-fit: cover;
   object-position: center 14%;
   display: block;
@@ -764,7 +764,7 @@ h3 { font-weight: normal; font-size: 1.05rem; }
   box-shadow:
     0 22px 46px rgba(0,0,0,0.46),
     0 10px 22px rgba(0,0,0,0.28);
-  transform: rotate(8deg);
+  transform: rotate(-8deg);
   filter: contrast(1.02) saturate(0.96);
 }
 
@@ -801,11 +801,11 @@ h3 { font-weight: normal; font-size: 1.05rem; }
   .risk-card--tax .risk-tax-text{ max-height: 116px; }
   .risk-bonus-preview{ height: 132px; }
   .risk-bonus-preview-img{
-    right: -14px;
-    bottom: -18px;
-    width: 136px;
-    height: 176px;
-    transform: rotate(8deg);
+    right: -18px;
+    bottom: -22px;
+    width: 162px;
+    height: 210px;
+    transform: rotate(-8deg);
   }
   .risk-bonus-btn{
     width: 100%;
