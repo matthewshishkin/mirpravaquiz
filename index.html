@@ -13,7 +13,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@200;300;400;500&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="style.css?v=235" />
+  <link rel="stylesheet" href="style.css?v=236" />
 </head>
 <body>
   <div id="siteLoadingOverlay" class="site-loading-overlay" aria-hidden="true">
@@ -119,11 +119,23 @@
           <div class="risk-fine" data-i18n="risk2_f" data-i18n-html="true">Штраф: до 100 МРП ≈ 393&nbsp;200&nbsp;₸ + отзыв лицензии</div>
         </div>
 
-        <div class="risk-card" data-delay="300">
+        <div class="risk-card risk-card--tax" data-delay="300">
           <div class="risk-label" data-i18n="risk3_l">3.</div>
           <p class="risk-kicker" data-i18n="risk3_k">Налоговые проверки</p>
-          <h3 data-i18n="risk3_h">С 2024 года активно применяется хронометражная проверка. Расхождение реального оборота с отчётностью — блокировка счетов</h3>
-          <div class="risk-fine" data-i18n="risk3_f" data-i18n-html="true">Штраф: доначисление налогов + до 1&nbsp;500 МРП за каждое нарушение</div>
+          <div class="risk-tax-text">
+            <h3 data-i18n="risk3_h">С 2024 года активно применяется хронометражная проверка. Расхождение реального оборота с отчётностью — блокировка счетов</h3>
+            <div class="risk-fine" data-i18n="risk3_f" data-i18n-html="true">Штраф: доначисление налогов + до 1&nbsp;500 МРП за каждое нарушение</div>
+          </div>
+
+          <div class="risk-bonus-card">
+            <div class="risk-bonus-copy">
+              <div class="risk-bonus-title" data-i18n="risk3_bonus_h">Оставьте заявку</div>
+              <div class="risk-bonus-text" data-i18n="risk3_bonus_p" data-i18n-html="true">и заберите 11 актуальных<br>штрафов 2026 года<br>в HoReCa бонусом!</div>
+              <div class="risk-bonus-meta" data-i18n="risk3_bonus_tag">Документ · PDF</div>
+            </div>
+            <div class="risk-bonus-preview" aria-hidden="true"></div>
+          </div>
+          <button class="risk-bonus-btn" type="button" onclick="openModal()" data-i18n="risk3_bonus_btn">Забрать PDF</button>
         </div>
 
         <div class="risk-card" data-delay="450">
@@ -574,7 +586,7 @@
     })();
   </script>
 
-  <script src="i18n.js?v=31"></script>
+  <script src="i18n.js?v=32"></script>
   <script src="script.js?v=88"></script>
 </body>
 </html>
