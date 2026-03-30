@@ -3163,6 +3163,34 @@ a.q-submit-btn {
 }
 .quiz-whatsapp-btn:hover { background: #222; transform: translateY(-1px); }
 
+/* Экран «Спасибо»: скачать PDF — как .risk-bonus-btn (без заливки, пунктир) */
+.quiz-download-pdf-btn {
+  display: inline-block;
+  align-self: center;
+  margin-top: 14px;
+  border: 1.5px dashed rgba(0, 0, 0, 0.35);
+  background: transparent;
+  color: #000;
+  border-radius: 10px;
+  padding: 14px 22px;
+  font-size: 0.95rem;
+  font-weight: 600;
+  font-family: Arial, Helvetica, sans-serif;
+  cursor: pointer;
+  text-decoration: none;
+  text-align: center;
+  box-sizing: border-box;
+  transition: background 0.18s ease, border-color 0.18s ease, transform 0.18s ease;
+}
+.quiz-download-pdf-btn:hover {
+  background: rgba(0, 0, 0, 0.04);
+  border-color: rgba(0, 0, 0, 0.5);
+  transform: translateY(-1px);
+}
+.quiz-download-pdf-btn:active {
+  transform: translateY(0);
+}
+
 /* =============================================
    RESPONSIVE
    ============================================= */
@@ -3432,6 +3460,10 @@ a.q-submit-btn {
   }
   .quiz-success .quiz-whatsapp-note {
     margin-bottom: 36px !important;
+  }
+  .quiz-download-pdf-btn {
+    width: 100%;
+    max-width: 100%;
   }
 
   /* Логотипы в бегущей строке меньше в 1.5x (256/1.5 ≈ 170px), отступы −1/3 */
