@@ -6,7 +6,7 @@
 
   const STRINGS = {
     ru: {
-      page_title: 'Майнур Мир Права — Юридическая защита медицинских клиник',
+      page_title: 'LA — Юридическая защита бизнеса в сфере HoReCa',
       header_logo_aria: 'Перейти к первому экрану',
       header_cta: 'Выявить риски',
       lang_toggle_to_kk: 'Қазақ тіліне ауыстыру',
@@ -180,7 +180,7 @@
       marquee_alt: 'Клиника',
     },
     kk: {
-      page_title: 'LEGAL ASSISTANCE — HoReCa саласындағы заң көмегі',
+      page_title: 'LA — HoReCa бизнесіне заң көмегі',
       header_logo_aria: 'Бірінші экранға өту',
       header_cta: 'Тәуекелді анықтау',
       lang_toggle_to_kk: 'Қазақ тіліне ауыстыру',
