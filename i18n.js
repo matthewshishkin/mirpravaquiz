@@ -373,6 +373,7 @@
     if (lang !== 'kk' && lang !== 'ru') lang = 'ru';
     localStorage.setItem(STORAGE_KEY, lang);
     document.documentElement.lang = lang === 'kk' ? 'kk' : 'ru';
+    document.documentElement.setAttribute('dir', 'ltr');
     document.body.classList.toggle('lang-kk', lang === 'kk');
     document.body.classList.toggle('lang-ru', lang === 'ru');
     apply(lang);
@@ -444,6 +445,7 @@
 
   function init() {
     const lang = getLang();
+    document.documentElement.setAttribute('dir', 'ltr');
     document.body.classList.toggle('lang-kk', lang === 'kk');
     document.body.classList.toggle('lang-ru', lang === 'ru');
     apply(lang);

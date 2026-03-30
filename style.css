@@ -32,8 +32,9 @@
 }
 
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-html  { scroll-behavior: smooth; font-size: 16px; }
-body  { font-family: Arial, Helvetica, sans-serif; color: var(--text); background: #fff; line-height: 1.6; overflow-x: hidden; }
+/* Казахская локаль (lang=kk): явный LTR, чтобы не было смещения блоков из‑за bidi/направления */
+html  { scroll-behavior: smooth; font-size: 16px; direction: ltr; unicode-bidi: isolate; }
+body  { font-family: Arial, Helvetica, sans-serif; color: var(--text); background: #fff; line-height: 1.6; overflow-x: hidden; direction: ltr; }
 img   { display: block; max-width: 100%; }
 a     { color: inherit; text-decoration: none; }
 
@@ -82,7 +83,7 @@ h3 { font-weight: normal; font-size: 1.05rem; }
 /* =============================================
    LAYOUT
    ============================================= */
-.container { max-width: 1120px; margin: 0 auto; padding: 0 24px; }
+.container { max-width: 1120px; margin: 0 auto; padding-inline: 24px; padding-block: 0; }
 .section   { padding: 88px 0; }
 
 /* =============================================
@@ -796,7 +797,7 @@ h3 { font-weight: normal; font-size: 1.05rem; }
 .risk-bonus-btn{
   margin-top: 16px;
   align-self: flex-end;
-  margin-left: auto;
+  margin-inline-start: auto;
   border: 1.5px dashed rgba(0,0,0,0.35);
   background: transparent;
   color: #000;
@@ -841,7 +842,7 @@ h3 { font-weight: normal; font-size: 1.05rem; }
   }
   .risk-bonus-btn{
     width: 100%;
-    margin-left: 0;
+    margin-inline-start: 0;
     margin-top: 14px;
   }
 }
@@ -877,8 +878,7 @@ h3 { font-weight: normal; font-size: 1.05rem; }
   gap: 20px;
   margin-top: 48px;
   max-width: 1120px;
-  margin-left: auto;
-  margin-right: auto;
+  margin-inline: auto;
   padding: 0 4px;
   list-style: none;
 }
@@ -1016,8 +1016,7 @@ h3 { font-weight: normal; font-size: 1.05rem; }
 .monitoring-carousel {
   margin-top: 48px;
   max-width: 1120px;
-  margin-left: auto;
-  margin-right: auto;
+  margin-inline: auto;
   padding: 0 4px;
 }
 
@@ -1271,8 +1270,7 @@ blockquote {
   line-height: 1.5;
   max-width: 30ch;
   text-align: center;
-  margin-left: auto;
-  margin-right: auto;
+  margin-inline: auto;
 }
 
 /* Блок «Наша команда» — фото на весь экран, без обрезки, вплотную к блоку партнёров */
@@ -2163,8 +2161,7 @@ blockquote {
   .cta-sub {
     margin-bottom: 0;
     max-width: min(65ch, 100%);
-    margin-left: auto;
-    margin-right: auto;
+    margin-inline: auto;
     text-align: center;
   }
 }
@@ -3259,8 +3256,8 @@ a.q-submit-btn {
   .law-card                { transform: translateX(-50px); height: auto; }   /* override desktop */
   .law-card.animate-in     { transform: translateX(0); }
 
-  /* Risk cards */
-  .risk-cards              { grid-template-columns: 1fr 1fr; }
+  /* Risk cards: одна колонка на планшете/мобиле — длинные KK-строки не ломают сетку */
+  .risk-cards              { grid-template-columns: 1fr; }
 
   /* Flow cards — сетка уже адаптивна через max-width в базовых правилах */
 
