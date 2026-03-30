@@ -1098,6 +1098,7 @@ let quizPriorityRemainingMs = 3 * 60 * 1000; // 03:00
 let quizPriorityLastTs = 0;
 let quizPriorityRaf = null;
 let quizPriorityExpired = false;
+let quizPriorityLastShakeAt = null; // marker in seconds
 const QUIZ_PRIORITY_STATE_KEY = 'mainur_quiz_priority_state_v1';
 
 function getNavType() {
@@ -1180,6 +1181,27 @@ function quizPriorityRender() {
   });
 }
 
+function quizPriorityShakeIfNeeded() {
+  // Shake at exact marks: 02:30 / 02:00 / 01:30 / 01:00 / 00:30 / 00:00
+  const marksSec = [150, 120, 90, 60, 30, 0];
+  const curSec = Math.max(0, Math.ceil(quizPriorityRemainingMs / 1000));
+
+  // Trigger only once per mark.
+  let should = false;
+  for (let i = 0; i < marksSec.length; i++) {
+    if (curSec === marksSec[i]) { should = true; break; }
+  }
+  if (!should || quizPriorityLastShakeAt === curSec) return;
+  quizPriorityLastShakeAt = curSec;
+
+  document.querySelectorAll('.q-timer').forEach((wrap) => {
+    wrap.classList.remove('q-timer--shake');
+    // Force reflow to restart animation reliably
+    void wrap.offsetWidth;
+    wrap.classList.add('q-timer--shake');
+  });
+}
+
 function quizPriorityStep(now) {
   if (quizPriorityExpired) return;
 
@@ -1213,6 +1235,7 @@ function quizPriorityStep(now) {
   }
 
   quizPriorityRender();
+  quizPriorityShakeIfNeeded();
 }
 
 function quizPriorityStart() {
@@ -1223,7 +1246,9 @@ function quizPriorityStart() {
   // Если вернулись со страницы политики — восстановить значение, если оно сохранено.
   quizPriorityRestoreIfNeeded();
   quizPriorityLastTs = 0;
+  quizPriorityLastShakeAt = null;
   quizPriorityRender();
+  quizPriorityShakeIfNeeded();
 
   const loop = (now) => {
     const m = document.getElementById('quizModal');
