@@ -1386,8 +1386,8 @@ blockquote {
 
 .tariff-card--filled {
   border: none;
-  background: var(--sand);
-  color: #000;
+  background: #000;
+  color: #fff;
   align-self: start;
   min-height: auto;
   height: fit-content;
@@ -1701,9 +1701,9 @@ blockquote {
 
 /* «С нами»: кнопка без заливки, только обводка; без анимации */
 .tariff-card--filled .tariff-btn--filled {
-  background: #000;
-  color: #fff;
-  border: 0.75px solid #000;
+  background: #fff;
+  color: #000;
+  border: 0.75px solid #fff;
   animation: none;
   box-shadow:
     0 10px 32px rgba(0, 0, 0, 0.24),
@@ -1712,9 +1712,9 @@ blockquote {
 }
 
 .tariff-card--filled .tariff-btn--filled:hover {
-  background: #111;
-  color: #fff;
-  border-color: #111;
+  background: #f5f5f5;
+  color: #000;
+  border-color: #fff;
   box-shadow:
     0 12px 36px rgba(0, 0, 0, 0.28),
     0 5px 16px rgba(0, 0, 0, 0.18);
@@ -1784,7 +1784,7 @@ blockquote {
    ============================================= */
 .cta-section {
   background: #fff;
-  padding-top: 168px; /* белое поле над заголовком */
+  padding: 60px 0; /* компактный последний блок */
 }
 
 .cta-inner {
@@ -1824,7 +1824,7 @@ blockquote {
   color: #c1272d;
   font-weight: 600;
 }
-.cta-sub        { color: var(--muted); margin-bottom: 104px; font-size: 0.97rem; }
+.cta-sub        { color: var(--muted); margin-bottom: 20px; font-size: 0.97rem; }
 
 /*
   CTA: бордовая кнопка и тень в тон бренду
@@ -1834,7 +1834,7 @@ blockquote {
   transform: none;
   left: auto;
   bottom: auto;
-  margin-top: 96px;
+  margin-top: 20px;
   display: inline-block;
   text-align: center;
   border-radius: 3px;
