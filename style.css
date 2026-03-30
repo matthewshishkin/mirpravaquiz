@@ -3138,10 +3138,19 @@ a.q-submit-btn {
   display: flex;
   flex-direction: column;
   justify-content: flex-end;
-  align-items: center;
-  gap: 0;
+  align-items: stretch;
+  gap: 14px;
   min-height: 0;
   padding-bottom: 10px;
+}
+/* Обе кнопки на экране «спасибо» — одна ширина (как самая широкая из двух) */
+.quiz-success-bottom .quiz-whatsapp-btn,
+.quiz-success-bottom .quiz-download-pdf-btn {
+  width: 100%;
+  max-width: 100%;
+  align-self: stretch;
+  box-sizing: border-box;
+  text-align: center;
 }
 .quiz-whatsapp-btn {
   display: inline-block;
@@ -3161,18 +3170,21 @@ a.q-submit-btn {
   text-decoration: none;
   transition: background 0.22s ease, transform 0.22s ease;
 }
+.quiz-success-bottom .quiz-whatsapp-btn {
+  align-self: stretch;
+}
 .quiz-whatsapp-btn:hover { background: #222; transform: translateY(-1px); }
 
-/* Экран «Спасибо»: скачать PDF — как .risk-bonus-btn (без заливки, пунктир) */
+/* Экран «Спасибо»: скачать PDF — пунктир как у risk-bonus, размеры как у .quiz-whatsapp-btn */
 .quiz-download-pdf-btn {
   display: inline-block;
   align-self: center;
-  margin-top: 14px;
+  margin-top: 0;
   border: 1.5px dashed rgba(0, 0, 0, 0.35);
   background: transparent;
   color: #000;
-  border-radius: 10px;
-  padding: 14px 22px;
+  border-radius: 3px;
+  padding: 14px 36px;
   font-size: 0.95rem;
   font-weight: 600;
   font-family: Arial, Helvetica, sans-serif;
@@ -3460,10 +3472,6 @@ a.q-submit-btn {
   }
   .quiz-success .quiz-whatsapp-note {
     margin-bottom: 36px !important;
-  }
-  .quiz-download-pdf-btn {
-    width: 100%;
-    max-width: 100%;
   }
 
   /* Логотипы в бегущей строке меньше в 1.5x (256/1.5 ≈ 170px), отступы −1/3 */
