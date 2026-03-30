@@ -359,6 +359,52 @@
   </section>
 
   <!-- ╔══════════════════════════════╗ -->
+  <!-- ║  БЛОК 8.5: ЛЕГИТИМНОСТЬ      ║ -->
+  <!-- ╚══════════════════════════════╝ -->
+  <section class="section certs-section" aria-labelledby="legitHeading">
+    <div class="container certs-inner">
+      <h2 id="legitHeading" class="section-title" data-i18n="legit_h2">Наша легитимность:</h2>
+      <div class="certs-carousel" id="certsCarousel">
+        <button type="button" class="certs-nav certs-nav--prev" data-i18n-aria="legit_prev" aria-label="Предыдущий документ">
+          <span class="certs-nav-icon" aria-hidden="true">‹</span>
+        </button>
+        <div class="certs-viewport" id="certsViewport">
+          <div class="certs-track" id="certsTrack">
+            <article class="certs-slide">
+              <button type="button" class="certs-thumb-btn" data-pdf="certificates/vypiska-saduev-2026.pdf">
+                <img src="certificates/vypiska-thumb.png" alt="" width="800" height="1000" loading="lazy" decoding="async" data-i18n-alt="legit_alt_1" />
+              </button>
+              <p class="certs-caption" data-i18n="legit_cap_1">Выписка (2026)</p>
+            </article>
+            <article class="certs-slide">
+              <button type="button" class="certs-thumb-btn" data-pdf="certificates/gramata-palata-yuk.pdf">
+                <img src="certificates/gramata-thumb.png" alt="" width="800" height="1000" loading="lazy" decoding="async" data-i18n-alt="legit_alt_2" />
+              </button>
+              <p class="certs-caption" data-i18n="legit_cap_2">Грамота палаты ЮК</p>
+            </article>
+            <article class="certs-slide">
+              <button type="button" class="certs-thumb-btn" data-pdf="certificates/sertifikat.pdf">
+                <img src="certificates/sertifikat-thumb.png" alt="" width="800" height="1000" loading="lazy" decoding="async" data-i18n-alt="legit_alt_3" />
+              </button>
+              <p class="certs-caption" data-i18n="legit_cap_3">Сертификат</p>
+            </article>
+            <article class="certs-slide">
+              <button type="button" class="certs-thumb-btn" data-pdf="certificates/rekvizity-too.pdf">
+                <img src="certificates/rekvizity-thumb.png" alt="" width="800" height="1000" loading="lazy" decoding="async" data-i18n-alt="legit_alt_4" />
+              </button>
+              <p class="certs-caption" data-i18n="legit_cap_4">Реквизиты ТОО</p>
+            </article>
+          </div>
+        </div>
+        <button type="button" class="certs-nav certs-nav--next" data-i18n-aria="legit_next" aria-label="Следующий документ">
+          <span class="certs-nav-icon" aria-hidden="true">›</span>
+        </button>
+        <div class="certs-dots" id="certsDots" role="group" data-i18n-aria="legit_dots_aria" aria-label="Навигация по документам"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ╔══════════════════════════════╗ -->
   <!-- ║  БЛОК 9: CTA                 ║ -->
   <!-- ╚══════════════════════════════╝ -->
   <section class="section cta-section">
@@ -379,6 +425,18 @@
       </p>
     </div>
   </section>
+
+  <!-- ╔══════════════════════════════════════╗ -->
+  <!-- ║  ПРОСМОТР PDF (сертификаты)          ║ -->
+  <!-- ╚══════════════════════════════════════╝ -->
+  <div id="certViewerModal" class="cert-viewer-modal" aria-hidden="true">
+    <div class="cert-viewer-backdrop" tabindex="-1"></div>
+    <div class="cert-viewer-shell" role="dialog" aria-modal="true" aria-labelledby="certViewerHeading">
+      <h2 id="certViewerHeading" class="sr-only" data-i18n="legit_modal_title">Просмотр документа</h2>
+      <button type="button" class="cert-viewer-close" data-i18n-aria="quiz_close" aria-label="Закрыть">×</button>
+      <iframe class="cert-viewer-iframe" title="Просмотр документа" src="about:blank"></iframe>
+    </div>
+  </div>
 
   <!-- ╔══════════════════════════════════════╗ -->
   <!-- ║  КВИЗ-МОДАЛ (единый для всей стр.)  ║ -->
@@ -573,7 +631,7 @@
     })();
   </script>
 
-  <script src="i18n.js?v=39"></script>
-  <script src="script.js?v=96"></script>
+  <script src="i18n.js?v=40"></script>
+  <script src="script.js?v=97"></script>
 </body>
 </html>
