@@ -724,7 +724,7 @@ h3 { font-weight: normal; font-size: 1.05rem; }
 .risk-bonus-title{
   font-family: 'PlayfairDisplay', Arial, Helvetica, sans-serif;
   font-size: 1.24rem;
-  font-weight: 500;
+  font-weight: 650;
   line-height: 1.05;
   white-space: nowrap;
   letter-spacing: -0.01em;
@@ -733,7 +733,7 @@ h3 { font-weight: normal; font-size: 1.05rem; }
 .risk-bonus-text{
   font-size: 0.90rem; /* -15% */
   line-height: 1.25;
-  font-weight: 200;
+  font-weight: 150;
   color: rgba(255,255,255,0.92);
 }
 .risk-bonus-meta{
