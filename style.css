@@ -765,8 +765,8 @@ h3 { font-weight: normal; font-size: 1.05rem; }
 .risk-bonus-preview-img{
   position: absolute;
   display: block;
-  width: 168px;
-  height: 206px;
+  width: 206px;
+  height: 254px;
   object-fit: cover;
   background: #fff;
   border-radius: 0;
@@ -776,19 +776,19 @@ h3 { font-weight: normal; font-size: 1.05rem; }
 }
 /* Нижний лист — чуть по часовой, сзади */
 .risk-bonus-preview-img--back{
-  right: -8px;
-  bottom: -30px;
-  object-position: 52% 20%;
-  transform: rotate(7deg);
+  right: -6px;
+  bottom: -18px;
+  object-position: 55% 20%;
+  transform: translate(32px, 18px) rotate(8deg);
   z-index: 1;
-  filter: contrast(0.98) saturate(0.92) brightness(0.96);
+  filter: contrast(0.98) saturate(0.94) brightness(0.97);
 }
 /* Верхний лист — против часовой, поверх */
 .risk-bonus-preview-img--front{
-  right: -22px;
-  bottom: -18px;
+  right: -10px;
+  bottom: -46px;
   object-position: center 14%;
-  transform: rotate(-6deg);
+  transform: rotate(8deg);
   z-index: 2;
   filter: contrast(1.02) saturate(0.96);
 }
@@ -826,18 +826,18 @@ h3 { font-weight: normal; font-size: 1.05rem; }
   .risk-card--tax .risk-tax-text{ max-height: 116px; }
   .risk-bonus-preview{ height: 132px; }
   .risk-bonus-preview-img{
-    width: 136px;
-    height: 176px;
+    width: 168px;
+    height: 210px;
   }
   .risk-bonus-preview-img--back{
-    right: -4px;
-    bottom: -26px;
-    transform: rotate(7deg);
+    right: -6px;
+    bottom: -16px;
+    transform: translate(22px, 14px) rotate(8deg);
   }
   .risk-bonus-preview-img--front{
-    right: -16px;
-    bottom: -14px;
-    transform: rotate(-6deg);
+    right: -10px;
+    bottom: -34px;
+    transform: rotate(8deg);
   }
   .risk-bonus-btn{
     width: 100%;
