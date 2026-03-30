@@ -1,4 +1,38 @@
 /* =============================================
+   POLYFILLS (Safari/old Chromium)
+   - NodeList.forEach (Safari <= 9)
+   - Element.matches / Element.closest (Safari <= 9)
+   ============================================= */
+(function () {
+  try {
+    if (window.NodeList && !NodeList.prototype.forEach) {
+      NodeList.prototype.forEach = Array.prototype.forEach;
+    }
+    if (window.Element && !Element.prototype.matches) {
+      Element.prototype.matches =
+        Element.prototype.msMatchesSelector ||
+        Element.prototype.webkitMatchesSelector ||
+        function (s) {
+          const m = (this.document || this.ownerDocument).querySelectorAll(s);
+          let i = 0;
+          while (m[i] && m[i] !== this) i++;
+          return !!m[i];
+        };
+    }
+    if (window.Element && !Element.prototype.closest) {
+      Element.prototype.closest = function (s) {
+        let el = this;
+        while (el && el.nodeType === 1) {
+          if (el.matches(s)) return el;
+          el = el.parentElement || el.parentNode;
+        }
+        return null;
+      };
+    }
+  } catch (_) {}
+})();
+
+/* =============================================
    HEADER — стекло при скролле
    ============================================= */
 window.addEventListener('scroll', () => {
