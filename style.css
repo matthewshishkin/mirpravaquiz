@@ -495,6 +495,7 @@ h3 { font-weight: normal; font-size: 1.05rem; }
   display: flex;
   flex-direction: column;
   align-items: center;
+  justify-content: center;
 }
 
 .single-video-page .hero-bonus-wrap .risk-bonus-preview {
@@ -926,7 +927,7 @@ h3 { font-weight: normal; font-size: 1.05rem; }
 }
 
 .single-video-page .hero-bonus-wrap .risk-bonus-meta{
-  margin-top: calc(24px + 0.8em);
+  margin-top: 10px;
 }
 
 .risk-bonus-nowrap{
