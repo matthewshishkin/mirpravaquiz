@@ -411,6 +411,43 @@ h3 { font-weight: normal; font-size: 1.05rem; }
   color: #fff;
 }
 
+@media (min-width: 961px) {
+  .single-video-page .hero-content-wrap {
+    align-items: flex-start;
+    justify-content: center;
+    text-align: left;
+  }
+
+  .single-video-page .hero-content {
+    width: min(980px, 100%);
+    margin-inline: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .single-video-page .hero-title {
+    text-align: left;
+    margin-bottom: 22px;
+    max-width: 980px;
+    line-height: 1.22;
+  }
+
+  .single-video-page .hero-subtitle {
+    justify-content: flex-start;
+    flex-wrap: nowrap;
+    gap: 10px;
+    margin-top: 0;
+    margin-bottom: 18px;
+    width: auto;
+  }
+
+  .single-video-page .hero-bonus-wrap {
+    margin: 0 0 12px;
+    width: min(760px, 100%);
+  }
+}
+
 .hero-pill {
   display: inline-flex;
   align-items: center;
