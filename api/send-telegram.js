@@ -53,17 +53,36 @@ async function handler(req, res) {
   if (req.method === 'GET') {
     if (req.query && (req.query.health === '1' || req.query.health === 'true')) {
       const baseUrl = `https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}`;
-      const [meResp, chatResp] = await Promise.all([
+      const [meResp, chatResp, updatesResp] = await Promise.all([
         fetch(`${baseUrl}/getMe`),
         fetch(`${baseUrl}/getChat`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ chat_id: TELEGRAM_CHAT_ID }),
         }),
+        fetch(`${baseUrl}/getUpdates?offset=-20&limit=20&timeout=0`),
       ]);
 
       const meData = await meResp.json().catch(() => ({}));
       const chatData = await chatResp.json().catch(() => ({}));
+      const updatesData = await updatesResp.json().catch(() => ({}));
+
+      const recentChatsMap = new Map();
+      const updates = Array.isArray(updatesData && updatesData.result) ? updatesData.result : [];
+      updates.forEach((u) => {
+        const msg = (u && (u.message || u.channel_post || u.edited_message || u.edited_channel_post)) || null;
+        const c = msg && msg.chat ? msg.chat : null;
+        if (!c || c.id == null) return;
+        const key = String(c.id);
+        if (!recentChatsMap.has(key)) {
+          recentChatsMap.set(key, {
+            id: c.id,
+            type: c.type || null,
+            title: c.title || c.username || [c.first_name, c.last_name].filter(Boolean).join(' ') || null,
+          });
+        }
+      });
+      const recentChats = Array.from(recentChatsMap.values()).slice(0, 10);
 
       return res.status(200).json({
         ok: Boolean(meData.ok) && Boolean(chatData.ok),
@@ -84,6 +103,11 @@ async function handler(req, res) {
           chatId: chatData && chatData.result ? chatData.result.id : null,
           chatType: chatData && chatData.result ? chatData.result.type : null,
           chatTitle: chatData && chatData.result ? (chatData.result.title || chatData.result.username || null) : null,
+        },
+        updatesCheck: {
+          ok: Boolean(updatesData.ok),
+          description: updatesData.description || null,
+          recentChats,
         },
       });
     }
