@@ -3951,8 +3951,8 @@ a.q-submit-btn {
     right: auto !important;
     bottom: auto !important;
     transform: none;
-    margin: 14px 24px 0 26px !important;
-    width: calc(100% - 50px) !important;
+    margin: 38px 0 0 26px !important;
+    width: calc(100% - 26px) !important;
     max-width: none !important;
     min-width: 0 !important;
     display: block !important;
