@@ -369,16 +369,13 @@
 
         <!-- Шаг 1 -->
         <div class="q-step active" id="step1">
-          <h3 data-i18n="q1_h">Какой у вас бизнес?</h3>
+          <h3 data-i18n="q1_h">Что вас привело к нам?</h3>
           <p class="q-hint" data-i18n="q1_hint">Выберите один вариант</p>
           <div class="q-options">
-            <button class="q-opt single" data-step="1" data-val="restaurant" data-i18n="q1_o1">Ресторан / кафе / бар</button>
-            <button class="q-opt single" data-step="1" data-val="hotel" data-i18n="q1_o2">Отель / хостел / апартаменты</button>
-            <button class="q-opt single" data-step="1" data-val="delivery" data-i18n="q1_o3">Доставка еды / кейтеринг</button>
-            <button class="q-opt single q-opt--other" data-step="1" data-val="other" data-i18n="q1_o4">Свой вариант</button>
-          </div>
-          <div class="q-other-field q-other-field--hidden" id="q1OtherWrap">
-            <input type="text" id="q1OtherInput" class="q-other-input" maxlength="140" data-i18n-placeholder="q1_other_ph" placeholder="Опишите свой вариант" autocomplete="off" aria-label="" data-i18n-aria="q1_other_aria" />
+            <button class="q-opt single" data-step="1" data-val="divorce" data-i18n="q1_o1">Хочу развестись</button>
+            <button class="q-opt single" data-step="1" data-val="alimony" data-i18n="q1_o2">Вопрос по алиментам</button>
+            <button class="q-opt single" data-step="1" data-val="property_dispute" data-i18n="q1_o3">Спор по имуществу</button>
+            <button class="q-opt single" data-step="1" data-val="children_meetings" data-i18n="q1_o4">Не могу увидеться с детьми</button>
           </div>
           <div class="q-nav">
             <button type="button" class="q-btn-back" onclick="prevStep()" data-i18n="q_back">Назад</button>
@@ -392,13 +389,16 @@
 
         <!-- Шаг 2 -->
         <div class="q-step" id="step2">
-          <h3 data-i18n="q2_h">Когда последний раз была проверка?</h3>
+          <h3 data-i18n="q2_h">Есть ли у вас несовершеннолетние дети?</h3>
           <p class="q-hint" data-i18n="q2_hint">Выберите один вариант</p>
           <div class="q-options">
-            <button class="q-opt single" data-step="2" data-val="never" data-i18n="q2_o1">Никогда не проверяли</button>
-            <button class="q-opt single" data-step="2" data-val="lt6" data-i18n="q2_o2">Менее 6 месяцев назад</button>
-            <button class="q-opt single" data-step="2" data-val="6_12" data-i18n="q2_o3">6–12 месяцев назад</button>
-            <button class="q-opt single" data-step="2" data-val="gt12" data-i18n="q2_o4">Более года назад</button>
+            <button class="q-opt single" data-step="2" data-val="minor_yes" data-i18n="q2_o1">Да, есть</button>
+            <button class="q-opt single" data-step="2" data-val="no_children" data-i18n="q2_o2">Нет детей</button>
+            <button class="q-opt single" data-step="2" data-val="adult_children" data-i18n="q2_o3">Дети уже 18+</button>
+            <button class="q-opt single q-opt--other" data-step="2" data-val="other" data-i18n="q2_o4">Свой вариант</button>
+          </div>
+          <div class="q-other-field q-other-field--hidden" id="q2OtherWrap">
+            <input type="text" id="q2OtherInput" class="q-other-input" maxlength="140" data-i18n-placeholder="q2_other_ph" placeholder="Опишите свой вариант" autocomplete="off" aria-label="" data-i18n-aria="q2_other_aria" />
           </div>
           <div class="q-nav">
             <button type="button" class="q-btn-back" onclick="prevStep()" data-i18n="q_back">Назад</button>
@@ -412,16 +412,13 @@
 
         <!-- Шаг 3 -->
         <div class="q-step" id="step3">
-          <h3 data-i18n="q3_h">С какими проблемами вы уже сталкивались?</h3>
-          <p class="q-hint" data-i18n="q3_hint">Можно выбрать несколько</p>
+          <h3 data-i18n="q3_h">Супруг согласен на развод?</h3>
+          <p class="q-hint" data-i18n="q3_hint">Выберите один вариант</p>
           <div class="q-options">
-            <button class="q-opt multi" data-step="3" data-val="san_tax" data-i18n="q3_o1">Санитарный контроль или налоговая</button>
-            <button class="q-opt multi" data-step="3" data-val="suppliers" data-i18n="q3_o2">С поставщиками или арендодателями</button>
-            <button class="q-opt multi" data-step="3" data-val="guests_hr" data-i18n="q3_o3">Жалобы гостей и кадровые конфликты</button>
-            <button class="q-opt multi q-opt--other" data-step="3" data-val="other" data-i18n="q3_o4">Свой вариант</button>
-          </div>
-          <div class="q-other-field q-other-field--hidden" id="q3OtherWrap">
-            <input type="text" id="q3OtherInput" class="q-other-input" maxlength="140" data-i18n-placeholder="q3_other_ph" placeholder="Опишите свой вариант" autocomplete="off" aria-label="" data-i18n-aria="q3_other_aria" />
+            <button class="q-opt single" data-step="3" data-val="both_agree" data-i18n="q3_o1">Да, оба согласны</button>
+            <button class="q-opt single" data-step="3" data-val="not_agree" data-i18n="q3_o2">Нет, не согласен</button>
+            <button class="q-opt single" data-step="3" data-val="not_talked" data-i18n="q3_o3">Ещё не разговаривали</button>
+            <button class="q-opt single" data-step="3" data-val="through_lawyer" data-i18n="q3_o4">Общаемся через юриста</button>
           </div>
           <div class="q-nav">
             <button type="button" class="q-btn-back" onclick="prevStep()" data-i18n="q_back">Назад</button>
@@ -435,13 +432,13 @@
 
         <!-- Шаг 4 -->
         <div class="q-step" id="step4">
-          <h3 data-i18n="q4_h">Что сейчас беспокоит больше всего?</h3>
+          <h3 data-i18n="q4_h">Есть ли спор по имуществу?</h3>
           <p class="q-hint" data-i18n="q4_hint">Можно выбрать несколько</p>
           <div class="q-options">
-            <button class="q-opt multi" data-step="4" data-val="fines" data-i18n="q4_o1">Риск крупных штрафов</button>
-            <button class="q-opt multi" data-step="4" data-val="docs" data-i18n="q4_o2">Документы и договоры</button>
-            <button class="q-opt multi" data-step="4" data-val="staff" data-i18n="q4_o3">Кадровые вопросы</button>
-            <button class="q-opt multi" data-step="4" data-val="labor" data-i18n="q4_o4">Трудовые споры</button>
+            <button class="q-opt multi" data-step="4" data-val="property_division" data-i18n="q4_o1">Да, делим имущество</button>
+            <button class="q-opt multi" data-step="4" data-val="relatives_rewrite" data-i18n="q4_o2">Имущество уже переписано на родственников</button>
+            <button class="q-opt multi" data-step="4" data-val="no_property" data-i18n="q4_o3">Имущества нет</button>
+            <button class="q-opt multi" data-step="4" data-val="shared_debts" data-i18n="q4_o4">Есть общие долги</button>
           </div>
           <div class="q-nav">
             <button type="button" class="q-btn-back" onclick="prevStep()" data-i18n="q_back">Назад</button>
@@ -455,13 +452,13 @@
 
         <!-- Шаг 5 -->
         <div class="q-step" id="step5">
-          <h3 data-i18n="q5_h">Как срочно нужна помощь?</h3>
+          <h3 data-i18n="q5_h">Как давно длится ситуация?</h3>
           <p class="q-hint" data-i18n="q5_hint">Выберите один вариант</p>
           <div class="q-options">
-            <button class="q-opt single" data-step="5" data-val="court_now" data-i18n="q5_o1">Уже идёт суд</button>
-            <button class="q-opt single" data-step="5" data-val="month" data-i18n="q5_o2">В ближайший месяц</button>
-            <button class="q-opt single" data-step="5" data-val="three_months" data-i18n="q5_o3">В ближайшие 3 месяца</button>
-            <button class="q-opt single" data-step="5" data-val="just_risks" data-i18n="q5_o4">Хочу выявить риски</button>
+            <button class="q-opt single" data-step="5" data-val="just_started" data-i18n="q5_o1">Только начинается</button>
+            <button class="q-opt single" data-step="5" data-val="up_to_year" data-i18n="q5_o2">До 1 года</button>
+            <button class="q-opt single" data-step="5" data-val="one_to_three_years" data-i18n="q5_o3">От 1 до 3 лет</button>
+            <button class="q-opt single" data-step="5" data-val="more_than_three_years" data-i18n="q5_o4">Более 3 лет</button>
           </div>
           <div class="q-nav">
             <button type="button" class="q-btn-back" onclick="prevStep()" data-i18n="q_back">Назад</button>

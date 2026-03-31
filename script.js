@@ -903,6 +903,17 @@ function quizApplySelectedFromAnswers() {
     q1Inp.value = '';
     q1Inp.classList.remove('q-other-input--invalid');
   }
+  const q2Other = document.getElementById('q2OtherWrap');
+  const q2Inp = document.getElementById('q2OtherInput');
+  if (answers[2] === 'other' && q2Other && q2Inp) {
+    q2Other.classList.remove('q-other-field--hidden');
+    q2Inp.value = answers['2_other'] || '';
+    q2Inp.classList.remove('q-other-input--invalid');
+  } else if (q2Other && q2Inp) {
+    q2Other.classList.add('q-other-field--hidden');
+    q2Inp.value = '';
+    q2Inp.classList.remove('q-other-input--invalid');
+  }
   const q3Other = document.getElementById('q3OtherWrap');
   const q3Inp = document.getElementById('q3OtherInput');
   const a3 = answers[3];
@@ -917,13 +928,12 @@ function quizApplySelectedFromAnswers() {
     q3Inp.classList.remove('q-other-input--invalid');
   }
 
-  // Шаг 3: блокировка «Свой вариант», если выбраны первые варианты
-  const firstVals = ['san_tax', 'suppliers', 'guests_hr'];
-  const anyFirstSelected = Array.isArray(a3) && a3.some((v) => firstVals.includes(String(v)));
-  const otherBtn = document.querySelector('.q-opt.multi[data-step="3"][data-val="other"]');
-  if (otherBtn) {
-    otherBtn.disabled = !!anyFirstSelected;
-    otherBtn.setAttribute('aria-disabled', anyFirstSelected ? 'true' : 'false');
+  const a4 = Array.isArray(answers[4]) ? answers[4] : [];
+  const allowedTail = 'shared_debts';
+  const validA4 = a4.length <= 1 || (a4.length === 2 && a4.includes(allowedTail));
+  if (!validA4) {
+    const first = a4[0];
+    answers[4] = first ? [first] : [];
   }
 }
 
@@ -988,6 +998,13 @@ function resetQuizToEmptyContactStep() {
     q1Inp.value = '';
     q1Inp.classList.remove('q-other-input--invalid');
   }
+  const q2Other = document.getElementById('q2OtherWrap');
+  const q2Inp = document.getElementById('q2OtherInput');
+  if (q2Other) q2Other.classList.add('q-other-field--hidden');
+  if (q2Inp) {
+    q2Inp.value = '';
+    q2Inp.classList.remove('q-other-input--invalid');
+  }
   const q3Other = document.getElementById('q3OtherWrap');
   const q3Inp = document.getElementById('q3OtherInput');
   if (q3Other) q3Other.classList.add('q-other-field--hidden');
@@ -1026,15 +1043,16 @@ function formatQuizAnswerForStep(step) {
     const kk = typeof window !== 'undefined' && window.SiteI18n && window.SiteI18n.getLang() === 'kk';
     return raw
       .map((v) => {
-        if (step === 3 && v === 'other') {
-          const el = document.getElementById('q3OtherInput');
-          const detail = (answers['3_other'] || (el && el.value) || '').trim();
-          if (detail) return kk ? `Өз нұсқа: ${detail}` : `Свой вариант: ${detail}`;
-          return kk ? 'Өз нұсқа (көрсетілмеген)' : 'Свой вариант (не указано)';
-        }
         return getQuizOptionLabel(step, v);
       })
       .join(', ');
+  }
+  if (step === 2 && raw === 'other') {
+    const el2 = document.getElementById('q2OtherInput');
+    const detail2 = (answers['2_other'] || (el2 && el2.value) || '').trim();
+    const kk = typeof window !== 'undefined' && window.SiteI18n && window.SiteI18n.getLang() === 'kk';
+    if (detail2) return kk ? `Басқа: ${detail2}` : `Свой вариант: ${detail2}`;
+    return kk ? 'Басқа (көрсетілмеген)' : 'Свой вариант (не указано)';
   }
   if (step === 1 && raw === 'other') {
     const el = document.getElementById('q1OtherInput');
@@ -1428,34 +1446,19 @@ function updateProgress(step) {
 
 function nextStep() {
   if (currentStep <= TOTAL_STEPS) {
-    // Шаг 1 «Другое»: нужен непустой ввод (без автоперехода по клику на карточку)
-    if (currentStep === 1 && answers[1] === 'other') {
-      const inp = document.getElementById('q1OtherInput');
-      const t = inp && inp.value.trim();
-      if (!t) {
-        if (inp) {
-          inp.classList.add('q-other-input--invalid');
-          inp.focus();
+    // Шаг 2 «Свой вариант»: нужен непустой ввод
+    if (currentStep === 2 && answers[2] === 'other') {
+      const inp2 = document.getElementById('q2OtherInput');
+      const t2 = inp2 && inp2.value.trim();
+      if (!t2) {
+        if (inp2) {
+          inp2.classList.add('q-other-input--invalid');
+          inp2.focus();
         }
         return;
       }
-      answers['1_other'] = t;
-      if (inp) inp.classList.remove('q-other-input--invalid');
-    }
-
-    // Шаг 3 «Свой вариант» в мультивыборе: нужен непустой ввод
-    if (currentStep === 3 && Array.isArray(answers[3]) && answers[3].includes('other')) {
-      const inp3 = document.getElementById('q3OtherInput');
-      const t3 = inp3 && inp3.value.trim();
-      if (!t3) {
-        if (inp3) {
-          inp3.classList.add('q-other-input--invalid');
-          inp3.focus();
-        }
-        return;
-      }
-      answers['3_other'] = t3;
-      if (inp3) inp3.classList.remove('q-other-input--invalid');
+      answers['2_other'] = t2;
+      if (inp2) inp2.classList.remove('q-other-input--invalid');
     }
 
     // На шагах 1–5 нельзя переходить без выбора ответа.
@@ -1625,7 +1628,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const waCta = document.getElementById('quizWhatsAppCta');
   if (waCta) waCta.addEventListener('click', onQuizWhatsAppCtaClick);
 
-  // Single-choice: auto-advance (кроме шага 1 «Другое…» — нужен ввод и «Далее»)
+  // Single-choice: auto-advance (кроме шага 2 «Свой вариант» — нужен ввод и «Далее»)
   document.querySelectorAll('.q-opt.single').forEach(btn => {
     btn.addEventListener('click', () => {
       const step = btn.dataset.step;
@@ -1634,12 +1637,12 @@ document.addEventListener('DOMContentLoaded', () => {
         .forEach(b => b.classList.remove('selected'));
       btn.classList.add('selected');
       answers[step] = val;
-      if (step === '1') {
-        const wrap = document.getElementById('q1OtherWrap');
-        const inp = document.getElementById('q1OtherInput');
+      if (step === '2') {
+        const wrap = document.getElementById('q2OtherWrap');
+        const inp = document.getElementById('q2OtherInput');
         if (val === 'other') {
           if (wrap) wrap.classList.remove('q-other-field--hidden');
-          delete answers['1_other'];
+          delete answers['2_other'];
           if (inp) {
             inp.classList.remove('q-other-input--invalid');
             setTimeout(() => inp.focus(), 0);
@@ -1652,28 +1655,18 @@ document.addEventListener('DOMContentLoaded', () => {
           inp.value = '';
           inp.classList.remove('q-other-input--invalid');
         }
-        delete answers['1_other'];
+        delete answers['2_other'];
       }
       quizSaveDraft();
       setTimeout(nextStep, 300);
     });
   });
 
-  const q1OtherInput = document.getElementById('q1OtherInput');
-  if (q1OtherInput) {
-    q1OtherInput.addEventListener('input', () => {
-      if (answers[1] === 'other') {
-        answers['1_other'] = q1OtherInput.value.trim();
-        quizSaveDraft();
-      }
-    });
-  }
-
-  const q3OtherInput = document.getElementById('q3OtherInput');
-  if (q3OtherInput) {
-    q3OtherInput.addEventListener('input', () => {
-      if (Array.isArray(answers[3]) && answers[3].includes('other')) {
-        answers['3_other'] = q3OtherInput.value.trim();
+  const q2OtherInput = document.getElementById('q2OtherInput');
+  if (q2OtherInput) {
+    q2OtherInput.addEventListener('input', () => {
+      if (answers[2] === 'other') {
+        answers['2_other'] = q2OtherInput.value.trim();
         quizSaveDraft();
       }
     });
@@ -1685,19 +1678,15 @@ document.addEventListener('DOMContentLoaded', () => {
       const step = btn.dataset.step;
       const val = btn.dataset.val;
 
-      // Шаг 3: если выбран любой из первых трех вариантов — «Свой вариант» недоступен
-      if (step === '3') {
-        const firstVals = ['san_tax', 'suppliers', 'guests_hr'];
-        const otherVal = 'other';
-        const selectedNow = Array.isArray(answers[step]) ? answers[step] : [];
-        const anyFirstSelected = selectedNow.some((v) => firstVals.includes(String(v)));
-        const isOtherClick = String(val) === otherVal;
-        const willSelectOther = isOtherClick && !btn.classList.contains('selected');
-
-        if (willSelectOther && anyFirstSelected) {
-          // Не даём выбрать «Свой вариант», если уже выбраны первые варианты
-          return;
-        }
+      // Шаг 4: максимум 2 ответа, а комбинация из 2 — только с последним вариантом.
+      if (step === '4') {
+        const selectedNow = Array.isArray(answers[step]) ? answers[step].slice() : [];
+        const isSelected = selectedNow.includes(val);
+        const proposed = isSelected ? selectedNow.filter((v) => v !== val) : selectedNow.concat(val);
+        const isValidSingle = proposed.length <= 1;
+        const isValidPair = proposed.length === 2 && proposed.includes('shared_debts');
+        const isValid = isValidSingle || isValidPair;
+        if (!isValid) return;
       }
 
       // Toggle selected
@@ -1707,43 +1696,6 @@ document.addEventListener('DOMContentLoaded', () => {
         if (!answers[step].includes(val)) answers[step].push(val);
       } else {
         answers[step] = answers[step].filter(v => v !== val);
-      }
-
-      if (step === '3') {
-        const firstVals = ['san_tax', 'suppliers', 'guests_hr'];
-        const otherBtn = document.querySelector('.q-opt.multi[data-step="3"][data-val="other"]');
-        const anyFirstSelected = (answers[step] || []).some((v) => firstVals.includes(String(v)));
-
-        // Если выбрали любой из первых трех — автоматически снимаем «Свой вариант»
-        if (anyFirstSelected && Array.isArray(answers[step]) && answers[step].includes('other')) {
-          answers[step] = answers[step].filter((v) => String(v) !== 'other');
-          if (otherBtn) otherBtn.classList.remove('selected');
-        }
-
-        // Визуально/семантически блокируем кнопку «Свой вариант» при выбранных первых вариантах
-        if (otherBtn) {
-          otherBtn.disabled = anyFirstSelected;
-          otherBtn.setAttribute('aria-disabled', anyFirstSelected ? 'true' : 'false');
-        }
-
-        const wrap = document.getElementById('q3OtherWrap');
-        const inp = document.getElementById('q3OtherInput');
-        const hasOther = (answers[step] || []).includes('other');
-        if (hasOther) {
-          if (wrap) wrap.classList.remove('q-other-field--hidden');
-          if (val === 'other' && btn.classList.contains('selected') && inp) {
-            delete answers['3_other'];
-            inp.classList.remove('q-other-input--invalid');
-            setTimeout(() => inp.focus(), 0);
-          }
-        } else {
-          if (wrap) wrap.classList.add('q-other-field--hidden');
-          if (inp) {
-            inp.value = '';
-            inp.classList.remove('q-other-input--invalid');
-          }
-          delete answers['3_other'];
-        }
       }
 
       quizSaveDraft();
