@@ -243,6 +243,11 @@ h3 { font-weight: normal; font-size: 1.05rem; }
 }
 
 @media (max-width: 700px) {
+  .single-video-page .header-logo {
+    /* Visual align with the first letter start of mobile hero title */
+    transform: translateX(-8px);
+  }
+
   .header-logo {
     font-size: 0.66rem;
     gap: 6px;
