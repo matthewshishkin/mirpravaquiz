@@ -247,6 +247,18 @@ h3 { font-weight: normal; font-size: 1.05rem; }
     transform: none;
   }
 
+  .single-video-page .header-logo-img {
+    min-width: 1.8em;
+    min-height: 1.8em;
+    opacity: 1;
+    visibility: visible;
+    /* Mobile fallback: show icon even if mask rendering glitches */
+    background-image: url('logo-header-mask.jpg');
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: contain;
+  }
+
   .header-logo {
     font-size: 0.84rem;
     gap: 6px;
