@@ -410,6 +410,8 @@ h3 { font-weight: normal; font-size: 1.05rem; }
   margin-top: 58px;
   align-self: flex-start;
   overflow: hidden;
+  border-color: #fff;
+  color: #fff;
 }
 
 /* У inline-кнопки убираем shimmer-маску, чтобы не появлялись светлые артефакты-линии на hero */
@@ -421,8 +423,8 @@ h3 { font-weight: normal; font-size: 1.05rem; }
   background: none;
   -webkit-background-clip: border-box;
   background-clip: border-box;
-  -webkit-text-fill-color: currentColor;
-  color: rgba(255, 255, 255, 0.68);
+  -webkit-text-fill-color: #fff;
+  color: #fff;
   animation: none;
 }
 
