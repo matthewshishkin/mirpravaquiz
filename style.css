@@ -412,6 +412,20 @@ h3 { font-weight: normal; font-size: 1.05rem; }
   overflow: hidden;
 }
 
+/* У inline-кнопки убираем shimmer-маску, чтобы не появлялись светлые артефакты-линии на hero */
+.hero--video .hero-btn.hero-btn--inline::before {
+  display: none;
+}
+
+.hero--video .hero-btn.hero-btn--inline .hero-btn-text {
+  background: none;
+  -webkit-background-clip: border-box;
+  background-clip: border-box;
+  -webkit-text-fill-color: currentColor;
+  color: rgba(255, 255, 255, 0.68);
+  animation: none;
+}
+
 @media (min-width: 961px) {
   .single-video-page .hero-content-wrap {
     align-items: flex-start;
