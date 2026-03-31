@@ -455,6 +455,12 @@ h3 { font-weight: normal; font-size: 1.05rem; }
 }
 
 @media (min-width: 961px) {
+  .single-video-page .hero-bonus-wrap .risk-bonus-card {
+    min-height: 190px;
+    padding-top: 16px;
+    padding-bottom: 16px;
+  }
+
   .single-video-page .hero-content-wrap {
     align-items: flex-start;
     justify-content: center;
@@ -938,12 +944,6 @@ h3 { font-weight: normal; font-size: 1.05rem; }
 }
 
 @media (max-width: 700px){
-  .single-video-page .hero-bonus-wrap .risk-bonus-card{
-    min-height: 170px;
-    padding-top: 14px;
-    padding-bottom: 14px;
-  }
-
   .risk-bonus-card{
     grid-template-columns: 1fr 120px;
     padding: 16px 16px;
