@@ -13,7 +13,7 @@
       lang_toggle_to_ru: 'Орыс тіліне ауыстыру',
 
       hero_title_main:
-        '<span class="title-desktop-only">Добейтесь с нашей помощью справедливых алиментов, даже если он платит 50,000 ₸, а ездит на Land Cruiser. Разберём вашу ситуацию за 30 минут!</span><span class="title-mobile-only">Добейтесь с нашей помощью<br>справедливых алиментов,<br>даже если он платит 50,000 ₸,<br>а ездит на Land Cruiser.<br>Разберём вашу ситуацию<br>за 30 минут!</span>',
+        '<span class="title-desktop-only">Добейтесь с нашей помощью справедливых алиментов, даже если он платит 50,000 ₸, а ездит на Land Cruiser.<br>Разберём вашу ситуацию за 30 минут!</span><span class="title-mobile-only">Добейтесь с нашей помощью<br>справедливых алиментов,<br>даже если он платит 50,000 ₸,<br>а ездит на Land Cruiser.<br>Разберём вашу ситуацию<br>за 30 минут!</span>',
       hero_sub1: '<span class="hero-pill-emph">С учётом</span>&nbsp;законодательства 2026 года',
       hero_sub2: 'Даже если у вас&nbsp;<span class="hero-pill-emph">уже есть юрист</span>',
       hero_sub3: '<span class="hero-pill-emph">За 2 недели</span>',
@@ -204,7 +204,7 @@
       lang_toggle_to_ru: 'Орыс тіліне ауыстыру',
 
       hero_title_main:
-        '<span class="title-desktop-only">Добейтесь с нашей помощью справедливых алиментов, даже если он платит 50,000 ₸, а ездит на Land Cruiser. Разберём вашу ситуацию за 30 минут!</span><span class="title-mobile-only">Добейтесь с нашей помощью<br>справедливых алиментов,<br>даже если он платит 50,000 ₸,<br>а ездит на Land Cruiser.<br>Разберём вашу ситуацию<br>за 30 минут!</span>',
+        '<span class="title-desktop-only">Добейтесь с нашей помощью справедливых алиментов, даже если он платит 50,000 ₸, а ездит на Land Cruiser.<br>Разберём вашу ситуацию за 30 минут!</span><span class="title-mobile-only">Добейтесь с нашей помощью<br>справедливых алиментов,<br>даже если он платит 50,000 ₸,<br>а ездит на Land Cruiser.<br>Разберём вашу ситуацию<br>за 30 минут!</span>',
       hero_sub1: '<span class="hero-pill-emph">2026 жылғы</span>&nbsp;заңнама талаптарын ескере отырып',
       hero_sub2: 'Тіпті сізде&nbsp;<span class="hero-pill-emph">заңгер болса да</span>',
       hero_sub3: '<span class="hero-pill-emph">2 аптада</span>',
