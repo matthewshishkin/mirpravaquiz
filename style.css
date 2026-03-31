@@ -3926,6 +3926,7 @@ a.q-submit-btn {
     width: 100%;
     margin: 18px 0 8px;
     display: flex;
+    flex-direction: column;
     justify-content: center;
   }
   .single-video-page .hero-bonus-wrap .risk-bonus-card {
@@ -3944,21 +3945,22 @@ a.q-submit-btn {
   }
 
   /* CTA в потоке под бонус-блоком на мобиле */
-  .hero--video .hero-btn.hero-btn--inline {
-    position: static;
-    left: auto;
-    right: auto;
-    bottom: auto;
-    transform: none;
-    margin: 14px 24px 0 26px;
-    width: calc(100% - 50px);
-    max-width: none;
-    min-width: 0;
-    display: block;
+  .single-video-page .hero-bonus-wrap .hero-btn.hero-btn--inline {
+    position: static !important;
+    left: auto !important;
+    right: auto !important;
+    bottom: auto !important;
+    transform: none !important;
+    margin: 14px 24px 0 26px !important;
+    width: calc(100% - 50px) !important;
+    max-width: none !important;
+    min-width: 0 !important;
+    display: block !important;
     text-align: center;
     box-sizing: border-box;
-    align-self: stretch;
+    align-self: auto !important;
     padding: 14px 32px;
+    white-space: nowrap;
   }
 
   .cta-content h2 {
