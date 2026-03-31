@@ -1181,12 +1181,12 @@ function quizPriorityRender() {
         const lang = window.SiteI18n.getLang ? window.SiteI18n.getLang() : 'ru';
         const dict = (window.SiteI18n.STRINGS && window.SiteI18n.STRINGS[lang]) || window.SiteI18n.STRINGS.ru || {};
         return quizPriorityExpired
-          ? (dict.q_timer_expired || 'Бонус PDF 11 штрафов <span class="q-timer-accent">недоступен.</span>')
-          : (dict.q_timer_label || '<span class="q-timer-accent">Сгорает</span>: <span class="q-timer-muted">PDF 11 актуальных штрафов 2026</span>');
+          ? (dict.q_timer_expired || 'Чек-лист бракоразвода <span class="q-timer-accent">недоступен.</span>')
+          : (dict.q_timer_label || '<span class="q-timer-accent">Сгорает</span>: <span class="q-timer-muted">Чек-лист бракоразводного процесса</span>');
       })())
     : (quizPriorityExpired
-        ? 'Бонус PDF 11 штрафов <span class="q-timer-accent">недоступен.</span>'
-        : '<span class="q-timer-accent">Сгорает</span>: <span class="q-timer-muted">PDF 11 актуальных штрафов 2026</span>');
+        ? 'Чек-лист бракоразвода <span class="q-timer-accent">недоступен.</span>'
+        : '<span class="q-timer-accent">Сгорает</span>: <span class="q-timer-muted">Чек-лист бракоразводного процесса</span>');
   const time = quizPriorityExpired ? '00:00' : formatMmSs(quizPriorityRemainingMs);
 
   document.querySelectorAll('.q-timer').forEach((wrap) => {
