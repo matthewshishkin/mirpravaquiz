@@ -14,9 +14,9 @@
 
       hero_title_main:
         '<span class="title-desktop-only">Добейтесь с нашей помощью справедливых алиментов,<br>даже если он платит 50,000 ₸, а ездит на Land Cruiser.<br>Разберём вашу ситуацию за 30 минут!</span><span class="title-mobile-only">Добейтесь с нашей помощью<br>справедливых алиментов,<br>даже если он платит 50,000 ₸,<br>а ездит на Land Cruiser.<br>Разберём вашу ситуацию<br>за 30 минут!</span>',
-      hero_sub1: '<span class="hero-pill-emph">С учётом</span>&nbsp;законодательства 2026 года',
-      hero_sub2: 'Даже если у вас&nbsp;<span class="hero-pill-emph">уже есть юрист</span>',
-      hero_sub3: '<span class="hero-pill-emph">За 2 недели</span>',
+      hero_sub1: 'Даже если он скрывает доходы',
+      hero_sub2: 'Даже если имущество уже переписано',
+      hero_sub3: 'Без лишних походов в суд',
       hero_btn: '<span class="hero-btn-text">Выявить риски</span>',
 
       law_h2: 'Как часто меняется законодательство<br>в&nbsp;сфере HoReCa?',
@@ -205,9 +205,9 @@
 
       hero_title_main:
         '<span class="title-desktop-only">Добейтесь с нашей помощью справедливых алиментов,<br>даже если он платит 50,000 ₸, а ездит на Land Cruiser.<br>Разберём вашу ситуацию за 30 минут!</span><span class="title-mobile-only">Добейтесь с нашей помощью<br>справедливых алиментов,<br>даже если он платит 50,000 ₸,<br>а ездит на Land Cruiser.<br>Разберём вашу ситуацию<br>за 30 минут!</span>',
-      hero_sub1: '<span class="hero-pill-emph">2026 жылғы</span>&nbsp;заңнама талаптарын ескере отырып',
-      hero_sub2: 'Тіпті сізде&nbsp;<span class="hero-pill-emph">заңгер болса да</span>',
-      hero_sub3: '<span class="hero-pill-emph">2 аптада</span>',
+      hero_sub1: 'Тіпті ол табысын жасырса да',
+      hero_sub2: 'Тіпті мүлік әлдеқашан қайта рәсімделсе де',
+      hero_sub3: 'Сотқа артық барусыз',
       hero_btn: '<span class="hero-btn-text">Тәуекелді анықтау</span>',
 
       law_h2: 'HoReCa саласында заңнама қаншалықты жиі өзгереді?',
