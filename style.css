@@ -426,6 +426,39 @@ h3 { font-weight: normal; font-size: 1.05rem; }
   animation: none;
 }
 
+/* Hero bonus card: centered text + document stack on left edge */
+.single-video-page .hero-bonus-wrap .risk-bonus-card {
+  position: relative;
+  grid-template-columns: 1fr;
+  min-height: 220px;
+  padding: 22px 24px;
+}
+
+.single-video-page .hero-bonus-wrap .risk-bonus-copy {
+  width: 100%;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.single-video-page .hero-bonus-wrap .risk-bonus-preview {
+  position: absolute;
+  left: 12px;
+  right: auto;
+  bottom: -22px;
+}
+
+.single-video-page .hero-bonus-wrap .risk-bonus-preview-img--back {
+  left: 0;
+  right: auto;
+}
+
+.single-video-page .hero-bonus-wrap .risk-bonus-preview-img--front {
+  left: 14px;
+  right: auto;
+}
+
 @media (min-width: 961px) {
   .single-video-page .hero-content-wrap {
     align-items: flex-start;
