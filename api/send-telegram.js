@@ -3,7 +3,22 @@
  * Должен открываться: GET /api/send-telegram
  */
 const TELEGRAM_BOT_TOKEN = (process.env.TELEGRAM_BOT_TOKEN || '').trim();
-const TELEGRAM_CHAT_ID = (process.env.TELEGRAM_CHAT_ID || '').trim();
+const TELEGRAM_CHAT_ID_RAW = process.env.TELEGRAM_CHAT_ID || '';
+
+function normalizeTelegramChatId(value) {
+  const v = String(value || '')
+    .trim()
+    .replace(/^['"]|['"]$/g, '')
+    .replace(/[−–—]/g, '-')
+    .replace(/\s+/g, '');
+
+  if (!v) return '';
+  const sign = v.startsWith('-') ? '-' : '';
+  const digits = v.replace(/[^0-9]/g, '');
+  return digits ? `${sign}${digits}` : '';
+}
+
+const TELEGRAM_CHAT_ID = normalizeTelegramChatId(TELEGRAM_CHAT_ID_RAW);
 
 function readJsonBody(req) {
   return new Promise((resolve, reject) => {
@@ -89,6 +104,7 @@ async function handler(req, res) {
         env: {
           hasBotToken: Boolean(TELEGRAM_BOT_TOKEN),
           hasChatId: Boolean(TELEGRAM_CHAT_ID),
+          rawChatIdPreview: TELEGRAM_CHAT_ID_RAW ? `${String(TELEGRAM_CHAT_ID_RAW).slice(0, 8)}...` : null,
           chatIdPreview: TELEGRAM_CHAT_ID ? `${TELEGRAM_CHAT_ID.slice(0, 5)}...` : null,
         },
         tokenCheck: {
