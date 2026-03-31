@@ -1467,12 +1467,12 @@ blockquote {
   display: block;
   width: 100%;
   margin: 0;
-  padding: 8px;
-  border: 2px solid #111;
-  background: #111;
+  padding: 0;
+  border: none;
+  background: transparent;
   cursor: pointer;
-  border-radius: var(--radius);
-  overflow: hidden;
+  border-radius: 0;
+  overflow: visible;
   box-shadow: none;
   transition: transform 0.28s ease;
 }
@@ -1490,6 +1490,9 @@ blockquote {
   object-fit: contain;
   object-position: center top;
   background: #fff;
+  border: 2px solid #111;
+  box-sizing: border-box;
+  display: block;
 }
 .certs-caption {
   margin-top: 14px;
