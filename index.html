@@ -14,28 +14,12 @@
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@200;300;400;500&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="style.css?v=261" />
 </head>
-<body>
+<body class="single-video-page">
   <div id="siteLoadingOverlay" class="site-loading-overlay" aria-hidden="true">
     <div class="site-loading-percent" aria-live="polite">
       <span id="siteLoadingPercentNum">0</span>%
     </div>
   </div>
-
-  <!-- ╔══════════════════════════════╗ -->
-  <!-- ║          HEADER              ║ -->
-  <!-- ╚══════════════════════════════╝ -->
-  <header class="site-header" id="siteHeader">
-    <div class="container header-inner">
-      <a href="#hero" class="header-logo" data-i18n-aria="header_logo_aria" aria-label="Перейти к первому экрану">
-        <span class="header-logo-img" aria-hidden="true"></span>
-        <span>МИР ПРАВА</span>
-      </a>
-      <div class="header-actions">
-        <button class="btn btn-header btn-header--cta" type="button" onclick="openModal()" data-i18n="header_cta">Выявить риски</button>
-        <button type="button" class="btn btn-header" id="langToggle" aria-label="Қазақ тіліне">KZ</button>
-      </div>
-    </div>
-  </header>
 
   <!-- ╔══════════════════════════════╗ -->
   <!-- ║        БЛОК 1: HERO          ║ -->
@@ -53,6 +37,18 @@
     ></video>
     <!-- Тёмный оверлей + шум -->
     <div class="hero-overlay"></div>
+    <div class="site-header" id="siteHeader">
+      <div class="container header-inner">
+        <a href="#hero" class="header-logo" data-i18n-aria="header_logo_aria" aria-label="Перейти к первому экрану">
+          <span class="header-logo-img" aria-hidden="true"></span>
+          <span>МИР ПРАВА</span>
+        </a>
+        <div class="header-actions">
+          <button class="btn btn-header btn-header--cta" type="button" onclick="openModal()" data-i18n="header_cta">Выявить риски</button>
+          <button type="button" class="btn btn-header" id="langToggle" aria-label="Қазақ тіліне">KZ</button>
+        </div>
+      </div>
+    </div>
     <!-- Контент -->
     <div class="container hero-content-wrap">
       <div class="hero-content">
