@@ -825,9 +825,9 @@ h3 { font-weight: normal; font-size: 1.05rem; }
   margin-top: 16px;
   align-self: flex-end;
   margin-inline-start: auto;
-  border: 1.5px dashed rgba(0,0,0,0.35);
+  border: 1.5px dashed #33d17a;
   background: transparent;
-  color: #000;
+  color: #39ff88;
   border-radius: 10px;
   padding: 14px 22px;
   font-weight: 600;
@@ -835,8 +835,8 @@ h3 { font-weight: normal; font-size: 1.05rem; }
   transition: background 0.18s ease, border-color 0.18s ease, transform 0.18s ease;
 }
 .risk-bonus-btn:hover{
-  background: rgba(0,0,0,0.04);
-  border-color: rgba(0,0,0,0.50);
+  background: rgba(57,255,136,0.10);
+  border-color: #46ff93;
   transform: translateY(-1px);
 }
 .risk-bonus-btn:active{
