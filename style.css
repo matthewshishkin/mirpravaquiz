@@ -410,22 +410,47 @@ h3 { font-weight: normal; font-size: 1.05rem; }
   margin-top: 58px;
   align-self: flex-start;
   overflow: hidden;
-  border-color: #fff;
-  color: #fff;
+  border-color: rgba(199, 39, 45, 0.9);
+  color: #c7272d;
 }
 
-/* У inline-кнопки убираем shimmer-маску, чтобы не появлялись светлые артефакты-линии на hero */
+/* Inline CTA: вернуть shimmer и сделать его красным */
 .hero--video .hero-btn.hero-btn--inline::before {
-  display: none;
+  display: block;
+  background-image:
+    linear-gradient(rgba(199, 39, 45, 0.9), rgba(199, 39, 45, 0.9)),
+    linear-gradient(
+      90deg,
+      rgba(199, 39, 45, 0) 0%,
+      rgba(199, 39, 45, 0) 35%,
+      rgba(199, 39, 45, 0.28) 42%,
+      rgba(255, 107, 107, 1) 50%,
+      rgba(199, 39, 45, 0.28) 58%,
+      rgba(199, 39, 45, 0) 65%,
+      rgba(199, 39, 45, 0) 100%
+    );
 }
 
 .hero--video .hero-btn.hero-btn--inline .hero-btn-text {
-  background: none;
-  -webkit-background-clip: border-box;
-  background-clip: border-box;
-  -webkit-text-fill-color: #fff;
-  color: #fff;
-  animation: none;
+  background-image:
+    linear-gradient(rgba(199, 39, 45, 0.9), rgba(199, 39, 45, 0.9)),
+    linear-gradient(
+      90deg,
+      rgba(199, 39, 45, 0) 0%,
+      rgba(199, 39, 45, 0) 35%,
+      rgba(199, 39, 45, 0.28) 42%,
+      rgba(255, 107, 107, 1) 50%,
+      rgba(199, 39, 45, 0.28) 58%,
+      rgba(199, 39, 45, 0) 65%,
+      rgba(199, 39, 45, 0) 100%
+    );
+  background-size: 100% 100%, 240% 100%;
+  background-repeat: no-repeat;
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: #c7272d;
+  animation: heroBtnSheen 3.4s linear infinite;
 }
 
 /* Hero bonus card: centered text + document stack on left edge */
