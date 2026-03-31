@@ -3924,20 +3924,19 @@ a.q-submit-btn {
 
   .single-video-page .hero-bonus-wrap {
     width: 100%;
-    margin: 18px 0 8px;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
+    margin: 42px 0 8px;
+    display: block;
   }
   .single-video-page .hero-bonus-wrap .risk-bonus-card {
-    max-width: 100%;
+    width: calc(100% - 26px);
+    max-width: none;
+    margin-left: 26px;
     grid-template-columns: 120px 1fr;
     column-gap: 12px;
     min-height: 0;
     padding: 14px;
     border-radius: 12px;
-    transform: scale(0.9);
-    transform-origin: center top;
+    transform: none;
   }
   .single-video-page .hero-bonus-wrap .risk-bonus-preview {
     width: 120px;
