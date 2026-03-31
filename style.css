@@ -3944,8 +3944,8 @@ a.q-submit-btn {
     justify-self: start;
   }
 
-  /* CTA в потоке под бонус-блоком на мобиле */
-  .single-video-page .hero-bonus-wrap .hero-btn.hero-btn--inline {
+  /* CTA в потоке под бонус-блоком на мобиле (независимо от бонус-карточки) */
+  .single-video-page .hero-btn.hero-btn--inline {
     position: static !important;
     left: auto !important;
     right: auto !important;
