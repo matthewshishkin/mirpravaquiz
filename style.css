@@ -3915,8 +3915,7 @@ a.q-submit-btn {
 
   /* Мобилка: «За 2 недели» по ширине текста и слева */
   .hero-subtitle [data-i18n="hero_sub3"] {
-    align-self: flex-start;
-    width: fit-content;
+    display: none;
   }
 
   .hero-pill-emph {
