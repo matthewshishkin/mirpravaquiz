@@ -2394,7 +2394,7 @@ document.addEventListener('DOMContentLoaded', () => {
   function openCertViewer(pdfSrc) {
     if (!modal || !iframe) return;
     iframe.title = legitModalTitle();
-    iframe.src = `${pdfSrc}#view=FitH`;
+    iframe.src = pdfSrc;
     modal.classList.add('open');
     modal.setAttribute('aria-hidden', 'false');
     document.body.style.overflow = 'hidden';

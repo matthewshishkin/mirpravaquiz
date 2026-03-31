@@ -1426,7 +1426,7 @@ blockquote {
    BLOCK 8.5 — ЛЕГИТИМНОСТЬ (карусель сертификатов)
    ============================================= */
 .certs-section {
-  background: linear-gradient(180deg, #faf8f6 0%, #f3efe8 100%);
+  background: #fff;
   padding-top: 72px;
   padding-bottom: 96px;
 }
@@ -1467,22 +1467,21 @@ blockquote {
   display: block;
   width: 100%;
   margin: 0;
-  padding: 0;
-  border: none;
-  background: var(--white);
+  padding: 8px;
+  border: 2px solid #111;
+  background: #111;
   cursor: pointer;
   border-radius: var(--radius);
   overflow: hidden;
-  box-shadow: var(--shadow);
-  border: 1px solid var(--border);
+  box-shadow: 0 8px 28px rgba(0, 0, 0, 0.14);
   transition: transform 0.28s ease, box-shadow 0.28s ease;
 }
 .certs-thumb-btn:hover {
   transform: translateY(-4px);
-  box-shadow: 0 14px 40px rgba(123, 26, 43, 0.12);
+  box-shadow: 0 14px 40px rgba(0, 0, 0, 0.2);
 }
 .certs-thumb-btn:focus-visible {
-  outline: 2px solid var(--blue);
+  outline: 2px solid #111;
   outline-offset: 3px;
 }
 .certs-thumb-btn img {
@@ -1491,7 +1490,7 @@ blockquote {
   max-height: min(52vh, 460px);
   object-fit: contain;
   object-position: center top;
-  background: #f4f1eb;
+  background: #fff;
 }
 .certs-caption {
   margin-top: 14px;
