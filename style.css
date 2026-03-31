@@ -3855,7 +3855,7 @@ a.q-submit-btn {
   h1 { font-size: clamp(3.1rem, 8vw, 5rem); }
   h2 { font-size: clamp(2.8rem, 7vw, 4rem); }
   h3 { font-size: 1.5rem; }
-  .hero-title { font-size: clamp(1.632rem, 6.8544vw, 3.264rem); text-align: left; }
+  .hero-title { font-size: clamp(0.6528rem, 2.74176vw, 1.3056rem); text-align: left; }
   .hero-title .title-desktop-only br { display: none; }
 
   /* Hero subtitle pills: align left, stay within title width; no border on mobile */
