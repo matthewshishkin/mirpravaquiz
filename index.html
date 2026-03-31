@@ -3,13 +3,12 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>LA — Юридическая защита бизнеса в сфере HoReCa</title>
+  <title>Мир Права — Юридическая защита бракоразводных процессов</title>
   <!-- Лого в шапке: грузится из CSS; preload убран из-за предупреждений в консоли -->
   <!-- Тот же шрифт, что у заголовка hero — без смены начертания на экране загрузки -->
   <link rel="preload" href="PlayfairDisplay-Regular.e3c63bea.otf" as="font" type="font/otf" crossorigin />
-  <!-- Ранний старт загрузки фона 1-го экрана -->
-  <link rel="preload" href="/cr4.jpg" as="image" />
-  <link rel="preload" href="/cr5.png" as="image" />
+  <!-- Ранний старт загрузки видео 1-го экрана -->
+  <link rel="preload" href="/27.mp4" as="video" type="video/mp4" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@200;300;400;500&display=swap" rel="stylesheet" />
@@ -29,7 +28,7 @@
     <div class="container header-inner">
       <a href="#hero" class="header-logo" data-i18n-aria="header_logo_aria" aria-label="Перейти к первому экрану">
         <span class="header-logo-img" aria-hidden="true"></span>
-        <span>LEGAL ASSISTANCE</span>
+        <span>МИР ПРАВА</span>
       </a>
       <div class="header-actions">
         <button class="btn btn-header btn-header--cta" type="button" onclick="openModal()" data-i18n="header_cta">Выявить риски</button>
@@ -42,9 +41,16 @@
   <!-- ║        БЛОК 1: HERO          ║ -->
   <!-- ╚══════════════════════════════╝ -->
   <section class="hero hero--video" id="hero">
-    <!-- Фоновое изображение (вместо видео) -->
-    <img class="hero-video hero-video--a" src="/cr4.jpg" alt="" aria-hidden="true" />
-    <img class="hero-video hero-video--b" src="/cr5.png" alt="" aria-hidden="true" />
+    <video
+      class="hero-video"
+      src="/27.mp4"
+      autoplay
+      muted
+      loop
+      playsinline
+      preload="auto"
+      aria-hidden="true"
+    ></video>
     <!-- Тёмный оверлей + шум -->
     <div class="hero-overlay"></div>
     <!-- Контент -->
@@ -57,6 +63,22 @@
           <span class="hero-pill" data-i18n="hero_sub1" data-i18n-html="true">С учётом законодательства 2026 года</span>
           <span class="hero-pill" data-i18n="hero_sub2" data-i18n-html="true">Даже если у вас уже есть юрист</span>
           <span class="hero-pill" data-i18n="hero_sub3" data-i18n-html="true">За 2 недели</span>
+        </div>
+        <div class="hero-bonus-wrap">
+          <div class="risk-bonus-card">
+            <div class="risk-bonus-copy">
+              <div class="risk-bonus-title" data-i18n="risk3_bonus_h">Оставьте заявку</div>
+              <div class="risk-bonus-text" data-i18n="risk3_bonus_p" data-i18n-html="true">и заберите 11 актуальных<br>штрафов 2026 года<br>в HoReCa бонусом!</div>
+              <div class="risk-bonus-meta" data-i18n="risk3_bonus_tag">Документ · PDF</div>
+            </div>
+            <div class="risk-bonus-preview" aria-hidden="true">
+              <div class="risk-bonus-stack">
+                <img class="risk-bonus-preview-img risk-bonus-preview-img--back" src="risk-pdf-preview.png" alt="" loading="lazy" decoding="async" />
+                <img class="risk-bonus-preview-img risk-bonus-preview-img--front" src="risk-pdf-preview.png" alt="" loading="lazy" decoding="async" />
+              </div>
+            </div>
+          </div>
+          <button class="risk-bonus-btn hero-bonus-btn" type="button" onclick="openModal()" data-i18n="risk3_bonus_btn">Забрать PDF</button>
         </div>
         <button class="btn hero-btn" type="button" onclick="openModal()" data-i18n="hero_btn" data-i18n-html="true"><span class="hero-btn-text">Выявить риски</span></button>
       </div>
@@ -127,20 +149,6 @@
             <div class="risk-fine" data-i18n="risk3_f" data-i18n-html="true">Штраф: доначисление налогов + до 1&nbsp;500 МРП за каждое нарушение</div>
           </div>
 
-          <div class="risk-bonus-card">
-            <div class="risk-bonus-copy">
-              <div class="risk-bonus-title" data-i18n="risk3_bonus_h">Оставьте заявку</div>
-              <div class="risk-bonus-text" data-i18n="risk3_bonus_p" data-i18n-html="true">и заберите 11 актуальных<br>штрафов 2026 года<br>в HoReCa бонусом!</div>
-              <div class="risk-bonus-meta" data-i18n="risk3_bonus_tag">Документ · PDF</div>
-            </div>
-            <div class="risk-bonus-preview" aria-hidden="true">
-              <div class="risk-bonus-stack">
-                <img class="risk-bonus-preview-img risk-bonus-preview-img--back" src="risk-pdf-preview.png" alt="" loading="lazy" decoding="async" />
-                <img class="risk-bonus-preview-img risk-bonus-preview-img--front" src="risk-pdf-preview.png" alt="" loading="lazy" decoding="async" />
-              </div>
-            </div>
-          </div>
-          <button class="risk-bonus-btn" type="button" onclick="openModal()" data-i18n="risk3_bonus_btn">Забрать PDF</button>
         </div>
 
         <!-- (Скрыто по ТЗ) Пункты 4–6 -->

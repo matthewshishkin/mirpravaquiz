@@ -414,20 +414,9 @@ function updateHeroBottom() {
 function updateHeaderGlassProgress() {
   const header = document.getElementById('siteHeader');
   if (!header || !heroBottom) return;
-
-  const start = heroBottom - GLASS_START_OFFSET;
-  const end = heroBottom;
-  const raw = (window.scrollY - start) / Math.max(1, end - start);
-  const progress = clamp01(raw);
-
-  // 0%: плотный белый без blur
-  // 100%: белый "glass" с blur
-  const alpha = 1 - (1 - 0.86) * progress;
-  const blur = 10 * progress;
-
-  header.style.background = `rgba(255, 255, 255, ${alpha.toFixed(3)})`;
-  header.style.backdropFilter = `blur(${blur.toFixed(2)}px)`;
-  header.style.webkitBackdropFilter = `blur(${blur.toFixed(2)}px)`;
+  header.style.background = '#000';
+  header.style.backdropFilter = 'none';
+  header.style.webkitBackdropFilter = 'none';
 }
 
 /**
