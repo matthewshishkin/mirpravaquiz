@@ -2,8 +2,8 @@
  * Vercel Serverless (Node): прокси к Telegram Bot API.
  * Должен открываться: GET /api/send-telegram
  */
-const TELEGRAM_BOT_TOKEN = process.env.TELEGRAM_BOT_TOKEN;
-const TELEGRAM_CHAT_ID = process.env.TELEGRAM_CHAT_ID;
+const TELEGRAM_BOT_TOKEN = (process.env.TELEGRAM_BOT_TOKEN || '').trim();
+const TELEGRAM_CHAT_ID = (process.env.TELEGRAM_CHAT_ID || '').trim();
 
 function readJsonBody(req) {
   return new Promise((resolve, reject) => {
@@ -51,6 +51,43 @@ async function handler(req, res) {
   }
 
   if (req.method === 'GET') {
+    if (req.query && (req.query.health === '1' || req.query.health === 'true')) {
+      const baseUrl = `https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}`;
+      const [meResp, chatResp] = await Promise.all([
+        fetch(`${baseUrl}/getMe`),
+        fetch(`${baseUrl}/getChat`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ chat_id: TELEGRAM_CHAT_ID }),
+        }),
+      ]);
+
+      const meData = await meResp.json().catch(() => ({}));
+      const chatData = await chatResp.json().catch(() => ({}));
+
+      return res.status(200).json({
+        ok: Boolean(meData.ok) && Boolean(chatData.ok),
+        env: {
+          hasBotToken: Boolean(TELEGRAM_BOT_TOKEN),
+          hasChatId: Boolean(TELEGRAM_CHAT_ID),
+          chatIdPreview: TELEGRAM_CHAT_ID ? `${TELEGRAM_CHAT_ID.slice(0, 5)}...` : null,
+        },
+        tokenCheck: {
+          ok: Boolean(meData.ok),
+          description: meData.description || null,
+          botId: meData && meData.result ? meData.result.id : null,
+          botUsername: meData && meData.result ? meData.result.username : null,
+        },
+        chatCheck: {
+          ok: Boolean(chatData.ok),
+          description: chatData.description || null,
+          chatId: chatData && chatData.result ? chatData.result.id : null,
+          chatType: chatData && chatData.result ? chatData.result.type : null,
+          chatTitle: chatData && chatData.result ? (chatData.result.title || chatData.result.username || null) : null,
+        },
+      });
+    }
+
     return res.status(200).json({
       ok: true,
       hint: 'POST JSON: { "text": "..." }',
