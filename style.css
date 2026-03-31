@@ -3866,7 +3866,7 @@ a.q-submit-btn {
   h1 { font-size: clamp(3.1rem, 8vw, 5rem); }
   h2 { font-size: clamp(2.8rem, 7vw, 4rem); }
   h3 { font-size: 1.5rem; }
-  .hero-title { font-size: clamp(1.632rem, 6.8544vw, 3.264rem); text-align: left; }
+  .hero-title { font-size: clamp(1.3872rem, 5.82624vw, 2.7744rem); text-align: left; }
   .hero-title .title-desktop-only br { display: none; }
   .single-video-page .hero-title .title-mobile-only { display: inline; font-size: 1em; line-height: 1.2; }
 
