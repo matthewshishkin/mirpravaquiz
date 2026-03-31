@@ -3925,6 +3925,8 @@ a.q-submit-btn {
   .single-video-page .hero-bonus-wrap {
     width: 100%;
     margin: 18px 0 8px;
+    display: flex;
+    justify-content: center;
   }
   .single-video-page .hero-bonus-wrap .risk-bonus-card {
     max-width: 100%;
@@ -3933,6 +3935,8 @@ a.q-submit-btn {
     min-height: 0;
     padding: 14px;
     border-radius: 12px;
+    transform: scale(0.9);
+    transform-origin: center top;
   }
   .single-video-page .hero-bonus-wrap .risk-bonus-preview {
     width: 120px;
