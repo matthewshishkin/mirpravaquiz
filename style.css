@@ -3869,6 +3869,10 @@ a.q-submit-btn {
   .hero-title { font-size: clamp(1.4688rem, 6.16896vw, 2.9376rem); text-align: left; }
   .hero-title .title-desktop-only br { display: none; }
   .single-video-page .hero-title .title-mobile-only { display: inline; font-size: 1em; line-height: 1.2; }
+  .single-video-page .hero-title {
+    margin-left: 36px;
+    width: calc(100% - 36px);
+  }
 
   /* Hero subtitle pills: align left, stay within title width; no border on mobile */
   .hero-subtitle {
@@ -3877,10 +3881,11 @@ a.q-submit-btn {
     flex-direction: column;
     flex-wrap: nowrap;
     width: 100%;
-    margin-left: 0;
+    margin-left: 36px;
     margin-right: 0;
     margin-top: -10px;
     margin-bottom: 18px;
+    width: calc(100% - 36px);
   }
   .hero-pill {
     border: none;
