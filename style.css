@@ -1462,10 +1462,12 @@ blockquote {
   flex-shrink: 0;
   box-sizing: border-box;
   padding: 0 8px;
+  text-align: center;
 }
 .certs-thumb-btn {
-  display: block;
-  width: 100%;
+  display: inline-block;
+  width: auto;
+  max-width: 100%;
   margin: 0;
   padding: 0;
   border: none;
@@ -1484,12 +1486,10 @@ blockquote {
   outline-offset: 3px;
 }
 .certs-thumb-btn img {
-  width: 100%;
+  width: auto;
   height: auto;
+  max-width: 100%;
   max-height: min(52vh, 460px);
-  object-fit: contain;
-  object-position: center top;
-  background: #fff;
   border: 2px solid #111;
   box-sizing: border-box;
   display: block;
