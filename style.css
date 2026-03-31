@@ -3950,7 +3950,7 @@ a.q-submit-btn {
     left: auto !important;
     right: auto !important;
     bottom: auto !important;
-    transform: none !important;
+    transform: none;
     margin: 14px 24px 0 26px !important;
     width: calc(100% - 50px) !important;
     max-width: none !important;
@@ -3961,6 +3961,7 @@ a.q-submit-btn {
     align-self: auto !important;
     padding: 14px 32px;
     white-space: nowrap;
+    will-change: transform;
   }
 
   .cta-content h2 {
