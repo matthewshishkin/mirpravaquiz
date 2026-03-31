@@ -104,6 +104,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
   const mqReduce = window.matchMedia('(prefers-reduced-motion: reduce)');
   const AUTOPLAY_MS = 2200;
+  const LONG_DELAY_SLIDE_INDEX = 3; // flow4
+  const LONG_DELAY_MULTIPLIER = 2;
 
   if (mqReduce.matches) {
     root.classList.add('monitoring-carousel--static');
@@ -124,17 +126,22 @@ document.addEventListener('DOMContentLoaded', () => {
 
   function stopAutoplay() {
     if (autoplayTimer != null) {
-      window.clearInterval(autoplayTimer);
+      window.clearTimeout(autoplayTimer);
       autoplayTimer = null;
     }
   }
 
+  function autoplayDelayForCurrentSlide() {
+    return index === LONG_DELAY_SLIDE_INDEX ? AUTOPLAY_MS * LONG_DELAY_MULTIPLIER : AUTOPLAY_MS;
+  }
+
   function startAutoplay() {
     stopAutoplay();
-    autoplayTimer = window.setInterval(() => {
+    autoplayTimer = window.setTimeout(function tick() {
       const next = index + 1 >= steps.length ? 0 : index + 1;
       goTo(next, true);
-    }, AUTOPLAY_MS);
+      autoplayTimer = window.setTimeout(tick, autoplayDelayForCurrentSlide());
+    }, autoplayDelayForCurrentSlide());
   }
 
   function updateDots() {
