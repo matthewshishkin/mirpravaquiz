@@ -6,14 +6,14 @@
 
   const STRINGS = {
     ru: {
-      page_title: 'Мир Права — Юридическая защита бракоразводных процессов',
+      page_title: 'Мир Права — Юридическое сопровождение бракоразводных процессов',
       header_logo_aria: 'Перейти к первому экрану',
       header_cta: 'Выявить риски',
       lang_toggle_to_kk: 'Қазақ тіліне ауыстыру',
       lang_toggle_to_ru: 'Орыс тіліне ауыстыру',
 
       hero_title_main:
-        '<span class="title-desktop-only">Экономим ресторанам и отелям от 10,000,000 тенге<br>на штрафах инспекций и договорах с поставщиками</span><span class="title-mobile-only">Экономим деньги<br>ресторанам и отелям<br>от 10,000,000 тенге<br>на штрафах инспекций<br>и договорах с поставщиками</span>',
+        '<span class="title-desktop-only">Мир Права — Юридическое сопровождение бракоразводных процессов</span><span class="title-mobile-only">Мир Права —<br>Юридическое сопровождение<br>бракоразводных процессов</span>',
       hero_sub1: '<span class="hero-pill-emph">С учётом</span>&nbsp;законодательства 2026 года',
       hero_sub2: 'Даже если у вас&nbsp;<span class="hero-pill-emph">уже есть юрист</span>',
       hero_sub3: '<span class="hero-pill-emph">За 2 недели</span>',
@@ -199,14 +199,14 @@
       marquee_alt: 'Клиника',
     },
     kk: {
-      page_title: 'Мир Права — Юридическая защита бракоразводных процессов',
+      page_title: 'Мир Права — Юридическое сопровождение бракоразводных процессов',
       header_logo_aria: 'Бірінші экранға өту',
       header_cta: 'Тәуекелді анықтау',
       lang_toggle_to_kk: 'Қазақ тіліне ауыстыру',
       lang_toggle_to_ru: 'Орыс тіліне ауыстыру',
 
       hero_title_main:
-        '<span class="title-desktop-only">Ресторан мен қонақ үйлерге инспекция айыппұлдарынан және жеткізушілермен шарттар бойынша 10&nbsp;000&nbsp;000 теңгеден бастап үнемдейміз</span><span class="title-mobile-only">Ресторан мен қонақ үйлерге<br>ақшаны үнемдейміз<br>10&nbsp;000&nbsp;000 теңгеден<br>инспекция айыппұлдарынан<br>және жеткізушілермен шарттардан</span>',
+        '<span class="title-desktop-only">Мир Права — Юридическое сопровождение бракоразводных процессов</span><span class="title-mobile-only">Мир Права —<br>Юридическое сопровождение<br>бракоразводных процессов</span>',
       hero_sub1: '<span class="hero-pill-emph">2026 жылғы</span>&nbsp;заңнама талаптарын ескере отырып',
       hero_sub2: 'Тіпті сізде&nbsp;<span class="hero-pill-emph">заңгер болса да</span>',
       hero_sub3: '<span class="hero-pill-emph">2 аптада</span>',

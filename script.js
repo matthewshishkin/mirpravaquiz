@@ -414,6 +414,12 @@ function updateHeroBottom() {
 function updateHeaderGlassProgress() {
   const header = document.getElementById('siteHeader');
   if (!header || !heroBottom) return;
+  if (document.body && document.body.classList.contains('single-video-page')) {
+    header.style.background = 'transparent';
+    header.style.backdropFilter = 'none';
+    header.style.webkitBackdropFilter = 'none';
+    return;
+  }
   header.style.background = '#000';
   header.style.backdropFilter = 'none';
   header.style.webkitBackdropFilter = 'none';
