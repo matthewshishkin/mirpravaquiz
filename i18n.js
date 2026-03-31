@@ -17,7 +17,7 @@
       hero_sub1: 'Даже если он скрывает доходы',
       hero_sub2: 'Даже если имущество уже переписано',
       hero_sub3: 'Без лишних походов в суд',
-      hero_btn: '<span class="hero-btn-text">Выявить риски</span>',
+      hero_btn: '<span class="hero-btn-text">Оставить заявку</span>',
 
       law_h2: 'Как часто меняется законодательство<br>в&nbsp;сфере HoReCa?',
       law_c1_t: 'Контрагенты',
@@ -208,7 +208,7 @@
       hero_sub1: 'Тіпті ол табысын жасырса да',
       hero_sub2: 'Тіпті мүлік әлдеқашан қайта рәсімделсе де',
       hero_sub3: 'Сотқа артық барусыз',
-      hero_btn: '<span class="hero-btn-text">Тәуекелді анықтау</span>',
+      hero_btn: '<span class="hero-btn-text">Өтінім қалдыру</span>',
 
       law_h2: 'HoReCa саласында заңнама қаншалықты жиі өзгереді?',
       law_c1_t: 'Контрагенттер',
