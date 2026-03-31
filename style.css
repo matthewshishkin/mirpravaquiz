@@ -402,19 +402,14 @@ h3 { font-weight: normal; font-size: 1.05rem; }
   margin-top: 0;
 }
 
-.hero-bonus-cta {
+.hero--video .hero-btn.hero-btn--inline {
+  position: static;
+  left: auto;
+  bottom: auto;
+  transform: none;
   margin-top: 18px;
   align-self: flex-start;
-  border: 1px solid #7B1A2B;
-  background: #7B1A2B;
-  color: #fff;
-  padding: 14px 34px;
-}
-
-.hero-bonus-cta:hover {
-  background: #5C1220;
-  border-color: #5C1220;
-  color: #fff;
+  overflow: hidden;
 }
 
 @media (min-width: 961px) {
