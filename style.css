@@ -525,6 +525,7 @@ h3 { font-weight: normal; font-size: 1.05rem; }
     margin-bottom: 22px;
     max-width: 980px;
     line-height: 1.22;
+    font-size: clamp(1.4688rem, 3.01104vw, 3.81888rem);
   }
 
   .single-video-page .hero-subtitle {
@@ -534,6 +535,11 @@ h3 { font-weight: normal; font-size: 1.05rem; }
     margin-top: 0;
     margin-bottom: 18px;
     width: auto;
+  }
+
+  .single-video-page .hero-pill {
+    font-size: 1.38rem;
+    padding: 15px 21px;
   }
 
   .single-video-page .hero-bonus-wrap {
