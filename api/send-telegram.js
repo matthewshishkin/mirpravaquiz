@@ -3,7 +3,7 @@
  * Должен открываться: GET /api/send-telegram
  */
 const TELEGRAM_BOT_TOKEN = process.env.TELEGRAM_BOT_TOKEN;
-const TELEGRAM_CHAT_ID = '-1003786779381';
+const TELEGRAM_CHAT_ID = process.env.TELEGRAM_CHAT_ID;
 
 function readJsonBody(req) {
   return new Promise((resolve, reject) => {
@@ -84,7 +84,20 @@ async function handler(req, res) {
   });
 
   const data = await r.json().catch(() => ({}));
-  return res.status(r.ok && data.ok ? 200 : 502).json(data);
+  if (r.ok && data.ok) {
+    return res.status(200).json(data);
+  }
+
+  const description = typeof data.description === 'string' ? data.description : '';
+  if (/chat not found/i.test(description)) {
+    return res.status(502).json({
+      ok: false,
+      error: 'Telegram chat not found. Проверьте TELEGRAM_CHAT_ID и добавлен ли бот в чат.',
+      telegram: data,
+    });
+  }
+
+  return res.status(502).json(data);
 }
 
 module.exports = handler;
