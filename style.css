@@ -374,7 +374,7 @@ h3 { font-weight: normal; font-size: 1.05rem; }
   transform: translateX(-50%);
 }
 
-.hero-title { margin-bottom: 36px; color: #fff; font-size: clamp(1.224rem, 2.5092vw, 3.1824rem); font-weight: 500; width: 100%; }
+.hero-title { margin-bottom: 36px; color: #fff; font-size: clamp(0.9792rem, 2.00736vw, 2.54592rem); font-weight: 500; width: 100%; }
 
 .hero-title-keyword {
   color: #c1272d;
@@ -3817,7 +3817,7 @@ a.q-submit-btn {
   h1 { font-size: clamp(3.1rem, 8vw, 5rem); }
   h2 { font-size: clamp(2.8rem, 7vw, 4rem); }
   h3 { font-size: 1.5rem; }
-  .hero-title { font-size: clamp(2.04rem, 8.568vw, 4.08rem); text-align: left; }
+  .hero-title { font-size: clamp(1.632rem, 6.8544vw, 3.264rem); text-align: left; }
   .hero-title .title-desktop-only br { display: none; }
 
   /* Hero subtitle pills: align left, stay within title width; no border on mobile */
