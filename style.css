@@ -245,7 +245,7 @@ h3 { font-weight: normal; font-size: 1.05rem; }
 @media (max-width: 700px) {
   .single-video-page .header-logo {
     /* Visual align with the first letter start of hero title */
-    transform: translateX(-8px);
+    transform: translateX(-18px);
   }
 
   .header-logo {
@@ -408,22 +408,22 @@ h3 { font-weight: normal; font-size: 1.05rem; }
 }
 
 .hero--video .hero-btn.hero-btn--inline {
-  position: static;
+  position: relative;
   left: auto;
   bottom: auto;
   transform: none;
   margin-top: 58px;
   align-self: flex-start;
   overflow: hidden;
-  border-color: rgba(199, 39, 45, 0.9);
-  color: #c7272d;
+  border-color: #fff;
+  color: #fff;
 }
 
 /* Inline CTA: вернуть shimmer и сделать его красным */
 .hero--video .hero-btn.hero-btn--inline::before {
   display: block;
   background-image:
-    linear-gradient(rgba(199, 39, 45, 0.9), rgba(199, 39, 45, 0.9)),
+    linear-gradient(rgba(255, 255, 255, 0.68), rgba(255, 255, 255, 0.68)),
     linear-gradient(
       90deg,
       rgba(199, 39, 45, 0) 0%,
@@ -438,7 +438,7 @@ h3 { font-weight: normal; font-size: 1.05rem; }
 
 .hero--video .hero-btn.hero-btn--inline .hero-btn-text {
   background-image:
-    linear-gradient(rgba(199, 39, 45, 0.9), rgba(199, 39, 45, 0.9)),
+    linear-gradient(rgba(255, 255, 255, 0.88), rgba(255, 255, 255, 0.88)),
     linear-gradient(
       90deg,
       rgba(199, 39, 45, 0) 0%,
@@ -454,7 +454,7 @@ h3 { font-weight: normal; font-size: 1.05rem; }
   -webkit-background-clip: text;
   background-clip: text;
   -webkit-text-fill-color: transparent;
-  color: #c7272d;
+  color: #fff;
   animation: heroBtnSheen 3.4s linear infinite;
 }
 
@@ -3951,7 +3951,7 @@ a.q-submit-btn {
 
 @media (min-width: 701px) {
   .single-video-page .header-logo {
-    transform: translateX(-8px);
+    transform: translateX(-18px);
   }
 }
 
