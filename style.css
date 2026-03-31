@@ -3785,11 +3785,14 @@ a.q-submit-btn {
   .hero-content-wrap {
     padding-top: 40px;
     padding-bottom: 24px;
+    padding-left: 24px;
+    padding-right: 24px;
     display: flex;
     flex-direction: column;
     min-height: calc(100vh - var(--header-h));
     justify-content: flex-start;
-    align-items: center;
+    align-items: flex-start;
+    text-align: left;
   }
   .hero--video .hero-content {
     margin-top: 52px;
