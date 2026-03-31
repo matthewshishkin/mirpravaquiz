@@ -872,6 +872,10 @@ h3 { font-weight: normal; font-size: 1.05rem; }
   color: rgba(255,255,255,0.58);
 }
 
+.single-video-page .hero-bonus-wrap .risk-bonus-meta{
+  margin-top: calc(24px + 0.8em);
+}
+
 .risk-bonus-nowrap{
   white-space: nowrap;
 }
