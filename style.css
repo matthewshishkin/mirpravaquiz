@@ -3887,6 +3887,7 @@ a.q-submit-btn {
   .single-video-page .hero-title {
     margin-left: 26px;
     width: calc(100% - 26px);
+    transform: translateY(-26px);
   }
 
   /* Hero subtitle pills: align left, stay within title width; no border on mobile */
@@ -3901,6 +3902,7 @@ a.q-submit-btn {
     margin-top: -10px;
     margin-bottom: 18px;
     width: calc(100% - 26px);
+    transform: translateY(-26px);
   }
   .hero-pill {
     border: none;
@@ -3926,6 +3928,7 @@ a.q-submit-btn {
     width: 100%;
     margin: 42px 0 8px;
     display: block;
+    transform: translateY(-26px);
   }
   .single-video-page .hero-bonus-wrap .risk-bonus-card {
     width: calc(100% - 26px);
