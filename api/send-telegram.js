@@ -1,24 +1,12 @@
 /**
  * Vercel Serverless (Node): прокси к Telegram Bot API.
  * Должен открываться: GET /api/send-telegram
+ * parse_mode HTML + tg-spoiler для UTM
  */
-const TELEGRAM_BOT_TOKEN = (process.env.TELEGRAM_BOT_TOKEN || '').trim();
-const TELEGRAM_CHAT_ID_RAW = process.env.TELEGRAM_CHAT_ID || '';
-
-function normalizeTelegramChatId(value) {
-  const v = String(value || '')
-    .trim()
-    .replace(/^['"]|['"]$/g, '')
-    .replace(/[−–—]/g, '-')
-    .replace(/\s+/g, '');
-
-  if (!v) return '';
-  const sign = v.startsWith('-') ? '-' : '';
-  const digits = v.replace(/[^0-9]/g, '');
-  return digits ? `${sign}${digits}` : '';
-}
-
-const TELEGRAM_CHAT_ID = normalizeTelegramChatId(TELEGRAM_CHAT_ID_RAW);
+const TELEGRAM_BOT_TOKEN = process.env.TELEGRAM_BOT_TOKEN;
+const TELEGRAM_CHAT_ID = process.env.TELEGRAM_CHAT_ID;
+const UPSTASH_REDIS_REST_URL = process.env.UPSTASH_REDIS_REST_URL;
+const UPSTASH_REDIS_REST_TOKEN = process.env.UPSTASH_REDIS_REST_TOKEN;
 
 function readJsonBody(req) {
   return new Promise((resolve, reject) => {
@@ -49,6 +37,104 @@ function readJsonBody(req) {
   });
 }
 
+function sanitizeUtmValue(v) {
+  if (v == null) return null;
+  const s = String(v).trim();
+  if (!s) return null;
+  return s.slice(0, 300);
+}
+
+function normalizeUtm(utm) {
+  if (!utm || typeof utm !== 'object') return null;
+  const out = {
+    utm_source: sanitizeUtmValue(utm.utm_source),
+    utm_medium: sanitizeUtmValue(utm.utm_medium),
+    utm_campaign: sanitizeUtmValue(utm.utm_campaign),
+    utm_content: sanitizeUtmValue(utm.utm_content),
+    utm_term: sanitizeUtmValue(utm.utm_term),
+  };
+  const hasAny = Object.values(out).some(Boolean);
+  return hasAny ? out : null;
+}
+
+/** Telegram HTML: &, <, > */
+function escapeHtml(s) {
+  return String(s)
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;');
+}
+
+/** Склонение «N лид / лида / лидов» */
+function pluralLeadsRu(n) {
+  const x = Math.abs(Math.floor(Number(n)) || 0);
+  const mod100 = x % 100;
+  const mod10 = x % 10;
+  let word = 'лидов';
+  if (mod100 < 11 || mod100 > 14) {
+    if (mod10 === 1) word = 'лид';
+    else if (mod10 >= 2 && mod10 <= 4) word = 'лида';
+  }
+  return `${x} ${word}`;
+}
+
+async function upstashIncr(key) {
+  if (!UPSTASH_REDIS_REST_URL || !UPSTASH_REDIS_REST_TOKEN) return null;
+  const url = `${UPSTASH_REDIS_REST_URL.replace(/\/$/, '')}/incr/${encodeURIComponent(key)}`;
+  const r = await fetch(url, {
+    headers: { Authorization: `Bearer ${UPSTASH_REDIS_REST_TOKEN}` },
+  });
+  const data = await r.json().catch(() => null);
+  if (!r.ok || !data || typeof data.result !== 'number') return null;
+  return data.result;
+}
+
+function buildUtmSpoilerHtml(utm) {
+  if (!utm) return '';
+  const lines = ['🔎 UTM'];
+  if (utm.utm_source) lines.push(`utm_source: ${utm.utm_source}`);
+  if (utm.utm_medium) lines.push(`utm_medium: ${utm.utm_medium}`);
+  if (utm.utm_campaign) lines.push(`utm_campaign: ${utm.utm_campaign}`);
+  if (utm.utm_content) lines.push(`utm_content: ${utm.utm_content}`);
+  if (utm.utm_term) lines.push(`utm_term: ${utm.utm_term}`);
+  if (lines.length <= 1) return '';
+  /* В HTML-режиме Telegram тег <br> не поддерживается — только \n */
+  const inner = lines.map((line) => escapeHtml(line)).join('\n');
+  return `<tg-spoiler>${inner}</tg-spoiler>`;
+}
+
+/** Тело заявки: экранирование HTML; переносы строк — \n (не <br>) */
+function bodyToTelegramHtml(plain) {
+  return escapeHtml(plain).replace(/\r\n/g, '\n');
+}
+
+function buildMessageHtml({ text, utm, totalLeadNo, perAdLeadNo, adName }) {
+  const blocks = [];
+  blocks.push('🔔 Новая заявка с сайта!');
+  blocks.push('');
+  if (typeof totalLeadNo === 'number') {
+    blocks.push(`№ Лида: ${totalLeadNo}`);
+  } else {
+    blocks.push('№ Лида: —');
+  }
+  if (adName) {
+    const safeName = escapeHtml(adName);
+    if (typeof perAdLeadNo === 'number') {
+      blocks.push(`От крео &quot;${safeName}&quot;: ${pluralLeadsRu(perAdLeadNo)}`);
+    } else {
+      blocks.push(`От крео &quot;${safeName}&quot;: —`);
+    }
+  }
+  blocks.push('');
+  const spoiler = buildUtmSpoilerHtml(utm);
+  if (spoiler) {
+    blocks.push(spoiler);
+    blocks.push('');
+  }
+  blocks.push(bodyToTelegramHtml(text));
+  return blocks.join('\n');
+}
+
 async function handler(req, res) {
   res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS, GET');
@@ -66,71 +152,9 @@ async function handler(req, res) {
   }
 
   if (req.method === 'GET') {
-    if (req.query && (req.query.health === '1' || req.query.health === 'true')) {
-      const baseUrl = `https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}`;
-      const [meResp, chatResp, updatesResp] = await Promise.all([
-        fetch(`${baseUrl}/getMe`),
-        fetch(`${baseUrl}/getChat`, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ chat_id: TELEGRAM_CHAT_ID }),
-        }),
-        fetch(`${baseUrl}/getUpdates?offset=-20&limit=20&timeout=0`),
-      ]);
-
-      const meData = await meResp.json().catch(() => ({}));
-      const chatData = await chatResp.json().catch(() => ({}));
-      const updatesData = await updatesResp.json().catch(() => ({}));
-
-      const recentChatsMap = new Map();
-      const updates = Array.isArray(updatesData && updatesData.result) ? updatesData.result : [];
-      updates.forEach((u) => {
-        const msg = (u && (u.message || u.channel_post || u.edited_message || u.edited_channel_post)) || null;
-        const c = msg && msg.chat ? msg.chat : null;
-        if (!c || c.id == null) return;
-        const key = String(c.id);
-        if (!recentChatsMap.has(key)) {
-          recentChatsMap.set(key, {
-            id: c.id,
-            type: c.type || null,
-            title: c.title || c.username || [c.first_name, c.last_name].filter(Boolean).join(' ') || null,
-          });
-        }
-      });
-      const recentChats = Array.from(recentChatsMap.values()).slice(0, 10);
-
-      return res.status(200).json({
-        ok: Boolean(meData.ok) && Boolean(chatData.ok),
-        env: {
-          hasBotToken: Boolean(TELEGRAM_BOT_TOKEN),
-          hasChatId: Boolean(TELEGRAM_CHAT_ID),
-          rawChatIdPreview: TELEGRAM_CHAT_ID_RAW ? `${String(TELEGRAM_CHAT_ID_RAW).slice(0, 8)}...` : null,
-          chatIdPreview: TELEGRAM_CHAT_ID ? `${TELEGRAM_CHAT_ID.slice(0, 5)}...` : null,
-        },
-        tokenCheck: {
-          ok: Boolean(meData.ok),
-          description: meData.description || null,
-          botId: meData && meData.result ? meData.result.id : null,
-          botUsername: meData && meData.result ? meData.result.username : null,
-        },
-        chatCheck: {
-          ok: Boolean(chatData.ok),
-          description: chatData.description || null,
-          chatId: chatData && chatData.result ? chatData.result.id : null,
-          chatType: chatData && chatData.result ? chatData.result.type : null,
-          chatTitle: chatData && chatData.result ? (chatData.result.title || chatData.result.username || null) : null,
-        },
-        updatesCheck: {
-          ok: Boolean(updatesData.ok),
-          description: updatesData.description || null,
-          recentChats,
-        },
-      });
-    }
-
     return res.status(200).json({
       ok: true,
-      hint: 'POST JSON: { "text": "..." }',
+      hint: 'POST JSON: { "text": "...", "utm": { ... } }',
     });
   }
 
@@ -150,31 +174,34 @@ async function handler(req, res) {
     return res.status(400).json({ ok: false, error: 'Missing text' });
   }
 
+  const utm = normalizeUtm(body && body.utm);
+  const adName = utm && utm.utm_term ? utm.utm_term : null;
+
+  const totalLeadNo = await upstashIncr('leads:total');
+  const perAdLeadNo = adName ? await upstashIncr(`leads:ad:${adName}`) : null;
+
+  const html = buildMessageHtml({
+    text,
+    utm,
+    totalLeadNo,
+    perAdLeadNo,
+    adName,
+  });
+
   const url = `https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage`;
   const r = await fetch(url, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({
       chat_id: TELEGRAM_CHAT_ID,
-      text,
+      text: html,
+      parse_mode: 'HTML',
+      disable_web_page_preview: true,
     }),
   });
 
   const data = await r.json().catch(() => ({}));
-  if (r.ok && data.ok) {
-    return res.status(200).json(data);
-  }
-
-  const description = typeof data.description === 'string' ? data.description : '';
-  if (/chat not found/i.test(description)) {
-    return res.status(502).json({
-      ok: false,
-      error: 'Telegram chat not found. Проверьте TELEGRAM_CHAT_ID и добавлен ли бот в чат.',
-      telegram: data,
-    });
-  }
-
-  return res.status(502).json(data);
+  return res.status(r.ok && data.ok ? 200 : 502).json(data);
 }
 
 module.exports = handler;

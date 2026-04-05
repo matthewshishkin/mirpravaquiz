@@ -1017,7 +1017,7 @@ function resetQuizToEmptyContactStep() {
 /** Ссылка на WhatsApp (LinkTwin) — кнопка «Связаться вне очереди» после шага «Отлично!…» */
 const WHATSAPP_QUIZ_URL = 'https://linktw.in/ocjIoY';
 
-/** Прокси на Vercel (без CORS): POST JSON { text } → пересылает в Telegram */
+/** Прокси на Vercel (без CORS): POST JSON { text, utm } → HTML + спойлер UTM, счётчики на сервере */
 const TELEGRAM_PROXY_URL = '/api/send-telegram';
 
 function getQuizStepQuestionTitle(stepNum) {
@@ -1064,7 +1064,7 @@ function formatQuizAnswerForStep(step) {
   return getQuizOptionLabel(step, raw);
 }
 
-/** Текст заявки для Telegram (plain text, все шаги квиза + контакты). */
+/** Текст заявки для Telegram: контакты + ответы (заголовок и нумерация лида добавляет сервер). */
 function buildTelegramLeadMessage(form) {
   const fd = new FormData(form);
   const name = (fd.get('name') || '').toString().trim();
@@ -1073,20 +1073,36 @@ function buildTelegramLeadMessage(form) {
 
   const contactBlock = `👤 Имя: ${name}\n📞 Телефон: ${phone}\n📍 Город: ${city}`;
 
-  const qaLines = [];
+  const qaParts = [];
   for (let s = 1; s <= TOTAL_STEPS; s++) {
     const qTitle = getQuizStepQuestionTitle(s);
     const ans = formatQuizAnswerForStep(s);
-    qaLines.push(`${qTitle}: ${ans}`);
+    qaParts.push(`Вопрос ${s}:\n${qTitle}\nОтвет: ${ans}`);
   }
-  const answersBlock = qaLines.join('\n\n');
+  const answersBlock = qaParts.join('\n\n');
 
-  return (
-    `🔔 Новая заявка с сайта!\n\n` +
-    `${contactBlock}\n\n` +
-    `📋 Ответы на вопросы:\n\n` +
-    answersBlock
-  );
+  return `${contactBlock}\n\n📋 Ответы на вопросы:\n\n${answersBlock}`;
+}
+
+function getUtmFromUrl() {
+  try {
+    const params = new URLSearchParams(window.location.search || '');
+    const pick = (k) => {
+      const v = (params.get(k) || '').toString().trim();
+      return v || null;
+    };
+    const utm = {
+      utm_source: pick('utm_source'),
+      utm_medium: pick('utm_medium'),
+      utm_campaign: pick('utm_campaign'),
+      utm_content: pick('utm_content'),
+      utm_term: pick('utm_term'),
+    };
+    const hasAny = Object.values(utm).some(Boolean);
+    return hasAny ? utm : null;
+  } catch (_) {
+    return null;
+  }
 }
 
 /**
@@ -1094,10 +1110,11 @@ function buildTelegramLeadMessage(form) {
  */
 async function sendQuizLeadToTelegram(form) {
   const text = buildTelegramLeadMessage(form);
+  const utm = getUtmFromUrl();
   const res = await fetch(TELEGRAM_PROXY_URL, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ text }),
+    body: JSON.stringify({ text, utm }),
   });
   const data = await res.json().catch(() => ({}));
   if (!res.ok || !data || data.ok !== true) {
