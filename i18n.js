@@ -186,7 +186,7 @@
       q_next: 'Далее',
       q_timer_label: '<span class="q-timer-accent">Сгорает</span>: <span class="q-timer-muted">Чек-лист бракоразводного процесса</span>',
       q_timer_expired: 'Чек-лист бракоразвода <span class="q-timer-accent">недоступен.</span>',
-      q_submit: 'Выявить риски',
+      q_submit: 'Вернуть средства',
       q_ok_h: 'Заявка принята!',
       q_ok_p: 'Юрист свяжется с вами в&nbsp;течение 30&nbsp;минут',
       q_ok_note:
@@ -384,7 +384,7 @@
       q_timer_label:
         '<span class="q-timer-accent">Өшеді</span>: <span class="q-timer-muted">Ажырасу процесінің чек-парағы</span>',
       q_timer_expired: 'Ажырасу чек-парағы <span class="q-timer-accent">қолжетімсіз.</span>',
-      q_submit: 'Тәуекелді анықтау',
+      q_submit: 'Қаражатты қайтару',
       q_ok_h: 'Өтініш қабылданды!',
       q_ok_p: '30&nbsp;минут ішінде заңгер сізбен байланысады',
       q_ok_note:

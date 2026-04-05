@@ -2987,8 +2987,40 @@ blockquote {
 .q-step#step6 h3 { font-size: 1.71rem; margin-bottom: 10px; }
 #step6 .q-hint { margin-bottom: 24px; }
 /* Отступ от блока «город» до согласий = такой же доп. зазор до кнопок «Назад» / «Выявить риски» */
-#step6 .q-nav-submit { margin-top: 26px; }
+/* Отступ от блока «город» до согласий = такой же доп. зазор до кнопок «Назад» / «Вернуть средства» */
+#step6 .q-nav-submit {
+  margin-top: 26px;
+  align-items: stretch;
+}
+#step6 .q-nav-submit .q-btn-back,
+#step6 .q-nav-submit .q-submit-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+}
+#step6 .q-submit-btn {
+  border-width: 1.5px;
+  white-space: nowrap;
+}
 .q-contact-form { display: flex; flex-direction: column; gap: 12px; text-align: left; }
+
+/* Имя и телефон — две колонки на широком экране; на узком — столбик */
+.q-contact-row {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  gap: 12px;
+  width: 100%;
+}
+@media (max-width: 520px) {
+  .q-contact-row {
+    grid-template-columns: 1fr;
+  }
+}
+.q-contact-form input[name="phone"] {
+  min-width: 0;
+  font-variant-numeric: tabular-nums;
+}
 
 /* Согласия: обводка как у полей (#dde5f4); по центру с текстом; при выборе — чёрная заливка и белая галочка */
 .q-consent {
@@ -3120,6 +3152,11 @@ blockquote {
   animation: quizFieldShake 320ms ease-in-out, quizFieldBorderPulse 680ms ease-in-out;
 }
 
+/* Phone limit feedback (when user tries to type extra digits) */
+.quiz-field-limit {
+  animation: quizFieldShake 320ms ease-in-out, quizFieldBorderPulse 680ms ease-in-out;
+}
+
 @keyframes quizOptionBorderPulse {
   0%, 100% { border-color: rgba(0, 0, 0, 0.22); }
   45% { border-color: #7B1A2B; }
@@ -3191,18 +3228,18 @@ blockquote {
 @keyframes q-btn-next-pulse {
   0% {
     box-shadow:
-      0 10px 24px rgba(0, 0, 0, 0.10),
-      0 0 0 rgba(123, 26, 43, 0);
+      0 10px 24px rgba(51, 153, 0, 0.22),
+      0 0 0 rgba(51, 153, 0, 0);
   }
   50% {
     box-shadow:
-      0 12px 28px rgba(0, 0, 0, 0.14),
-      0 0 16px rgba(123, 26, 43, 0.30);
+      0 12px 28px rgba(51, 153, 0, 0.32),
+      0 0 18px rgba(51, 153, 0, 0.45);
   }
   100% {
     box-shadow:
-      0 10px 24px rgba(0, 0, 0, 0.10),
-      0 0 0 rgba(123, 26, 43, 0);
+      0 10px 24px rgba(51, 153, 0, 0.22),
+      0 0 0 rgba(51, 153, 0, 0);
   }
 }
 
@@ -3232,17 +3269,17 @@ blockquote {
   color: var(--text);
 }
 
-/* Далее — только обводка + лёгкая тень; при наведении без заливки */
+/* Далее — заливка #339900 и тень в тот же зелёный */
 .q-btn-next {
   flex: 1;
   padding: 11px 18px;
-  background: transparent;
-  border: 1px solid var(--blue);
+  background: #339900;
+  border: 1px solid #339900;
   border-radius: 3px;
   font-family: Arial, Helvetica, sans-serif;
   font-size: 0.86rem;
   font-weight: 500;
-  color: var(--blue);
+  color: #fff;
   cursor: pointer;
   transition: border-color 0.2s ease, color 0.2s ease, background 0.2s ease,
     box-shadow 0.2s ease;
@@ -3250,42 +3287,46 @@ blockquote {
   animation: q-btn-next-pulse 1s linear infinite;
 }
 .q-btn-next:hover {
-  background: transparent;
-  border-color: var(--blue);
-  color: var(--blue);
+  background: #339900;
+  border-color: #339900;
+  color: #fff;
   animation: none;
   box-shadow:
-    0 12px 28px rgba(0, 0, 0, 0.14),
-    0 0 16px rgba(123, 26, 43, 0.22);
+    0 12px 28px rgba(51, 153, 0, 0.38),
+    0 0 18px rgba(51, 153, 0, 0.42);
 }
 .q-btn-next:active {
-  background: transparent;
-  border-color: var(--blue);
-  color: var(--blue);
+  background: #2d8500;
+  border-color: #2d8500;
+  color: #fff;
   animation: none;
   box-shadow:
-    0 8px 18px rgba(0, 0, 0, 0.12),
-    0 0 10px rgba(123, 26, 43, 0.14);
+    0 8px 18px rgba(51, 153, 0, 0.32),
+    0 0 12px rgba(51, 153, 0, 0.35);
 }
 
 @media (prefers-reduced-motion: reduce) {
   .q-btn-next {
     animation: none;
-    box-shadow: 0 10px 24px rgba(0, 0, 0, 0.10);
+    box-shadow: 0 10px 24px rgba(51, 153, 0, 0.28);
   }
 }
 
-/* Submit на шаге 5 (ссылка на WhatsApp — как кнопка) */
+/* Submit («Вернуть средства») — те же настройки, что у «Далее» (.q-btn-next) */
 .q-submit-btn {
   flex: 2;
   padding: 11px 18px;
-  background: var(--blue);
-  border: 1.5px solid var(--blue);
+  background: #339900;
+  border: 1px solid #339900;
+  border-radius: 3px;
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 0.86rem;
+  font-weight: 500;
   color: #fff;
-  box-shadow:
-    0 10px 24px rgba(0, 0, 0, 0.14),
-    0 2px 8px rgba(0, 0, 0, 0.10);
-  transition: background 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+  cursor: pointer;
+  transition: border-color 0.2s ease, color 0.2s ease, background 0.2s ease,
+    box-shadow 0.2s ease;
+  text-align: center;
   animation: q-btn-next-pulse 1s linear infinite;
 }
 a.q-submit-btn {
@@ -3295,26 +3336,29 @@ a.q-submit-btn {
   cursor: pointer;
 }
 .q-submit-btn:hover {
-  background: #6a1324;
-  border-color: #6a1324;
+  background: #339900;
+  border-color: #339900;
+  color: #fff;
   animation: none;
   box-shadow:
-    0 12px 28px rgba(0, 0, 0, 0.16),
-    0 0 16px rgba(123, 26, 43, 0.22);
+    0 12px 28px rgba(51, 153, 0, 0.38),
+    0 0 18px rgba(51, 153, 0, 0.42);
 }
 
 .q-submit-btn:active {
-  background: #5a0f1e;
-  border-color: #5a0f1e;
+  background: #2d8500;
+  border-color: #2d8500;
+  color: #fff;
   animation: none;
   box-shadow:
-    0 8px 18px rgba(0, 0, 0, 0.14),
-    0 0 10px rgba(123, 26, 43, 0.14);
+    0 8px 18px rgba(51, 153, 0, 0.32),
+    0 0 12px rgba(51, 153, 0, 0.35);
 }
 
 @media (prefers-reduced-motion: reduce) {
   .q-submit-btn {
     animation: none;
+    box-shadow: 0 10px 24px rgba(51, 153, 0, 0.28);
   }
 }
 

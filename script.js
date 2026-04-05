@@ -1536,7 +1536,8 @@ function validateQuizContactForm(form) {
   const phoneInput = form.querySelector('input[name="phone"]');
   const phoneRaw = phoneInput && phoneInput.value ? phoneInput.value : '';
   const phoneDigits = phoneRaw.replace(/\D/g, '');
-  const isValidPhone = phoneDigits.length === 11 && phoneDigits.startsWith('7');
+  const isValidPhone =
+    phoneDigits.length === 11 && (phoneDigits.startsWith('7') || phoneDigits.startsWith('8'));
 
   if (!isValidPhone) {
     if (phoneInput) {
@@ -1718,6 +1719,22 @@ document.addEventListener('DOMContentLoaded', () => {
       quizSaveDraft();
     });
   });
+
+  // Phone input: allow 7/8, limit to 11 digits, shake on overflow
+  const phoneInput = document.querySelector('.q-contact-form input[name="phone"]');
+  if (phoneInput) {
+    phoneInput.addEventListener('input', () => {
+      const raw = phoneInput.value || '';
+      const digits = raw.replace(/\D/g, '');
+      if (digits.length <= 11) return;
+
+      phoneInput.value = digits.slice(0, 11);
+
+      phoneInput.classList.remove('quiz-field-limit');
+      void phoneInput.offsetWidth;
+      phoneInput.classList.add('quiz-field-limit');
+    });
+  }
 
   const quizModalEl = document.getElementById('quizModal');
   if (quizModalEl) {
