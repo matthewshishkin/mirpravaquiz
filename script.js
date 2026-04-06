@@ -877,7 +877,15 @@ function q2CreateRowEl(index, name, age) {
   split.appendChild(inpName);
   split.appendChild(sep);
   split.appendChild(inpAge);
+
+  const removeBtn = document.createElement('button');
+  removeBtn.type = 'button';
+  removeBtn.className = 'q-child-remove';
+  removeBtn.setAttribute('data-i18n-aria', 'q2_remove_aria');
+  removeBtn.textContent = '\u00D7';
+
   wrap.appendChild(split);
+  wrap.appendChild(removeBtn);
   return wrap;
 }
 
@@ -888,6 +896,7 @@ function q2ResetRowsToOneEmpty() {
   block.innerHTML = '';
   block.appendChild(q2CreateRowEl(0, '', ''));
   if (window.SiteI18n) window.SiteI18n.apply(window.SiteI18n.getLang());
+  q2UpdateNoChildrenVisibility();
 }
 
 function q2RestoreFromAnswers() {
@@ -905,6 +914,7 @@ function q2RestoreFromAnswers() {
     block.appendChild(q2CreateRowEl(i, item.name || '', item.age));
   }
   if (window.SiteI18n) window.SiteI18n.apply(window.SiteI18n.getLang());
+  q2UpdateNoChildrenVisibility();
 }
 
 function q2CollectChildrenFromDom() {
@@ -955,6 +965,66 @@ function q2ClearNoChildrenSelection() {
   if (answers[2] === 'no_children') delete answers[2];
 }
 
+function q2HasAnyChildInput() {
+  const rows = document.querySelectorAll('#q2ChildrenBlock .q-child-row');
+  for (let i = 0; i < rows.length; i++) {
+    const row = rows[i];
+    const name = row.querySelector('.q-child-name');
+    const ageInp = row.querySelector('.q-child-age-inp');
+    if (!name || !ageInp) continue;
+    if ((name.value || '').trim() !== '') return true;
+    if ((ageInp.value || '').trim() !== '') return true;
+  }
+  return false;
+}
+
+function q2UpdateNoChildrenVisibility() {
+  const noBtn = document.querySelector('#step2 .q-opt[data-val="no_children"]');
+  if (!noBtn) return;
+  const hide = q2HasAnyChildInput();
+  noBtn.classList.toggle('q-opt--hidden', hide);
+  if (hide) noBtn.setAttribute('hidden', '');
+  else noBtn.removeAttribute('hidden');
+}
+
+function q2ReindexChildRows() {
+  const block = document.getElementById('q2ChildrenBlock');
+  if (!block) return;
+  const rows = [...block.querySelectorAll('.q-child-row')];
+  q2VisibleRows = rows.length;
+  rows.forEach((row, i) => {
+    row.dataset.childIndex = String(i);
+    const nameInp = row.querySelector('.q-child-name');
+    if (nameInp) {
+      nameInp.setAttribute('data-i18n-placeholder', i === 0 ? 'q2_child_ph' : 'q2_child_ph_add');
+    }
+  });
+  if (window.SiteI18n) window.SiteI18n.apply(window.SiteI18n.getLang());
+}
+
+function q2RemoveChildRow(row) {
+  const block = document.getElementById('q2ChildrenBlock');
+  if (!block || !row) return;
+  const rows = [...block.querySelectorAll('.q-child-row')];
+  if (rows.length === 1) {
+    const nameInp = row.querySelector('.q-child-name');
+    const ageInp = row.querySelector('.q-child-age-inp');
+    if (nameInp) nameInp.value = '';
+    if (ageInp) ageInp.value = '';
+    q2ClearNoChildrenSelection();
+    q2UpdateNoChildrenVisibility();
+    q2SyncDraftFromDom();
+    quizSaveDraft();
+    return;
+  }
+  row.remove();
+  q2ReindexChildRows();
+  q2ClearNoChildrenSelection();
+  q2UpdateNoChildrenVisibility();
+  q2SyncDraftFromDom();
+  quizSaveDraft();
+}
+
 function q2InitChildrenBlock() {
   const block = document.getElementById('q2ChildrenBlock');
   if (!block || block.querySelector('.q-child-row')) return;
@@ -965,6 +1035,13 @@ function q2BindChildrenBlockDelegation() {
   const block = document.getElementById('q2ChildrenBlock');
   if (!block || block.dataset.q2Bound === '1') return;
   block.dataset.q2Bound = '1';
+  block.addEventListener('click', (e) => {
+    const rm = e.target.closest('.q-child-remove');
+    if (!rm) return;
+    e.preventDefault();
+    const row = rm.closest('.q-child-row');
+    if (row) q2RemoveChildRow(row);
+  });
   block.addEventListener('input', (e) => {
     const t = e.target;
     if (!t || !t.classList) return;
@@ -991,6 +1068,7 @@ function q2BindChildrenBlockDelegation() {
       if (window.SiteI18n) window.SiteI18n.apply(window.SiteI18n.getLang());
     }
     q2SyncDraftFromDom();
+    q2UpdateNoChildrenVisibility();
     quizSaveDraft();
   });
 }
@@ -1088,6 +1166,7 @@ function quizApplySelectedFromAnswers() {
     answers[5] = arr[0] ? String(arr[0]) : '';
   }
   if (answers[2] === 'no_children') delete answers[3];
+  q2UpdateNoChildrenVisibility();
 }
 
 /** Восстанавливает ответы и поля формы из localStorage. Не меняет видимый шаг — вызывайте showStep(8) после. */
@@ -1301,13 +1380,18 @@ async function sendQuizLeadToTelegram(form) {
 }
 
 /* =============================================
-   QUIZ — priority timer (03:00 → 00:00)
+   QUIZ — priority timer (04:00 → 00:00)
    - starts when quiz opens
    - pauses when quiz closes (keeps remaining)
    - resets on page reload (no persistence)
-   - first minute is accelerated: 03:00 → 02:00 in 30s real time
+   - первые 2 минуты на экране (04:00 → 02:00) идут за 1 минуту реального времени (2×)
+   - последние 2 минуты (02:00 → 00:00) — реальное время (1×)
    ============================================= */
-let quizPriorityRemainingMs = 3 * 60 * 1000; // 03:00
+const QUIZ_PRIORITY_TOTAL_MS = 4 * 60 * 1000;
+/** Ниже этого остатка на экране отсчёт идёт в реальном темпе; выше — ускоренный (2×). */
+const QUIZ_PRIORITY_NORMAL_THRESHOLD_MS = 2 * 60 * 1000;
+
+let quizPriorityRemainingMs = QUIZ_PRIORITY_TOTAL_MS;
 let quizPriorityLastTs = 0;
 let quizPriorityRaf = null;
 let quizPriorityExpired = false;
@@ -1350,7 +1434,7 @@ function quizPriorityRestoreIfNeeded() {
     if (!raw) return false;
     const data = JSON.parse(raw);
     const ms = Number(data && data.remainingMs);
-    if (!Number.isFinite(ms) || ms < 0 || ms > 3 * 60 * 1000) return false;
+    if (!Number.isFinite(ms) || ms < 0 || ms > QUIZ_PRIORITY_TOTAL_MS) return false;
     quizPriorityRemainingMs = ms;
     quizPriorityExpired = !!(data && data.expired);
     quizPriorityLastTs = 0;
@@ -1395,8 +1479,8 @@ function quizPriorityRender() {
 }
 
 function quizPriorityShakeIfNeeded() {
-  // Shake at exact marks: 02:30 / 02:00 / 01:30 / 01:00 / 00:30 / 00:00
-  const marksSec = [150, 120, 90, 60, 30, 0];
+  // Shake каждые 30 секунд оставшегося времени (4:00 → 0:00)
+  const marksSec = [240, 210, 180, 150, 120, 90, 60, 30, 0];
   const curSec = Math.max(0, Math.ceil(quizPriorityRemainingMs / 1000));
 
   // Trigger only once per mark.
@@ -1423,16 +1507,15 @@ function quizPriorityStep(now) {
   quizPriorityLastTs = now;
   if (!Number.isFinite(dt) || dt < 0) dt = 0;
 
-  // Accelerated zone: only while remaining > 02:00
-  const THRESHOLD_MS = 2 * 60 * 1000; // 02:00
-  if (quizPriorityRemainingMs > THRESHOLD_MS) {
-    const toThresholdDisplay = quizPriorityRemainingMs - THRESHOLD_MS;
+  // Ускоренный участок: пока на экране осталось больше 02:00 (первые 2 минуты таймера 04:00 → 02:00 за 1 мин реальную)
+  if (quizPriorityRemainingMs > QUIZ_PRIORITY_NORMAL_THRESHOLD_MS) {
+    const toThresholdDisplay = quizPriorityRemainingMs - QUIZ_PRIORITY_NORMAL_THRESHOLD_MS;
     const toThresholdReal = toThresholdDisplay / 2; // 2× speed
     if (dt <= toThresholdReal) {
       quizPriorityRemainingMs -= dt * 2;
       dt = 0;
     } else {
-      quizPriorityRemainingMs = THRESHOLD_MS;
+      quizPriorityRemainingMs = QUIZ_PRIORITY_NORMAL_THRESHOLD_MS;
       dt -= toThresholdReal;
     }
   }
@@ -1603,6 +1686,7 @@ function showStep(n) {
   if (el) el.classList.add('active');
 
   updateProgress(step);
+  if (step === 2) q2UpdateNoChildrenVisibility();
 }
 
 function updateProgress(step) {

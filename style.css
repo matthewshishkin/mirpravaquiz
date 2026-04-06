@@ -426,9 +426,31 @@ h3 { font-weight: normal; font-size: 1.05rem; }
   margin-top: 58px;
   align-self: flex-start;
   overflow: hidden;
-  border-color: #fff;
+  background: var(--blue);
+  border: 1px solid var(--blue);
   color: #fff;
   animation: heroCtaShake 2s ease-in-out infinite;
+  box-shadow: 0 8px 28px rgba(123, 26, 43, 0.35);
+}
+
+.hero--video .hero-btn.hero-btn--inline:hover {
+  background: var(--blue-dark);
+  border-color: var(--blue-dark);
+  box-shadow: 0 10px 32px rgba(123, 26, 43, 0.42);
+}
+
+/* заливка: без shimmer-обводки */
+.hero--video .hero-btn.hero-btn--inline::before {
+  display: none;
+}
+
+.hero--video .hero-btn.hero-btn--inline .hero-btn-text {
+  color: #fff;
+  -webkit-text-fill-color: #fff;
+  background-image: none;
+  animation: none;
+  -webkit-background-clip: unset;
+  background-clip: unset;
 }
 
 @keyframes heroCtaShake {
@@ -437,45 +459,6 @@ h3 { font-weight: normal; font-size: 1.05rem; }
   88% { transform: translateX(1px) rotate(0.4deg); }
   92% { transform: translateX(-1px) rotate(-0.3deg); }
   96% { transform: translateX(1px) rotate(0.3deg); }
-}
-
-/* Inline CTA: вернуть shimmer и сделать его красным */
-.hero--video .hero-btn.hero-btn--inline::before {
-  display: block;
-  background-image:
-    linear-gradient(rgba(255, 255, 255, 0.68), rgba(255, 255, 255, 0.68)),
-    linear-gradient(
-      90deg,
-      rgba(199, 39, 45, 0) 0%,
-      rgba(199, 39, 45, 0) 35%,
-      rgba(199, 39, 45, 0.28) 42%,
-      rgba(255, 107, 107, 1) 50%,
-      rgba(199, 39, 45, 0.28) 58%,
-      rgba(199, 39, 45, 0) 65%,
-      rgba(199, 39, 45, 0) 100%
-    );
-}
-
-.hero--video .hero-btn.hero-btn--inline .hero-btn-text {
-  background-image:
-    linear-gradient(rgba(255, 255, 255, 0.88), rgba(255, 255, 255, 0.88)),
-    linear-gradient(
-      90deg,
-      rgba(199, 39, 45, 0) 0%,
-      rgba(199, 39, 45, 0) 35%,
-      rgba(199, 39, 45, 0.28) 42%,
-      rgba(255, 107, 107, 1) 50%,
-      rgba(199, 39, 45, 0.28) 58%,
-      rgba(199, 39, 45, 0) 65%,
-      rgba(199, 39, 45, 0) 100%
-    );
-  background-size: 100% 100%, 240% 100%;
-  background-repeat: no-repeat;
-  -webkit-background-clip: text;
-  background-clip: text;
-  -webkit-text-fill-color: transparent;
-  color: #fff;
-  animation: heroBtnSheen 3.4s linear infinite;
 }
 
 /* Hero bonus card: centered text + document stack on left edge */
@@ -642,6 +625,16 @@ h3 { font-weight: normal; font-size: 1.05rem; }
     background-clip: text;
     -webkit-text-fill-color: transparent;
     animation: heroBtnSheen 3.4s linear infinite;
+  }
+
+  /* CTA с бордовой заливкой: без sheen на тексте */
+  .hero--video .hero-btn.hero-btn--inline .hero-btn-text {
+    background-image: none;
+    -webkit-background-clip: unset;
+    background-clip: unset;
+    -webkit-text-fill-color: #fff;
+    color: #fff;
+    animation: none;
   }
 }
 
@@ -2939,19 +2932,49 @@ blockquote {
   animation: quizFieldShake 320ms ease-in-out, quizFieldBorderPulse 680ms ease-in-out;
 }
 .q-child-row {
+  display: flex;
+  align-items: stretch;
+  gap: 8px;
   width: 100%;
   margin-bottom: 12px;
+  box-sizing: border-box;
 }
 .q-child-split {
   display: flex;
   align-items: stretch;
-  width: 100%;
+  flex: 1 1 0;
+  min-width: 0;
   box-sizing: border-box;
   min-height: 48px;
   border: 1.5px solid rgba(0, 0, 0, 0.22);
   border-radius: 3px;
   background: #fff;
   overflow: hidden;
+}
+.q-child-remove {
+  flex: 0 0 44px;
+  width: 44px;
+  min-width: 44px;
+  align-self: stretch;
+  margin: 0;
+  padding: 0;
+  border: 1.5px solid rgba(0, 0, 0, 0.14);
+  border-radius: 3px;
+  background: #fff;
+  color: #c62828;
+  font-size: 1.35rem;
+  line-height: 1;
+  font-weight: 300;
+  cursor: pointer;
+  transition: var(--trans);
+}
+.q-child-remove:hover {
+  border-color: rgba(198, 40, 40, 0.45);
+  background: rgba(198, 40, 40, 0.06);
+}
+.q-child-remove:focus-visible {
+  outline: 2px solid rgba(198, 40, 40, 0.5);
+  outline-offset: 2px;
 }
 .q-child-split:focus-within {
   border-color: rgba(0, 0, 0, 0.45);
@@ -2981,11 +3004,17 @@ blockquote {
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 0 8px;
+  padding: 0 6px;
   color: var(--muted);
-  font-size: 0.95rem;
+  font-size: 1.42rem;
+  line-height: 1;
   user-select: none;
-  background: rgba(0, 0, 0, 0.04);
+  background: transparent;
+  align-self: center;
+}
+#step2 .q-opt[data-val="no_children"][hidden],
+#step2 .q-opt[data-val="no_children"].q-opt--hidden {
+  display: none !important;
 }
 #step2 .q-options {
   grid-template-columns: 1fr;
