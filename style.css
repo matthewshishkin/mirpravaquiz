@@ -2924,6 +2924,81 @@ blockquote {
 .q-step h3    { font-size: 1.71rem; margin-bottom: 6px; }
 .q-hint       { font-size: 0.83rem; color: var(--muted); margin-bottom: 18px; }
 
+/* Шаг 2: имя ребёнка + возраст (select; на iOS — нативное колесо) */
+.q-children-block {
+  margin-bottom: 14px;
+}
+.quiz-q2-invalid {
+  animation: quizFieldShake 320ms ease-in-out, quizFieldBorderPulse 680ms ease-in-out;
+}
+.q-child-row {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto auto;
+  gap: 8px 10px;
+  align-items: center;
+  margin-bottom: 12px;
+}
+.q-child-name {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 12px 12px;
+  border: 1.5px solid rgba(0, 0, 0, 0.22);
+  border-radius: 3px;
+  background: #fff;
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 0.86rem;
+  min-width: 0;
+}
+.q-child-name:focus {
+  outline: none;
+  border-color: rgba(0, 0, 0, 0.45);
+  box-shadow: 0 0 0 2px rgba(0, 0, 0, 0.06);
+}
+.q-child-age-col {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-shrink: 0;
+}
+.q-child-age-select {
+  -webkit-appearance: none;
+  appearance: none;
+  min-width: 56px;
+  min-height: 44px;
+  padding: 8px 26px 8px 10px;
+  border: 1.5px solid rgba(0, 0, 0, 0.22);
+  border-radius: 3px;
+  background-color: #fff;
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 0.95rem;
+  font-variant-numeric: tabular-nums;
+  cursor: pointer;
+  text-align: center;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%23666' d='M6 8L1 3h10z'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 8px center;
+}
+.q-child-age-select:focus {
+  outline: none;
+  border-color: rgba(0, 0, 0, 0.45);
+}
+.q-age-suffix {
+  font-size: 0.78rem;
+  color: var(--muted);
+  white-space: nowrap;
+}
+#step2 .q-options {
+  grid-template-columns: 1fr;
+}
+@media (max-width: 420px) {
+  .q-child-row {
+    grid-template-columns: 1fr;
+  }
+  .q-child-age-col {
+    justify-content: flex-start;
+  }
+}
+
 .q-options {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -2981,25 +3056,25 @@ blockquote {
 .q-next-btn { margin-top: 4px; }
 
 /* Contact form */
-#step6 { text-align: center; }
-#step6 .q-hint { text-align: center; }
-#step6 { margin-top: -8px; }
-.q-step#step6 h3 { font-size: 1.71rem; margin-bottom: 10px; }
-#step6 .q-hint { margin-bottom: 24px; }
+#step8 { text-align: center; }
+#step8 .q-hint { text-align: center; }
+#step8 { margin-top: -8px; }
+.q-step#step8 h3 { font-size: 1.71rem; margin-bottom: 10px; }
+#step8 .q-hint { margin-bottom: 24px; }
 /* Отступ от блока «город» до согласий = такой же доп. зазор до кнопок «Назад» / «Выявить риски» */
 /* Отступ от блока «город» до согласий = такой же доп. зазор до кнопок «Назад» / «Вернуть средства» */
-#step6 .q-nav-submit {
+#step8 .q-nav-submit {
   margin-top: 26px;
   align-items: stretch;
 }
-#step6 .q-nav-submit .q-btn-back,
-#step6 .q-nav-submit .q-submit-btn {
+#step8 .q-nav-submit .q-btn-back,
+#step8 .q-nav-submit .q-submit-btn {
   display: flex;
   align-items: center;
   justify-content: center;
   box-sizing: border-box;
 }
-#step6 .q-submit-btn {
+#step8 .q-submit-btn {
   border-width: 1.5px;
   white-space: nowrap;
 }
@@ -4029,7 +4104,7 @@ a.q-submit-btn {
 
   /* Quiz headers (уменьшить на ~15%) */
   .q-step h3 { font-size: 1.45rem; }
-  .q-step#step6 h3 { font-size: 1.45rem; }
+  .q-step#step8 h3 { font-size: 1.45rem; }
 
   /* Квиз: экран «Заявка принята» — убрать десктопную min-height 450px (тянула блок вниз), усилить отступ текста от WhatsApp */
   .quiz-success {

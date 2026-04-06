@@ -823,9 +823,159 @@ window.addEventListener('pageshow', updateHeaderCtaAfterSecondBlock);
    QUIZ MODAL
    ============================================= */
 let currentStep = 1;
-const TOTAL_STEPS = 5;
+const TOTAL_STEPS = 7;
 const answers = {};
 let lastProgressPercent = 0;
+
+/** Шаг 2: до 4 строк «имя + возраст»; на iOS `<select>` открывается колесом */
+const Q2_MAX_CHILD_ROWS = 4;
+let q2VisibleRows = 1;
+
+function q2CreateRowEl(index, name, age) {
+  const wrap = document.createElement('div');
+  wrap.className = 'q-child-row';
+  wrap.dataset.childIndex = String(index);
+  const inp = document.createElement('input');
+  inp.type = 'text';
+  inp.className = 'q-child-name';
+  inp.maxLength = 80;
+  inp.autocomplete = 'off';
+  inp.value = name || '';
+  inp.setAttribute('data-i18n-placeholder', index === 0 ? 'q2_child_ph' : 'q2_child_ph_add');
+
+  const ageCol = document.createElement('div');
+  ageCol.className = 'q-child-age-col';
+  const sel = document.createElement('select');
+  sel.className = 'q-child-age-select';
+  sel.setAttribute('data-i18n-aria', 'q2_age_aria');
+  const ageN = Math.min(30, Math.max(1, Number(age) || 7));
+  for (let a = 1; a <= 30; a++) {
+    const o = document.createElement('option');
+    o.value = String(a);
+    o.textContent = String(a);
+    if (a === ageN) o.selected = true;
+  }
+  const suf = document.createElement('span');
+  suf.className = 'q-age-suffix';
+  suf.setAttribute('data-i18n', 'q2_age_suffix');
+  ageCol.appendChild(sel);
+  ageCol.appendChild(suf);
+  wrap.appendChild(inp);
+  wrap.appendChild(ageCol);
+  return wrap;
+}
+
+function q2ResetRowsToOneEmpty() {
+  q2VisibleRows = 1;
+  const block = document.getElementById('q2ChildrenBlock');
+  if (!block) return;
+  block.innerHTML = '';
+  block.appendChild(q2CreateRowEl(0, '', 7));
+  if (window.SiteI18n) window.SiteI18n.apply(window.SiteI18n.getLang());
+}
+
+function q2RestoreFromAnswers() {
+  const arr = Array.isArray(answers['2_children']) ? answers['2_children'] : [];
+  const vr = answers['2_visibleRows'];
+  q2VisibleRows =
+    Number.isFinite(vr) && vr >= 1 && vr <= Q2_MAX_CHILD_ROWS
+      ? vr
+      : Math.min(Q2_MAX_CHILD_ROWS, Math.max(1, arr.length));
+  const block = document.getElementById('q2ChildrenBlock');
+  if (!block) return;
+  block.innerHTML = '';
+  for (let i = 0; i < q2VisibleRows; i++) {
+    const item = arr[i] || { name: '', age: 7 };
+    block.appendChild(q2CreateRowEl(i, item.name || '', Number(item.age) || 7));
+  }
+  if (window.SiteI18n) window.SiteI18n.apply(window.SiteI18n.getLang());
+}
+
+function q2CollectChildrenFromDom() {
+  const rows = document.querySelectorAll('#q2ChildrenBlock .q-child-row');
+  const out = [];
+  rows.forEach((row) => {
+    const nameInput = row.querySelector('.q-child-name');
+    const sel = row.querySelector('.q-child-age-select');
+    if (!nameInput || !sel) return;
+    const name = nameInput.value.trim();
+    const age = parseInt(sel.value, 10);
+    if (!name) return;
+    if (!Number.isFinite(age) || age < 1 || age > 30) return;
+    out.push({ name, age });
+  });
+  return out;
+}
+
+function q2SyncDraftFromDom() {
+  const rows = document.querySelectorAll('#q2ChildrenBlock .q-child-row');
+  const arr = [];
+  rows.forEach((row) => {
+    const nameInput = row.querySelector('.q-child-name');
+    const sel = row.querySelector('.q-child-age-select');
+    if (!nameInput || !sel) return;
+    const name = nameInput.value.trim();
+    const age = parseInt(sel.value, 10);
+    if (!name) return;
+    if (!Number.isFinite(age) || age < 1 || age > 30) return;
+    arr.push({ name, age });
+  });
+  answers['2_children'] = arr;
+  answers['2_visibleRows'] = q2VisibleRows;
+}
+
+function q2ShakeBlock() {
+  const block = document.getElementById('q2ChildrenBlock');
+  if (!block) return;
+  block.classList.remove('quiz-q2-invalid');
+  void block.offsetWidth;
+  block.classList.add('quiz-q2-invalid');
+  setTimeout(() => block.classList.remove('quiz-q2-invalid'), 900);
+}
+
+function q2ClearNoChildrenSelection() {
+  const noBtn = document.querySelector('#step2 .q-opt[data-val="no_children"]');
+  if (noBtn) noBtn.classList.remove('selected');
+  if (answers[2] === 'no_children') delete answers[2];
+}
+
+function q2InitChildrenBlock() {
+  const block = document.getElementById('q2ChildrenBlock');
+  if (!block || block.querySelector('.q-child-row')) return;
+  q2ResetRowsToOneEmpty();
+}
+
+function q2BindChildrenBlockDelegation() {
+  const block = document.getElementById('q2ChildrenBlock');
+  if (!block || block.dataset.q2Bound === '1') return;
+  block.dataset.q2Bound = '1';
+  block.addEventListener('input', (e) => {
+    const t = e.target;
+    if (!t || !t.classList || !t.classList.contains('q-child-name')) return;
+    q2ClearNoChildrenSelection();
+    const row = t.closest('.q-child-row');
+    const allRows = [...block.querySelectorAll('.q-child-row')];
+    const idx = allRows.indexOf(row);
+    if (
+      idx === q2VisibleRows - 1 &&
+      t.value.trim() &&
+      q2VisibleRows < Q2_MAX_CHILD_ROWS
+    ) {
+      q2VisibleRows += 1;
+      block.appendChild(q2CreateRowEl(q2VisibleRows - 1, '', 7));
+      if (window.SiteI18n) window.SiteI18n.apply(window.SiteI18n.getLang());
+    }
+    q2SyncDraftFromDom();
+    quizSaveDraft();
+  });
+  block.addEventListener('change', (e) => {
+    const t = e.target;
+    if (!t || !t.classList || !t.classList.contains('q-child-age-select')) return;
+    q2ClearNoChildrenSelection();
+    q2SyncDraftFromDom();
+    quizSaveDraft();
+  });
+}
 
 /** Черновик квиза (шаги 1–6, форма) — для возврата с legal-страниц в новой вкладке */
 try {
@@ -903,41 +1053,25 @@ function quizApplySelectedFromAnswers() {
     q1Inp.value = '';
     q1Inp.classList.remove('q-other-input--invalid');
   }
-  const q2Other = document.getElementById('q2OtherWrap');
-  const q2Inp = document.getElementById('q2OtherInput');
-  if (answers[2] === 'other' && q2Other && q2Inp) {
-    q2Other.classList.remove('q-other-field--hidden');
-    q2Inp.value = answers['2_other'] || '';
-    q2Inp.classList.remove('q-other-input--invalid');
-  } else if (q2Other && q2Inp) {
-    q2Other.classList.add('q-other-field--hidden');
-    q2Inp.value = '';
-    q2Inp.classList.remove('q-other-input--invalid');
+  const q2NoBtn = document.querySelector('.q-opt[data-step="2"][data-val="no_children"]');
+  if (answers[2] === 'no_children') {
+    if (q2NoBtn) q2NoBtn.classList.add('selected');
+    q2ResetRowsToOneEmpty();
+  } else {
+    if (q2NoBtn) q2NoBtn.classList.remove('selected');
+    if (answers[2] === 'children' || (answers['2_children'] && answers['2_children'].length)) {
+      q2RestoreFromAnswers();
+    } else {
+      q2ResetRowsToOneEmpty();
+    }
   }
-  const q3Other = document.getElementById('q3OtherWrap');
-  const q3Inp = document.getElementById('q3OtherInput');
-  const a3 = answers[3];
-  const has3other = Array.isArray(a3) && a3.includes('other');
-  if (has3other && q3Other && q3Inp) {
-    q3Other.classList.remove('q-other-field--hidden');
-    q3Inp.value = answers['3_other'] || '';
-    q3Inp.classList.remove('q-other-input--invalid');
-  } else if (q3Other && q3Inp) {
-    q3Other.classList.add('q-other-field--hidden');
-    q3Inp.value = '';
-    q3Inp.classList.remove('q-other-input--invalid');
-  }
-
-  const a4 = Array.isArray(answers[4]) ? answers[4] : [];
-  const allowedTail = 'shared_debts';
-  const validA4 = a4.length <= 1 || (a4.length === 2 && a4.includes(allowedTail));
-  if (!validA4) {
-    const first = a4[0];
-    answers[4] = first ? [first] : [];
+  if (Array.isArray(answers[5])) {
+    const arr = answers[5].filter((v) => v !== 'shared_debts');
+    answers[5] = arr[0] ? String(arr[0]) : '';
   }
 }
 
-/** Восстанавливает ответы и поля формы из localStorage. Не меняет видимый шаг — вызывайте showStep(6) после. */
+/** Восстанавливает ответы и поля формы из localStorage. Не меняет видимый шаг — вызывайте showStep(8) после. */
 function quizApplyDraft() {
   try {
     const raw = localStorage.getItem(QUIZ_DRAFT_KEY);
@@ -998,20 +1132,7 @@ function resetQuizToEmptyContactStep() {
     q1Inp.value = '';
     q1Inp.classList.remove('q-other-input--invalid');
   }
-  const q2Other = document.getElementById('q2OtherWrap');
-  const q2Inp = document.getElementById('q2OtherInput');
-  if (q2Other) q2Other.classList.add('q-other-field--hidden');
-  if (q2Inp) {
-    q2Inp.value = '';
-    q2Inp.classList.remove('q-other-input--invalid');
-  }
-  const q3Other = document.getElementById('q3OtherWrap');
-  const q3Inp = document.getElementById('q3OtherInput');
-  if (q3Other) q3Other.classList.add('q-other-field--hidden');
-  if (q3Inp) {
-    q3Inp.value = '';
-    q3Inp.classList.remove('q-other-input--invalid');
-  }
+  q2ResetRowsToOneEmpty();
 }
 
 /** Ссылка на WhatsApp (LinkTwin) — кнопка «Связаться вне очереди» после шага «Отлично!…» */
@@ -1035,24 +1156,45 @@ function getQuizOptionLabel(step, val) {
   return btn.textContent.replace(/\s+/g, ' ').trim();
 }
 
+function ruChildAgeWord(n) {
+  const a = Math.floor(Math.abs(Number(n)));
+  const m = a % 10;
+  const x = a % 100;
+  if (m === 1 && x !== 11) return 'год';
+  if (m >= 2 && m <= 4 && (x < 10 || x > 20)) return 'года';
+  return 'лет';
+}
+
 function formatQuizAnswerForStep(step) {
   const raw = answers[step];
   if (raw == null || raw === '') return '—';
   if (Array.isArray(raw)) {
     if (raw.length === 0) return '—';
-    const kk = typeof window !== 'undefined' && window.SiteI18n && window.SiteI18n.getLang() === 'kk';
+    if (step === 5) {
+      const arr = raw.filter((v) => v !== 'shared_debts');
+      const v = arr[0];
+      if (!v) return '—';
+      return getQuizOptionLabel(5, v);
+    }
     return raw
       .map((v) => {
         return getQuizOptionLabel(step, v);
       })
       .join(', ');
   }
-  if (step === 2 && raw === 'other') {
-    const el2 = document.getElementById('q2OtherInput');
-    const detail2 = (answers['2_other'] || (el2 && el2.value) || '').trim();
+  if (step === 2 && raw === 'children') {
+    const rows = answers['2_children'];
+    if (!Array.isArray(rows) || !rows.length) return '—';
     const kk = typeof window !== 'undefined' && window.SiteI18n && window.SiteI18n.getLang() === 'kk';
-    if (detail2) return kk ? `Басқа: ${detail2}` : `Свой вариант: ${detail2}`;
-    return kk ? 'Басқа (көрсетілмеген)' : 'Свой вариант (не указано)';
+    const parts = rows
+      .map((r) => {
+        const n = r && r.name ? String(r.name).trim() : '';
+        const age = Number(r && r.age);
+        if (!n || !Number.isFinite(age)) return null;
+        return kk ? `${n} — ${age} жас` : `${n} — ${age} ${ruChildAgeWord(age)}`;
+      })
+      .filter(Boolean);
+    return parts.length ? parts.join('; ') : '—';
   }
   if (step === 1 && raw === 'other') {
     const el = document.getElementById('q1OtherInput');
@@ -1365,13 +1507,7 @@ function openModal() {
       q1Inp.value = '';
       q1Inp.classList.remove('q-other-input--invalid');
     }
-    const q3Other = document.getElementById('q3OtherWrap');
-    const q3Inp = document.getElementById('q3OtherInput');
-    if (q3Other) q3Other.classList.add('q-other-field--hidden');
-    if (q3Inp) {
-      q3Inp.value = '';
-      q3Inp.classList.remove('q-other-input--invalid');
-    }
+    q2ResetRowsToOneEmpty();
   }
 }
 
@@ -1394,7 +1530,7 @@ try {
 } catch (_) {}
 
 /**
- * Открыть квиз на шаге контактов (шаг 6).
+ * Открыть квиз на шаге контактов (шаг 8).
  * @param {Event|null} e
  * @param {{ fromLegal?: boolean }} [options] — с legal-страниц: восстановить черновик из localStorage
  */
@@ -1426,11 +1562,11 @@ function openQuizContact(e, options) {
     if (!restored) resetQuizToEmptyContactStep();
   }
 
-  currentStep = 6;
-  showStep(6);
+  currentStep = 8;
+  showStep(8);
 
   setTimeout(() => {
-    const nameInput = document.querySelector('#step6 input[name="name"]');
+    const nameInput = document.querySelector('#step8 input[name="name"]');
     if (nameInput) nameInput.focus();
   }, 60);
 }
@@ -1444,16 +1580,17 @@ function showStep(n) {
 }
 
 function updateProgress(step) {
-  // Прогресс: 5 вопросов + контакт = 6 частей (до контактов равные части, на контактах 99%)
+  // Прогресс: 7 вопросов + контакт = 8 частей (до контактов равные части, на контактах 99%)
   const percent = step <= TOTAL_STEPS ? step * (100 / (TOTAL_STEPS + 1)) : 99;
   const p = Math.round(percent);
   const textEl = document.getElementById('quizProgressText');
   const fillEl = document.getElementById('quizProgressFill');
   if (textEl) textEl.textContent = `${p}%`;
   if (fillEl) {
-    // При открытии квиза (0% -> 20%) делаем заполнение в 3 раза медленнее.
-    const isFirstFillTo20 = p === 20 && lastProgressPercent === 0;
-    const durationMs = isFirstFillTo20 ? 1050 : 350;
+    // При открытии квиза (0% -> первый сегмент) делаем заполнение в 3 раза медленнее.
+    const firstSeg = Math.round(100 / (TOTAL_STEPS + 1));
+    const isFirstFillSlow = p === firstSeg && lastProgressPercent === 0;
+    const durationMs = isFirstFillSlow ? 1050 : 350;
     fillEl.style.transitionDuration = `${durationMs}ms`;
     fillEl.style.width = `${p}%`;
     if (p >= 99) fillEl.classList.add('is-full');
@@ -1477,19 +1614,29 @@ function updateProgress(step) {
 
 function nextStep() {
   if (currentStep <= TOTAL_STEPS) {
-    // Шаг 2 «Свой вариант»: нужен непустой ввод
-    if (currentStep === 2 && answers[2] === 'other') {
-      const inp2 = document.getElementById('q2OtherInput');
-      const t2 = inp2 && inp2.value.trim();
-      if (!t2) {
-        if (inp2) {
-          inp2.classList.add('q-other-input--invalid');
-          inp2.focus();
-        }
+    if (currentStep === 2) {
+      const noBtn = document.querySelector('#step2 .q-opt[data-val="no_children"]');
+      if (noBtn && noBtn.classList.contains('selected')) {
+        answers[2] = 'no_children';
+        delete answers['2_children'];
+        delete answers['2_visibleRows'];
+        currentStep++;
+        showStep(currentStep);
+        quizSaveDraft();
         return;
       }
-      answers['2_other'] = t2;
-      if (inp2) inp2.classList.remove('q-other-input--invalid');
+      const collected = q2CollectChildrenFromDom();
+      if (!collected.length) {
+        q2ShakeBlock();
+        return;
+      }
+      answers[2] = 'children';
+      answers['2_children'] = collected;
+      answers['2_visibleRows'] = q2VisibleRows;
+      currentStep++;
+      showStep(currentStep);
+      quizSaveDraft();
+      return;
     }
 
     // На шагах 1–5 нельзя переходить без выбора ответа.
@@ -1525,7 +1672,7 @@ function prevStep() {
   quizSaveDraft();
 }
 
-/** Валидация шага 5 (контакты). true — можно открывать WhatsApp и показывать успех. */
+/** Валидация шага контактов. true — можно отправлять заявку. */
 function validateQuizContactForm(form) {
   if (!form) return false;
 
@@ -1660,66 +1807,40 @@ document.addEventListener('DOMContentLoaded', () => {
   const waCta = document.getElementById('quizWhatsAppCta');
   if (waCta) waCta.addEventListener('click', onQuizWhatsAppCtaClick);
 
-  // Single-choice: auto-advance (кроме шага 2 «Свой вариант» — нужен ввод и «Далее»)
+  q2BindChildrenBlockDelegation();
+  q2InitChildrenBlock();
+
+  // Single-choice: auto-advance (шаг 2 — только «Нет детей»; список детей — «Далее»)
   document.querySelectorAll('.q-opt.single').forEach(btn => {
     btn.addEventListener('click', () => {
       const step = btn.dataset.step;
       const val = btn.dataset.val;
+      if (step === '2') {
+        document.querySelectorAll('.q-opt.single[data-step="2"]')
+          .forEach(b => b.classList.remove('selected'));
+        btn.classList.add('selected');
+        q2ResetRowsToOneEmpty();
+        delete answers['2_children'];
+        delete answers['2_visibleRows'];
+        answers[2] = 'no_children';
+        quizSaveDraft();
+        setTimeout(nextStep, 300);
+        return;
+      }
       document.querySelectorAll(`.q-opt.single[data-step="${step}"]`)
         .forEach(b => b.classList.remove('selected'));
       btn.classList.add('selected');
       answers[step] = val;
-      if (step === '2') {
-        const wrap = document.getElementById('q2OtherWrap');
-        const inp = document.getElementById('q2OtherInput');
-        if (val === 'other') {
-          if (wrap) wrap.classList.remove('q-other-field--hidden');
-          delete answers['2_other'];
-          if (inp) {
-            inp.classList.remove('q-other-input--invalid');
-            setTimeout(() => inp.focus(), 0);
-          }
-          quizSaveDraft();
-          return;
-        }
-        if (wrap) wrap.classList.add('q-other-field--hidden');
-        if (inp) {
-          inp.value = '';
-          inp.classList.remove('q-other-input--invalid');
-        }
-        delete answers['2_other'];
-      }
       quizSaveDraft();
       setTimeout(nextStep, 300);
     });
   });
-
-  const q2OtherInput = document.getElementById('q2OtherInput');
-  if (q2OtherInput) {
-    q2OtherInput.addEventListener('input', () => {
-      if (answers[2] === 'other') {
-        answers['2_other'] = q2OtherInput.value.trim();
-        quizSaveDraft();
-      }
-    });
-  }
 
   // Multi-choice: toggle
   document.querySelectorAll('.q-opt.multi').forEach(btn => {
     btn.addEventListener('click', () => {
       const step = btn.dataset.step;
       const val = btn.dataset.val;
-
-      // Шаг 4: максимум 2 ответа, а комбинация из 2 — только с последним вариантом.
-      if (step === '4') {
-        const selectedNow = Array.isArray(answers[step]) ? answers[step].slice() : [];
-        const isSelected = selectedNow.includes(val);
-        const proposed = isSelected ? selectedNow.filter((v) => v !== val) : selectedNow.concat(val);
-        const isValidSingle = proposed.length <= 1;
-        const isValidPair = proposed.length === 2 && proposed.includes('shared_debts');
-        const isValid = isValidSingle || isValidPair;
-        if (!isValid) return;
-      }
 
       // Toggle selected
       btn.classList.toggle('selected');

@@ -69,7 +69,7 @@
     <div class="container hero-content-wrap">
       <div class="hero-content">
         <h1 class="hero-title">
-          <span data-i18n="hero_title_main" data-i18n-html="true"><span class="title-desktop-only">Добейтесь с нашей помощью справедливых алиментов,<br>даже если он платит 50,000 ₸, а ездит на Range Rover.<br>Разберём вашу ситуацию за 30 минут!</span><span class="title-mobile-only">Добейтесь<br>с нашей помощью<br>справедливых алиментов,<br>даже если он платит<br>50,000 тенге,<br>а ездит на Range Rover!</span></span>
+          <span data-i18n="hero_title_main" data-i18n-html="true"><span class="title-desktop-only">Добейтесь с нашей помощью справедливых алиментов,<br>даже если он платит 25,000 ₸, а ездит на Range Rover.<br>Разберём вашу ситуацию за 30 минут!</span><span class="title-mobile-only">Добейтесь<br>с нашей помощью<br>справедливых алиментов,<br>даже если он платит<br>25,000 тенге,<br>а ездит на Range Rover!</span></span>
         </h1>
         <div class="hero-subtitle">
           <span class="hero-pill" data-i18n="hero_sub1" data-i18n-html="true">Даже если он скрывает доходы</span>
@@ -375,7 +375,7 @@
       <div id="quizFormScreen">
         <div class="quiz-stepper" id="quizStepper">
           <div class="quiz-progress-meter" data-i18n-aria="quiz_prog_aria" aria-label="Прогресс квиза">
-            <div class="quiz-progress-text" id="quizProgressText">20%</div>
+            <div class="quiz-progress-text" id="quizProgressText">13%</div>
             <div class="quiz-progress-track" aria-hidden="true">
               <div class="quiz-progress-fill" id="quizProgressFill"></div>
             </div>
@@ -404,16 +404,11 @@
 
         <!-- Шаг 2 -->
         <div class="q-step" id="step2">
-          <h3 data-i18n="q2_h">Есть ли у вас несовершеннолетние дети?</h3>
-          <p class="q-hint" data-i18n="q2_hint">Выберите один вариант</p>
+          <h3 data-i18n="q2_h">Сколько у вас детей и сколько им лет?</h3>
+          <p class="q-hint" data-i18n="q2_hint">Перечислите всех детей и укажите возраст каждого</p>
+          <div class="q-children-block" id="q2ChildrenBlock" aria-live="polite"></div>
           <div class="q-options">
-            <button class="q-opt single" data-step="2" data-val="minor_yes" data-i18n="q2_o1">Да, есть</button>
-            <button class="q-opt single" data-step="2" data-val="no_children" data-i18n="q2_o2">Нет детей</button>
-            <button class="q-opt single" data-step="2" data-val="adult_children" data-i18n="q2_o3">Дети уже 18+</button>
-            <button class="q-opt single q-opt--other" data-step="2" data-val="other" data-i18n="q2_o4">Свой вариант</button>
-          </div>
-          <div class="q-other-field q-other-field--hidden" id="q2OtherWrap">
-            <input type="text" id="q2OtherInput" class="q-other-input" maxlength="140" data-i18n-placeholder="q2_other_ph" placeholder="Опишите свой вариант" autocomplete="off" aria-label="" data-i18n-aria="q2_other_aria" />
+            <button type="button" class="q-opt single" data-step="2" data-val="no_children" data-i18n="q2_o2">Нет детей</button>
           </div>
           <div class="q-nav">
             <button type="button" class="q-btn-back" onclick="prevStep()" data-i18n="q_back">Назад</button>
@@ -427,13 +422,11 @@
 
         <!-- Шаг 3 -->
         <div class="q-step" id="step3">
-          <h3 data-i18n="q3_h">Супруг согласен на развод?</h3>
+          <h3 data-i18n="q3_h">Есть ли у вас «особенные» дети?</h3>
           <p class="q-hint" data-i18n="q3_hint">Выберите один вариант</p>
           <div class="q-options">
-            <button class="q-opt single" data-step="3" data-val="both_agree" data-i18n="q3_o1">Да, оба согласны</button>
-            <button class="q-opt single" data-step="3" data-val="not_agree" data-i18n="q3_o2">Нет, не согласен</button>
-            <button class="q-opt single" data-step="3" data-val="not_talked" data-i18n="q3_o3">Ещё не разговаривали</button>
-            <button class="q-opt single" data-step="3" data-val="through_lawyer" data-i18n="q3_o4">Общаемся через юриста</button>
+            <button type="button" class="q-opt single" data-step="3" data-val="special_yes" data-i18n="q3_o1">Да</button>
+            <button type="button" class="q-opt single" data-step="3" data-val="special_no" data-i18n="q3_o2">Нет</button>
           </div>
           <div class="q-nav">
             <button type="button" class="q-btn-back" onclick="prevStep()" data-i18n="q_back">Назад</button>
@@ -447,13 +440,13 @@
 
         <!-- Шаг 4 -->
         <div class="q-step" id="step4">
-          <h3 data-i18n="q4_h">Есть ли спор по имуществу?</h3>
-          <p class="q-hint" data-i18n="q4_hint">Можно выбрать несколько</p>
+          <h3 data-i18n="q4_h">Супруг согласен на развод?</h3>
+          <p class="q-hint" data-i18n="q4_hint">Выберите один вариант</p>
           <div class="q-options">
-            <button class="q-opt multi" data-step="4" data-val="property_division" data-i18n="q4_o1">Да, делим имущество</button>
-            <button class="q-opt multi" data-step="4" data-val="relatives_rewrite" data-i18n="q4_o2">Имущество уже переписано на родственников</button>
-            <button class="q-opt multi" data-step="4" data-val="no_property" data-i18n="q4_o3">Имущества нет</button>
-            <button class="q-opt multi" data-step="4" data-val="shared_debts" data-i18n="q4_o4">Есть общие долги</button>
+            <button class="q-opt single" data-step="4" data-val="both_agree" data-i18n="q4_o1">Да, оба согласны</button>
+            <button class="q-opt single" data-step="4" data-val="not_agree" data-i18n="q4_o2">Нет, не согласен</button>
+            <button class="q-opt single" data-step="4" data-val="not_talked" data-i18n="q4_o3">Ещё не разговаривали</button>
+            <button class="q-opt single" data-step="4" data-val="through_lawyer" data-i18n="q4_o4">Общаемся через юриста</button>
           </div>
           <div class="q-nav">
             <button type="button" class="q-btn-back" onclick="prevStep()" data-i18n="q_back">Назад</button>
@@ -467,13 +460,12 @@
 
         <!-- Шаг 5 -->
         <div class="q-step" id="step5">
-          <h3 data-i18n="q5_h">Как давно длится ситуация?</h3>
+          <h3 data-i18n="q5_h">Есть ли спор по имуществу?</h3>
           <p class="q-hint" data-i18n="q5_hint">Выберите один вариант</p>
           <div class="q-options">
-            <button class="q-opt single" data-step="5" data-val="just_started" data-i18n="q5_o1">Только начинается</button>
-            <button class="q-opt single" data-step="5" data-val="up_to_year" data-i18n="q5_o2">До 1 года</button>
-            <button class="q-opt single" data-step="5" data-val="one_to_three_years" data-i18n="q5_o3">От 1 до 3 лет</button>
-            <button class="q-opt single" data-step="5" data-val="more_than_three_years" data-i18n="q5_o4">Более 3 лет</button>
+            <button type="button" class="q-opt single" data-step="5" data-val="property_division" data-i18n="q5_o1">Да, делим имущество</button>
+            <button type="button" class="q-opt single" data-step="5" data-val="no_property" data-i18n="q5_o2">Имущества нет</button>
+            <button type="button" class="q-opt single" data-step="5" data-val="relatives_rewrite" data-i18n="q5_o3">Муж переписал имущество на родственников</button>
           </div>
           <div class="q-nav">
             <button type="button" class="q-btn-back" onclick="prevStep()" data-i18n="q_back">Назад</button>
@@ -485,10 +477,48 @@
           </div>
         </div>
 
-        <!-- Шаг 6: контакты -->
+        <!-- Шаг 6 -->
         <div class="q-step" id="step6">
-          <h3 data-i18n="q6_h" data-i18n-html="true">Отлично!<br>Оставьте контакт ниже:</h3>
-          <p class="q-hint" data-i18n="q6_hint">Юрист свяжется с вами в течение 30 минут</p>
+          <h3 data-i18n="q6_h">Есть ли общие долги?</h3>
+          <p class="q-hint" data-i18n="q6_hint">Выберите один вариант</p>
+          <div class="q-options">
+            <button type="button" class="q-opt single" data-step="6" data-val="debts_yes" data-i18n="q6_o1">Да</button>
+            <button type="button" class="q-opt single" data-step="6" data-val="debts_no" data-i18n="q6_o2">Нет</button>
+          </div>
+          <div class="q-nav">
+            <button type="button" class="q-btn-back" onclick="prevStep()" data-i18n="q_back">Назад</button>
+            <button type="button" class="q-btn-next" onclick="nextStep()" data-i18n="q_next">Далее</button>
+          </div>
+          <div class="q-timer" aria-live="polite">
+            <div class="q-timer-label js-q-timer-label" data-i18n="q_timer_label" data-i18n-html="true"><span class="q-timer-accent">Сгорает</span>: <span class="q-timer-muted">Чек-лист бракоразводного процесса</span></div>
+            <div class="q-timer-time js-q-timer-time">03:00</div>
+          </div>
+        </div>
+
+        <!-- Шаг 7 -->
+        <div class="q-step" id="step7">
+          <h3 data-i18n="q7_h">Как давно длится ситуация?</h3>
+          <p class="q-hint" data-i18n="q7_hint">Выберите один вариант</p>
+          <div class="q-options">
+            <button type="button" class="q-opt single" data-step="7" data-val="just_started" data-i18n="q7_o1">Только начинается</button>
+            <button type="button" class="q-opt single" data-step="7" data-val="up_to_year" data-i18n="q7_o2">До 1 года</button>
+            <button type="button" class="q-opt single" data-step="7" data-val="one_to_three_years" data-i18n="q7_o3">От 1 до 3 лет</button>
+            <button type="button" class="q-opt single" data-step="7" data-val="more_than_three_years" data-i18n="q7_o4">Более 3 лет</button>
+          </div>
+          <div class="q-nav">
+            <button type="button" class="q-btn-back" onclick="prevStep()" data-i18n="q_back">Назад</button>
+            <button type="button" class="q-btn-next" onclick="nextStep()" data-i18n="q_next">Далее</button>
+          </div>
+          <div class="q-timer" aria-live="polite">
+            <div class="q-timer-label js-q-timer-label" data-i18n="q_timer_label" data-i18n-html="true"><span class="q-timer-accent">Сгорает</span>: <span class="q-timer-muted">Чек-лист бракоразводного процесса</span></div>
+            <div class="q-timer-time js-q-timer-time">03:00</div>
+          </div>
+        </div>
+
+        <!-- Шаг 8: контакты -->
+        <div class="q-step" id="step8">
+          <h3 data-i18n="q8_h" data-i18n-html="true">Отлично!<br>Оставьте контакт ниже:</h3>
+          <p class="q-hint" data-i18n="q8_hint">Юрист свяжется с вами в течение 30 минут</p>
           <form class="q-contact-form" onsubmit="submitQuizLastStep(event)" novalidate>
             <div class="q-contact-row">
               <input type="text" name="name" data-i18n-placeholder="q_ph_name" placeholder="Ваше имя" required autocomplete="name" />
@@ -505,7 +535,7 @@
 
             <div class="q-nav q-nav-submit">
               <button type="button" class="q-btn-back" onclick="prevStep()" data-i18n="q_back">Назад</button>
-              <button type="button" class="btn btn-primary q-submit-btn" id="quizWhatsAppCta" data-i18n="q_submit">Вернуть средства</button>
+              <button type="button" class="btn btn-primary q-submit-btn" id="quizWhatsAppCta" data-i18n="q_submit">Оставить заявку</button>
             </div>
             <div class="q-timer" aria-live="polite">
               <div class="q-timer-label js-q-timer-label" data-i18n="q_timer_label" data-i18n-html="true"><span class="q-timer-accent">Сгорает</span>: <span class="q-timer-muted">Чек-лист бракоразводного процесса</span></div>
