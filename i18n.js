@@ -191,7 +191,7 @@
         'Ознакомлен(а) с <a href="privacy.html" target="_blank" rel="noopener noreferrer" class="q-doc-link">политикой конфиденциальности</a>',
       q_back: 'Назад',
       q_next: 'Далее',
-      q_timer_label: '<span class="q-timer-accent">Сгорает</span>: <span class="q-timer-muted">Чек-лист бракоразводного процесса</span>',
+      q_timer_label: '<span class="q-timer-accent">Сгорает</span>: <span class="q-timer-muted">Чек-лист по разводу</span>',
       q_timer_expired: 'Чек-лист бракоразвода <span class="q-timer-accent">недоступен.</span>',
       q_submit: 'Оставить заявку',
       q_ok_h: 'Заявка принята!',

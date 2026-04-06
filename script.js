@@ -1482,11 +1482,11 @@ function quizPriorityRender() {
         const dict = (window.SiteI18n.STRINGS && window.SiteI18n.STRINGS[lang]) || window.SiteI18n.STRINGS.ru || {};
         return quizPriorityExpired
           ? (dict.q_timer_expired || 'Чек-лист бракоразвода <span class="q-timer-accent">недоступен.</span>')
-          : (dict.q_timer_label || '<span class="q-timer-accent">Сгорает</span>: <span class="q-timer-muted">Чек-лист бракоразводного процесса</span>');
+          : (dict.q_timer_label || '<span class="q-timer-accent">Сгорает</span>: <span class="q-timer-muted">Чек-лист по разводу</span>');
       })())
     : (quizPriorityExpired
         ? 'Чек-лист бракоразвода <span class="q-timer-accent">недоступен.</span>'
-        : '<span class="q-timer-accent">Сгорает</span>: <span class="q-timer-muted">Чек-лист бракоразводного процесса</span>');
+        : '<span class="q-timer-accent">Сгорает</span>: <span class="q-timer-muted">Чек-лист по разводу</span>');
   const time = quizPriorityExpired ? '00:00' : formatMmSs(quizPriorityRemainingMs);
 
   document.querySelectorAll('.q-timer').forEach((wrap) => {

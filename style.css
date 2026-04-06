@@ -2966,7 +2966,11 @@ blockquote {
   line-height: 1;
   font-weight: 300;
   cursor: pointer;
-  transition: var(--trans);
+  transition: background 0.22s ease;
+}
+/* Та же тряска, что у hero CTA; полный цикл 2,5 с */
+#q2ChildrenBlock.q-children-block--compact .q-child-row--has-input .q-child-remove {
+  animation: heroCtaShake 2.5s ease-in-out infinite;
 }
 .q-child-remove:hover {
   background: rgba(198, 40, 40, 0.08);
