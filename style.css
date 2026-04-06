@@ -2924,79 +2924,71 @@ blockquote {
 .q-step h3    { font-size: 1.71rem; margin-bottom: 6px; }
 .q-hint       { font-size: 0.83rem; color: var(--muted); margin-bottom: 18px; }
 
-/* Шаг 2: имя ребёнка + возраст (select; на iOS — нативное колесо) */
+/* Шаг 2: одна строка «Имя | Возраст», ширина как у кнопки «Нет детей» */
+#step2 .q-children-block {
+  width: 100%;
+  max-width: 100%;
+  align-self: stretch;
+  box-sizing: border-box;
+  margin-bottom: 10px;
+}
 .q-children-block {
-  margin-bottom: 14px;
+  margin-bottom: 0;
 }
 .quiz-q2-invalid {
   animation: quizFieldShake 320ms ease-in-out, quizFieldBorderPulse 680ms ease-in-out;
 }
 .q-child-row {
-  display: grid;
-  grid-template-columns: minmax(0, 1fr) auto auto;
-  gap: 8px 10px;
-  align-items: center;
+  width: 100%;
   margin-bottom: 12px;
 }
-.q-child-name {
+.q-child-split {
+  display: flex;
+  align-items: stretch;
   width: 100%;
   box-sizing: border-box;
-  padding: 12px 12px;
+  min-height: 48px;
   border: 1.5px solid rgba(0, 0, 0, 0.22);
   border-radius: 3px;
   background: #fff;
-  font-family: Arial, Helvetica, sans-serif;
-  font-size: 0.86rem;
-  min-width: 0;
+  overflow: hidden;
 }
-.q-child-name:focus {
-  outline: none;
+.q-child-split:focus-within {
   border-color: rgba(0, 0, 0, 0.45);
   box-shadow: 0 0 0 2px rgba(0, 0, 0, 0.06);
 }
-.q-child-age-col {
+.q-child-name,
+.q-child-age-inp {
+  flex: 1 1 0;
+  min-width: 0;
+  border: none;
+  box-sizing: border-box;
+  padding: 14px 12px;
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 0.86rem;
+  background: transparent;
+}
+.q-child-name:focus,
+.q-child-age-inp:focus {
+  outline: none;
+}
+.q-child-age-inp {
+  text-align: center;
+  font-variant-numeric: tabular-nums;
+}
+.q-child-sep {
+  flex: 0 0 auto;
   display: flex;
   align-items: center;
-  gap: 6px;
-  flex-shrink: 0;
-}
-.q-child-age-select {
-  -webkit-appearance: none;
-  appearance: none;
-  min-width: 56px;
-  min-height: 44px;
-  padding: 8px 26px 8px 10px;
-  border: 1.5px solid rgba(0, 0, 0, 0.22);
-  border-radius: 3px;
-  background-color: #fff;
-  font-family: Arial, Helvetica, sans-serif;
-  font-size: 0.95rem;
-  font-variant-numeric: tabular-nums;
-  cursor: pointer;
-  text-align: center;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%23666' d='M6 8L1 3h10z'/%3E%3C/svg%3E");
-  background-repeat: no-repeat;
-  background-position: right 8px center;
-}
-.q-child-age-select:focus {
-  outline: none;
-  border-color: rgba(0, 0, 0, 0.45);
-}
-.q-age-suffix {
-  font-size: 0.78rem;
+  justify-content: center;
+  padding: 0 8px;
   color: var(--muted);
-  white-space: nowrap;
+  font-size: 0.95rem;
+  user-select: none;
+  background: rgba(0, 0, 0, 0.04);
 }
 #step2 .q-options {
   grid-template-columns: 1fr;
-}
-@media (max-width: 420px) {
-  .q-child-row {
-    grid-template-columns: 1fr;
-  }
-  .q-child-age-col {
-    justify-content: flex-start;
-  }
 }
 
 .q-options {

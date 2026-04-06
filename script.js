@@ -827,41 +827,57 @@ const TOTAL_STEPS = 7;
 const answers = {};
 let lastProgressPercent = 0;
 
-/** Шаг 2: до 4 строк «имя + возраст»; на iOS `<select>` открывается колесом */
+/** Шаг 2: до 4 строк; одна «графа» — имя | возраст */
 const Q2_MAX_CHILD_ROWS = 4;
 let q2VisibleRows = 1;
+
+function q2RowComplete(row) {
+  if (!row) return false;
+  const name = row.querySelector('.q-child-name');
+  const ageInp = row.querySelector('.q-child-age-inp');
+  if (!name || !ageInp) return false;
+  const n = (name.value || '').trim();
+  const age = parseInt((ageInp.value || '').trim(), 10);
+  return Boolean(n && Number.isFinite(age) && age >= 1 && age <= 30);
+}
 
 function q2CreateRowEl(index, name, age) {
   const wrap = document.createElement('div');
   wrap.className = 'q-child-row';
   wrap.dataset.childIndex = String(index);
-  const inp = document.createElement('input');
-  inp.type = 'text';
-  inp.className = 'q-child-name';
-  inp.maxLength = 80;
-  inp.autocomplete = 'off';
-  inp.value = name || '';
-  inp.setAttribute('data-i18n-placeholder', index === 0 ? 'q2_child_ph' : 'q2_child_ph_add');
 
-  const ageCol = document.createElement('div');
-  ageCol.className = 'q-child-age-col';
-  const sel = document.createElement('select');
-  sel.className = 'q-child-age-select';
-  sel.setAttribute('data-i18n-aria', 'q2_age_aria');
-  const ageN = Math.min(30, Math.max(1, Number(age) || 7));
-  for (let a = 1; a <= 30; a++) {
-    const o = document.createElement('option');
-    o.value = String(a);
-    o.textContent = String(a);
-    if (a === ageN) o.selected = true;
-  }
-  const suf = document.createElement('span');
-  suf.className = 'q-age-suffix';
-  suf.setAttribute('data-i18n', 'q2_age_suffix');
-  ageCol.appendChild(sel);
-  ageCol.appendChild(suf);
-  wrap.appendChild(inp);
-  wrap.appendChild(ageCol);
+  const split = document.createElement('div');
+  split.className = 'q-child-split';
+
+  const inpName = document.createElement('input');
+  inpName.type = 'text';
+  inpName.className = 'q-child-name';
+  inpName.maxLength = 80;
+  inpName.autocomplete = 'off';
+  inpName.value = name || '';
+  inpName.setAttribute('data-i18n-placeholder', index === 0 ? 'q2_child_ph' : 'q2_child_ph_add');
+
+  const sep = document.createElement('span');
+  sep.className = 'q-child-sep';
+  sep.setAttribute('aria-hidden', 'true');
+  sep.textContent = '|';
+
+  const inpAge = document.createElement('input');
+  inpAge.type = 'text';
+  inpAge.className = 'q-child-age-inp';
+  inpAge.inputMode = 'numeric';
+  inpAge.autocomplete = 'off';
+  inpAge.maxLength = 2;
+  inpAge.setAttribute('data-i18n-placeholder', 'q2_age_ph');
+  inpAge.setAttribute('data-i18n-aria', 'q2_age_aria');
+  const aNum = Number(age);
+  inpAge.value =
+    Number.isFinite(aNum) && aNum >= 1 && aNum <= 30 ? String(Math.floor(aNum)) : '';
+
+  split.appendChild(inpName);
+  split.appendChild(sep);
+  split.appendChild(inpAge);
+  wrap.appendChild(split);
   return wrap;
 }
 
@@ -870,7 +886,7 @@ function q2ResetRowsToOneEmpty() {
   const block = document.getElementById('q2ChildrenBlock');
   if (!block) return;
   block.innerHTML = '';
-  block.appendChild(q2CreateRowEl(0, '', 7));
+  block.appendChild(q2CreateRowEl(0, '', ''));
   if (window.SiteI18n) window.SiteI18n.apply(window.SiteI18n.getLang());
 }
 
@@ -885,8 +901,8 @@ function q2RestoreFromAnswers() {
   if (!block) return;
   block.innerHTML = '';
   for (let i = 0; i < q2VisibleRows; i++) {
-    const item = arr[i] || { name: '', age: 7 };
-    block.appendChild(q2CreateRowEl(i, item.name || '', Number(item.age) || 7));
+    const item = arr[i] || { name: '', age: '' };
+    block.appendChild(q2CreateRowEl(i, item.name || '', item.age));
   }
   if (window.SiteI18n) window.SiteI18n.apply(window.SiteI18n.getLang());
 }
@@ -896,10 +912,10 @@ function q2CollectChildrenFromDom() {
   const out = [];
   rows.forEach((row) => {
     const nameInput = row.querySelector('.q-child-name');
-    const sel = row.querySelector('.q-child-age-select');
-    if (!nameInput || !sel) return;
+    const ageInp = row.querySelector('.q-child-age-inp');
+    if (!nameInput || !ageInp) return;
     const name = nameInput.value.trim();
-    const age = parseInt(sel.value, 10);
+    const age = parseInt((ageInp.value || '').trim(), 10);
     if (!name) return;
     if (!Number.isFinite(age) || age < 1 || age > 30) return;
     out.push({ name, age });
@@ -912,10 +928,10 @@ function q2SyncDraftFromDom() {
   const arr = [];
   rows.forEach((row) => {
     const nameInput = row.querySelector('.q-child-name');
-    const sel = row.querySelector('.q-child-age-select');
-    if (!nameInput || !sel) return;
+    const ageInp = row.querySelector('.q-child-age-inp');
+    if (!nameInput || !ageInp) return;
     const name = nameInput.value.trim();
-    const age = parseInt(sel.value, 10);
+    const age = parseInt((ageInp.value || '').trim(), 10);
     if (!name) return;
     if (!Number.isFinite(age) || age < 1 || age > 30) return;
     arr.push({ name, age });
@@ -951,27 +967,29 @@ function q2BindChildrenBlockDelegation() {
   block.dataset.q2Bound = '1';
   block.addEventListener('input', (e) => {
     const t = e.target;
-    if (!t || !t.classList || !t.classList.contains('q-child-name')) return;
+    if (!t || !t.classList) return;
+    if (t.classList.contains('q-child-age-inp')) {
+      let v = t.value.replace(/\D/g, '').slice(0, 2);
+      if (v.length === 2) {
+        const n = parseInt(v, 10);
+        if (n > 30) v = '30';
+      }
+      if (v !== t.value) t.value = v;
+    }
+    if (!t.classList.contains('q-child-name') && !t.classList.contains('q-child-age-inp')) return;
     q2ClearNoChildrenSelection();
     const row = t.closest('.q-child-row');
     const allRows = [...block.querySelectorAll('.q-child-row')];
     const idx = allRows.indexOf(row);
     if (
       idx === q2VisibleRows - 1 &&
-      t.value.trim() &&
+      q2RowComplete(row) &&
       q2VisibleRows < Q2_MAX_CHILD_ROWS
     ) {
       q2VisibleRows += 1;
-      block.appendChild(q2CreateRowEl(q2VisibleRows - 1, '', 7));
+      block.appendChild(q2CreateRowEl(q2VisibleRows - 1, '', ''));
       if (window.SiteI18n) window.SiteI18n.apply(window.SiteI18n.getLang());
     }
-    q2SyncDraftFromDom();
-    quizSaveDraft();
-  });
-  block.addEventListener('change', (e) => {
-    const t = e.target;
-    if (!t || !t.classList || !t.classList.contains('q-child-age-select')) return;
-    q2ClearNoChildrenSelection();
     q2SyncDraftFromDom();
     quizSaveDraft();
   });
@@ -1069,6 +1087,7 @@ function quizApplySelectedFromAnswers() {
     const arr = answers[5].filter((v) => v !== 'shared_debts');
     answers[5] = arr[0] ? String(arr[0]) : '';
   }
+  if (answers[2] === 'no_children') delete answers[3];
 }
 
 /** Восстанавливает ответы и поля формы из localStorage. Не меняет видимый шаг — вызывайте showStep(8) после. */
@@ -1219,6 +1238,7 @@ function getLeadFormFields(form) {
 function buildTelegramAnswersOnly(form) {
   const qaParts = [];
   for (let s = 1; s <= TOTAL_STEPS; s++) {
+    if (s === 3 && answers[2] === 'no_children') continue;
     const qTitle = getQuizStepQuestionTitle(s);
     const ans = formatQuizAnswerForStep(s);
     qaParts.push(`Вопрос ${s}:\n${qTitle}\nОтвет: ${ans}`);
@@ -1572,11 +1592,17 @@ function openQuizContact(e, options) {
 }
 
 function showStep(n) {
+  let step = Number(n);
+  // При «Нет детей» вопрос про особенных детей (шаг 3) не показываем
+  if (step === 3 && answers[2] === 'no_children') {
+    step = 4;
+    currentStep = 4;
+  }
   document.querySelectorAll('.q-step').forEach(s => s.classList.remove('active'));
-  const el = document.getElementById('step' + n);
+  const el = document.getElementById('step' + step);
   if (el) el.classList.add('active');
 
-  updateProgress(n);
+  updateProgress(step);
 }
 
 function updateProgress(step) {
@@ -1618,10 +1644,11 @@ function nextStep() {
       const noBtn = document.querySelector('#step2 .q-opt[data-val="no_children"]');
       if (noBtn && noBtn.classList.contains('selected')) {
         answers[2] = 'no_children';
+        delete answers[3];
         delete answers['2_children'];
         delete answers['2_visibleRows'];
-        currentStep++;
-        showStep(currentStep);
+        currentStep = 4;
+        showStep(4);
         quizSaveDraft();
         return;
       }
@@ -1665,6 +1692,12 @@ function nextStep() {
 function prevStep() {
   if (currentStep <= 1) {
     closeModal();
+    return;
+  }
+  if (currentStep === 4 && answers[2] === 'no_children') {
+    currentStep = 2;
+    showStep(2);
+    quizSaveDraft();
     return;
   }
   currentStep--;
@@ -1787,11 +1820,12 @@ window.addEventListener('siteLangChange', () => {
   quizSaveDraft();
 
   const draftStep = quizGetDraftStep();
-  const stepToShow = draftStep || currentStep || 1;
+  let stepToShow = draftStep || currentStep || 1;
 
   // Восстанавливаем selected + инпуты формы (если есть черновик),
   // затем показываем текущий шаг.
   quizApplyDraft();
+  if (answers[2] === 'no_children' && stepToShow === 3) stepToShow = 4;
   currentStep = stepToShow;
   showStep(stepToShow);
 
@@ -1822,6 +1856,7 @@ document.addEventListener('DOMContentLoaded', () => {
         q2ResetRowsToOneEmpty();
         delete answers['2_children'];
         delete answers['2_visibleRows'];
+        delete answers[3];
         answers[2] = 'no_children';
         quizSaveDraft();
         setTimeout(nextStep, 300);
