@@ -1501,6 +1501,13 @@ function quizPriorityRender() {
   });
 }
 
+/** Тексты квиза и таймера в выбранном языке (модалка могла не попасть в прошлый apply или черновик менял DOM). */
+function quizSyncI18n() {
+  if (!window.SiteI18n) return;
+  window.SiteI18n.apply(window.SiteI18n.getLang());
+  quizPriorityRender();
+}
+
 function quizPriorityShakeIfNeeded() {
   // Shake каждые 30 секунд оставшегося времени (4:00 → 0:00)
   const marksSec = [240, 210, 180, 150, 120, 90, 60, 30, 0];
@@ -1635,6 +1642,7 @@ function openModal() {
     }
     q2ResetRowsToOneEmpty();
   }
+  quizSyncI18n();
 }
 
 function closeModal() {
@@ -1690,6 +1698,7 @@ function openQuizContact(e, options) {
 
   currentStep = 8;
   showStep(8);
+  quizSyncI18n();
 
   setTimeout(() => {
     const nameInput = document.querySelector('#step8 input[name="name"]');
@@ -1936,8 +1945,7 @@ window.addEventListener('siteLangChange', () => {
   currentStep = stepToShow;
   showStep(stepToShow);
 
-  // Перерисовать подпись таймера в новом языке (и expired-текст).
-  quizPriorityRender();
+  quizSyncI18n();
 });
 
 // ── Option buttons logic ──
