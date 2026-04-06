@@ -896,7 +896,7 @@ function q2ResetRowsToOneEmpty() {
   block.innerHTML = '';
   block.appendChild(q2CreateRowEl(0, '', ''));
   if (window.SiteI18n) window.SiteI18n.apply(window.SiteI18n.getLang());
-  q2UpdateNoChildrenVisibility();
+  q2RefreshStep2ChildrenUI();
 }
 
 function q2RestoreFromAnswers() {
@@ -914,7 +914,7 @@ function q2RestoreFromAnswers() {
     block.appendChild(q2CreateRowEl(i, item.name || '', item.age));
   }
   if (window.SiteI18n) window.SiteI18n.apply(window.SiteI18n.getLang());
-  q2UpdateNoChildrenVisibility();
+  q2RefreshStep2ChildrenUI();
 }
 
 function q2CollectChildrenFromDom() {
@@ -987,6 +987,29 @@ function q2UpdateNoChildrenVisibility() {
   else noBtn.removeAttribute('hidden');
 }
 
+function q2RowHasInput(row) {
+  if (!row) return false;
+  const name = row.querySelector('.q-child-name');
+  const ageInp = row.querySelector('.q-child-age-inp');
+  if (!name || !ageInp) return false;
+  return (name.value || '').trim() !== '' || (ageInp.value || '').trim() !== '';
+}
+
+function q2UpdateChildRowsUI() {
+  const block = document.getElementById('q2ChildrenBlock');
+  if (!block) return;
+  const hasAny = q2HasAnyChildInput();
+  block.classList.toggle('q-children-block--compact', hasAny);
+  block.querySelectorAll('.q-child-row').forEach((row) => {
+    row.classList.toggle('q-child-row--has-input', q2RowHasInput(row));
+  });
+}
+
+function q2RefreshStep2ChildrenUI() {
+  q2UpdateNoChildrenVisibility();
+  q2UpdateChildRowsUI();
+}
+
 function q2ReindexChildRows() {
   const block = document.getElementById('q2ChildrenBlock');
   if (!block) return;
@@ -1012,7 +1035,7 @@ function q2RemoveChildRow(row) {
     if (nameInp) nameInp.value = '';
     if (ageInp) ageInp.value = '';
     q2ClearNoChildrenSelection();
-    q2UpdateNoChildrenVisibility();
+    q2RefreshStep2ChildrenUI();
     q2SyncDraftFromDom();
     quizSaveDraft();
     return;
@@ -1020,7 +1043,7 @@ function q2RemoveChildRow(row) {
   row.remove();
   q2ReindexChildRows();
   q2ClearNoChildrenSelection();
-  q2UpdateNoChildrenVisibility();
+  q2RefreshStep2ChildrenUI();
   q2SyncDraftFromDom();
   quizSaveDraft();
 }
@@ -1068,7 +1091,7 @@ function q2BindChildrenBlockDelegation() {
       if (window.SiteI18n) window.SiteI18n.apply(window.SiteI18n.getLang());
     }
     q2SyncDraftFromDom();
-    q2UpdateNoChildrenVisibility();
+    q2RefreshStep2ChildrenUI();
     quizSaveDraft();
   });
 }
@@ -1166,7 +1189,7 @@ function quizApplySelectedFromAnswers() {
     answers[5] = arr[0] ? String(arr[0]) : '';
   }
   if (answers[2] === 'no_children') delete answers[3];
-  q2UpdateNoChildrenVisibility();
+  q2RefreshStep2ChildrenUI();
 }
 
 /** Восстанавливает ответы и поля формы из localStorage. Не меняет видимый шаг — вызывайте showStep(8) после. */
@@ -1686,7 +1709,7 @@ function showStep(n) {
   if (el) el.classList.add('active');
 
   updateProgress(step);
-  if (step === 2) q2UpdateNoChildrenVisibility();
+  if (step === 2) q2RefreshStep2ChildrenUI();
 }
 
 function updateProgress(step) {

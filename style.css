@@ -2958,9 +2958,9 @@ blockquote {
   align-self: stretch;
   margin: 0;
   padding: 0;
-  border: 1.5px solid rgba(0, 0, 0, 0.14);
+  border: none;
   border-radius: 3px;
-  background: #fff;
+  background: transparent;
   color: #c62828;
   font-size: 1.35rem;
   line-height: 1;
@@ -2969,16 +2969,17 @@ blockquote {
   transition: var(--trans);
 }
 .q-child-remove:hover {
-  border-color: rgba(198, 40, 40, 0.45);
-  background: rgba(198, 40, 40, 0.06);
+  background: rgba(198, 40, 40, 0.08);
 }
 .q-child-remove:focus-visible {
-  outline: 2px solid rgba(198, 40, 40, 0.5);
-  outline-offset: 2px;
+  outline: none;
 }
 .q-child-split:focus-within {
   border-color: rgba(0, 0, 0, 0.45);
   box-shadow: 0 0 0 2px rgba(0, 0, 0, 0.06);
+}
+.q-child-split:focus-within .q-child-sep {
+  color: rgba(0, 0, 0, 0.45);
 }
 .q-child-name,
 .q-child-age-inp {
@@ -3005,12 +3006,23 @@ blockquote {
   align-items: center;
   justify-content: center;
   padding: 0 6px;
-  color: var(--muted);
+  color: rgba(0, 0, 0, 0.22);
   font-size: 1.42rem;
   line-height: 1;
   user-select: none;
   background: transparent;
   align-self: center;
+}
+/* До ввода — строка на всю ширину как «Нет детей»; после ввода — компактно с колонкой крестика */
+#q2ChildrenBlock:not(.q-children-block--compact) .q-child-remove {
+  display: none;
+}
+#q2ChildrenBlock:not(.q-children-block--compact) .q-child-row {
+  gap: 0;
+}
+#q2ChildrenBlock.q-children-block--compact .q-child-row:not(.q-child-row--has-input) .q-child-remove {
+  visibility: hidden;
+  pointer-events: none;
 }
 #step2 .q-opt[data-val="no_children"][hidden],
 #step2 .q-opt[data-val="no_children"].q-opt--hidden {
