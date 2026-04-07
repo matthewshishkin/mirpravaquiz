@@ -827,127 +827,51 @@ const TOTAL_STEPS = 7;
 const answers = {};
 let lastProgressPercent = 0;
 
-/** Шаг 2: до 4 строк; одна «графа» — имя | возраст */
-const Q2_MAX_CHILD_ROWS = 4;
-let q2VisibleRows = 1;
+/** Шаг 2: ползунок «сколько детей» (1–10) */
+const Q2_MIN_CHILDREN = 1;
+const Q2_MAX_CHILDREN = 10;
+const Q2_COUNT_KEY = '2_children_count';
 
-function q2RowComplete(row) {
-  if (!row) return false;
-  const name = row.querySelector('.q-child-name');
-  const ageInp = row.querySelector('.q-child-age-inp');
-  if (!name || !ageInp) return false;
-  const n = (name.value || '').trim();
-  const age = parseInt((ageInp.value || '').trim(), 10);
-  return Boolean(n && Number.isFinite(age) && age >= 1 && age <= 30);
+function q2GetNoChildrenBtn() {
+  return document.querySelector('#step2 .q-opt[data-val="no_children"]');
 }
 
-function q2CreateRowEl(index, name, age) {
-  const wrap = document.createElement('div');
-  wrap.className = 'q-child-row';
-  wrap.dataset.childIndex = String(index);
-
-  const split = document.createElement('div');
-  split.className = 'q-child-split';
-
-  const inpName = document.createElement('input');
-  inpName.type = 'text';
-  inpName.className = 'q-child-name';
-  inpName.maxLength = 80;
-  inpName.autocomplete = 'off';
-  inpName.value = name || '';
-  inpName.setAttribute('data-i18n-placeholder', index === 0 ? 'q2_child_ph' : 'q2_child_ph_add');
-
-  const sep = document.createElement('span');
-  sep.className = 'q-child-sep';
-  sep.setAttribute('aria-hidden', 'true');
-  sep.textContent = '|';
-
-  const inpAge = document.createElement('input');
-  inpAge.type = 'text';
-  inpAge.className = 'q-child-age-inp';
-  inpAge.inputMode = 'numeric';
-  inpAge.autocomplete = 'off';
-  inpAge.maxLength = 2;
-  inpAge.setAttribute('data-i18n-placeholder', 'q2_age_ph');
-  inpAge.setAttribute('data-i18n-aria', 'q2_age_aria');
-  const aNum = Number(age);
-  inpAge.value =
-    Number.isFinite(aNum) && aNum >= 1 && aNum <= 30 ? String(Math.floor(aNum)) : '';
-
-  split.appendChild(inpName);
-  split.appendChild(sep);
-  split.appendChild(inpAge);
-
-  const removeBtn = document.createElement('button');
-  removeBtn.type = 'button';
-  removeBtn.className = 'q-child-remove';
-  removeBtn.setAttribute('data-i18n-aria', 'q2_remove_aria');
-  removeBtn.textContent = '\u00D7';
-
-  wrap.appendChild(split);
-  wrap.appendChild(removeBtn);
-  return wrap;
+function q2ClearNoChildrenSelection() {
+  const noBtn = q2GetNoChildrenBtn();
+  if (noBtn) noBtn.classList.remove('selected');
+  if (answers[2] === 'no_children') delete answers[2];
 }
 
-function q2ResetRowsToOneEmpty() {
-  q2VisibleRows = 1;
-  const block = document.getElementById('q2ChildrenBlock');
-  if (!block) return;
-  block.innerHTML = '';
-  block.appendChild(q2CreateRowEl(0, '', ''));
-  if (window.SiteI18n) window.SiteI18n.apply(window.SiteI18n.getLang());
-  q2RefreshStep2ChildrenUI();
+function q2GetRangeEl() {
+  return document.getElementById('q2ChildrenRange');
 }
 
-function q2RestoreFromAnswers() {
-  const arr = Array.isArray(answers['2_children']) ? answers['2_children'] : [];
-  const vr = answers['2_visibleRows'];
-  q2VisibleRows =
-    Number.isFinite(vr) && vr >= 1 && vr <= Q2_MAX_CHILD_ROWS
-      ? vr
-      : Math.min(Q2_MAX_CHILD_ROWS, Math.max(1, arr.length));
-  const block = document.getElementById('q2ChildrenBlock');
-  if (!block) return;
-  block.innerHTML = '';
-  for (let i = 0; i < q2VisibleRows; i++) {
-    const item = arr[i] || { name: '', age: '' };
-    block.appendChild(q2CreateRowEl(i, item.name || '', item.age));
-  }
-  if (window.SiteI18n) window.SiteI18n.apply(window.SiteI18n.getLang());
-  q2RefreshStep2ChildrenUI();
+function q2GetValueEl() {
+  return document.getElementById('q2ChildrenRangeValue');
 }
 
-function q2CollectChildrenFromDom() {
-  const rows = document.querySelectorAll('#q2ChildrenBlock .q-child-row');
-  const out = [];
-  rows.forEach((row) => {
-    const nameInput = row.querySelector('.q-child-name');
-    const ageInp = row.querySelector('.q-child-age-inp');
-    if (!nameInput || !ageInp) return;
-    const name = nameInput.value.trim();
-    const age = parseInt((ageInp.value || '').trim(), 10);
-    if (!name) return;
-    if (!Number.isFinite(age) || age < 1 || age > 30) return;
-    out.push({ name, age });
-  });
-  return out;
+function q2SetRangeValue(n) {
+  const range = q2GetRangeEl();
+  const valueEl = q2GetValueEl();
+  const num = Math.max(Q2_MIN_CHILDREN, Math.min(Q2_MAX_CHILDREN, Number(n)));
+  if (range) range.value = String(num);
+  if (valueEl) valueEl.textContent = String(num);
 }
 
-function q2SyncDraftFromDom() {
-  const rows = document.querySelectorAll('#q2ChildrenBlock .q-child-row');
-  const arr = [];
-  rows.forEach((row) => {
-    const nameInput = row.querySelector('.q-child-name');
-    const ageInp = row.querySelector('.q-child-age-inp');
-    if (!nameInput || !ageInp) return;
-    const name = nameInput.value.trim();
-    const age = parseInt((ageInp.value || '').trim(), 10);
-    if (!name) return;
-    if (!Number.isFinite(age) || age < 1 || age > 30) return;
-    arr.push({ name, age });
-  });
-  answers['2_children'] = arr;
-  answers['2_visibleRows'] = q2VisibleRows;
+function q2HasPickedChildrenCount() {
+  const v = Number(answers[Q2_COUNT_KEY]);
+  return Number.isFinite(v) && v >= Q2_MIN_CHILDREN && v <= Q2_MAX_CHILDREN;
+}
+
+function q2OnRangeInput() {
+  const range = q2GetRangeEl();
+  if (!range) return;
+  const num = Number(range.value);
+  q2SetRangeValue(num);
+  q2ClearNoChildrenSelection();
+  answers[2] = 'children';
+  answers[Q2_COUNT_KEY] = Math.max(Q2_MIN_CHILDREN, Math.min(Q2_MAX_CHILDREN, Math.round(num)));
+  quizSaveDraft();
 }
 
 function q2ShakeBlock() {
@@ -959,141 +883,55 @@ function q2ShakeBlock() {
   setTimeout(() => block.classList.remove('quiz-q2-invalid'), 900);
 }
 
-function q2ClearNoChildrenSelection() {
-  const noBtn = document.querySelector('#step2 .q-opt[data-val="no_children"]');
-  if (noBtn) noBtn.classList.remove('selected');
-  if (answers[2] === 'no_children') delete answers[2];
-}
-
-function q2HasAnyChildInput() {
-  const rows = document.querySelectorAll('#q2ChildrenBlock .q-child-row');
-  for (let i = 0; i < rows.length; i++) {
-    const row = rows[i];
-    const name = row.querySelector('.q-child-name');
-    const ageInp = row.querySelector('.q-child-age-inp');
-    if (!name || !ageInp) continue;
-    if ((name.value || '').trim() !== '') return true;
-    if ((ageInp.value || '').trim() !== '') return true;
-  }
-  return false;
-}
-
-function q2UpdateNoChildrenVisibility() {
-  const noBtn = document.querySelector('#step2 .q-opt[data-val="no_children"]');
-  if (!noBtn) return;
-  const hide = q2HasAnyChildInput();
-  noBtn.classList.toggle('q-opt--hidden', hide);
-  if (hide) noBtn.setAttribute('hidden', '');
-  else noBtn.removeAttribute('hidden');
-}
-
-function q2RowHasInput(row) {
-  if (!row) return false;
-  const name = row.querySelector('.q-child-name');
-  const ageInp = row.querySelector('.q-child-age-inp');
-  if (!name || !ageInp) return false;
-  return (name.value || '').trim() !== '' || (ageInp.value || '').trim() !== '';
-}
-
-function q2UpdateChildRowsUI() {
+function q2RenderSlider() {
   const block = document.getElementById('q2ChildrenBlock');
   if (!block) return;
-  const hasAny = q2HasAnyChildInput();
-  block.classList.toggle('q-children-block--compact', hasAny);
-  block.querySelectorAll('.q-child-row').forEach((row) => {
-    row.classList.toggle('q-child-row--has-input', q2RowHasInput(row));
-  });
-}
+  if (block.dataset.q2Built === '1') return;
+  block.dataset.q2Built = '1';
+  block.innerHTML = '';
 
-function q2RefreshStep2ChildrenUI() {
-  q2UpdateNoChildrenVisibility();
-  q2UpdateChildRowsUI();
-}
+  const wrap = document.createElement('div');
+  wrap.className = 'q2-range-wrap';
 
-function q2ReindexChildRows() {
-  const block = document.getElementById('q2ChildrenBlock');
-  if (!block) return;
-  const rows = [...block.querySelectorAll('.q-child-row')];
-  q2VisibleRows = rows.length;
-  rows.forEach((row, i) => {
-    row.dataset.childIndex = String(i);
-    const nameInp = row.querySelector('.q-child-name');
-    if (nameInp) {
-      nameInp.setAttribute('data-i18n-placeholder', i === 0 ? 'q2_child_ph' : 'q2_child_ph_add');
-    }
-  });
+  const range = document.createElement('input');
+  range.type = 'range';
+  range.id = 'q2ChildrenRange';
+  range.className = 'q2-range';
+  range.min = String(Q2_MIN_CHILDREN);
+  range.max = String(Q2_MAX_CHILDREN);
+  range.step = '1';
+  range.value = String(Q2_MIN_CHILDREN);
+
+  const value = document.createElement('div');
+  value.className = 'q2-range-value';
+  value.id = 'q2ChildrenRangeValue';
+  value.textContent = String(Q2_MIN_CHILDREN);
+
+  wrap.appendChild(range);
+  wrap.appendChild(value);
+  block.appendChild(wrap);
+
+  range.addEventListener('input', q2OnRangeInput);
+  range.addEventListener('change', q2OnRangeInput);
+
   if (window.SiteI18n) window.SiteI18n.apply(window.SiteI18n.getLang());
 }
 
-function q2RemoveChildRow(row) {
-  const block = document.getElementById('q2ChildrenBlock');
-  if (!block || !row) return;
-  const rows = [...block.querySelectorAll('.q-child-row')];
-  if (rows.length === 1) {
-    const nameInp = row.querySelector('.q-child-name');
-    const ageInp = row.querySelector('.q-child-age-inp');
-    if (nameInp) nameInp.value = '';
-    if (ageInp) ageInp.value = '';
-    q2ClearNoChildrenSelection();
-    q2RefreshStep2ChildrenUI();
-    q2SyncDraftFromDom();
-    quizSaveDraft();
-    return;
-  }
-  row.remove();
-  q2ReindexChildRows();
-  q2ClearNoChildrenSelection();
-  q2RefreshStep2ChildrenUI();
-  q2SyncDraftFromDom();
-  quizSaveDraft();
+function q2ResetSlider() {
+  delete answers[Q2_COUNT_KEY];
+  if (answers[2] === 'children') delete answers[2];
+  q2SetRangeValue(Q2_MIN_CHILDREN);
+}
+
+function q2RestoreSliderFromAnswers() {
+  const v = Number(answers[Q2_COUNT_KEY]);
+  if (Number.isFinite(v)) q2SetRangeValue(v);
+  else q2SetRangeValue(Q2_MIN_CHILDREN);
 }
 
 function q2InitChildrenBlock() {
-  const block = document.getElementById('q2ChildrenBlock');
-  if (!block || block.querySelector('.q-child-row')) return;
-  q2ResetRowsToOneEmpty();
-}
-
-function q2BindChildrenBlockDelegation() {
-  const block = document.getElementById('q2ChildrenBlock');
-  if (!block || block.dataset.q2Bound === '1') return;
-  block.dataset.q2Bound = '1';
-  block.addEventListener('click', (e) => {
-    const rm = e.target.closest('.q-child-remove');
-    if (!rm) return;
-    e.preventDefault();
-    const row = rm.closest('.q-child-row');
-    if (row) q2RemoveChildRow(row);
-  });
-  block.addEventListener('input', (e) => {
-    const t = e.target;
-    if (!t || !t.classList) return;
-    if (t.classList.contains('q-child-age-inp')) {
-      let v = t.value.replace(/\D/g, '').slice(0, 2);
-      if (v.length === 2) {
-        const n = parseInt(v, 10);
-        if (n > 30) v = '30';
-      }
-      if (v !== t.value) t.value = v;
-    }
-    if (!t.classList.contains('q-child-name') && !t.classList.contains('q-child-age-inp')) return;
-    q2ClearNoChildrenSelection();
-    const row = t.closest('.q-child-row');
-    const allRows = [...block.querySelectorAll('.q-child-row')];
-    const idx = allRows.indexOf(row);
-    if (
-      idx === q2VisibleRows - 1 &&
-      q2RowComplete(row) &&
-      q2VisibleRows < Q2_MAX_CHILD_ROWS
-    ) {
-      q2VisibleRows += 1;
-      block.appendChild(q2CreateRowEl(q2VisibleRows - 1, '', ''));
-      if (window.SiteI18n) window.SiteI18n.apply(window.SiteI18n.getLang());
-    }
-    q2SyncDraftFromDom();
-    q2RefreshStep2ChildrenUI();
-    quizSaveDraft();
-  });
+  q2RenderSlider();
+  q2RestoreSliderFromAnswers();
 }
 
 /** Черновик квиза (шаги 1–6, форма) — для возврата с legal-страниц в новой вкладке */
@@ -1175,21 +1013,19 @@ function quizApplySelectedFromAnswers() {
   const q2NoBtn = document.querySelector('.q-opt[data-step="2"][data-val="no_children"]');
   if (answers[2] === 'no_children') {
     if (q2NoBtn) q2NoBtn.classList.add('selected');
-    q2ResetRowsToOneEmpty();
+    q2ResetSlider();
   } else {
     if (q2NoBtn) q2NoBtn.classList.remove('selected');
-    if (answers[2] === 'children' || (answers['2_children'] && answers['2_children'].length)) {
-      q2RestoreFromAnswers();
-    } else {
-      q2ResetRowsToOneEmpty();
-    }
+    q2InitChildrenBlock();
+    if (answers[2] === 'children') q2RestoreSliderFromAnswers();
+    else q2ResetSlider();
   }
   if (Array.isArray(answers[5])) {
     const arr = answers[5].filter((v) => v !== 'shared_debts');
     answers[5] = arr[0] ? String(arr[0]) : '';
   }
   if (answers[2] === 'no_children') delete answers[3];
-  q2RefreshStep2ChildrenUI();
+  q2InitChildrenBlock();
 }
 
 /** Восстанавливает ответы и поля формы из localStorage. Не меняет видимый шаг — вызывайте showStep(8) после. */
@@ -1253,7 +1089,7 @@ function resetQuizToEmptyContactStep() {
     q1Inp.value = '';
     q1Inp.classList.remove('q-other-input--invalid');
   }
-  q2ResetRowsToOneEmpty();
+  q2ResetSlider();
 }
 
 /** Ссылка на WhatsApp (LinkTwin) — кнопка «Связаться вне очереди» после шага «Отлично!…» */
@@ -1304,18 +1140,15 @@ function formatQuizAnswerForStep(step) {
       .join(', ');
   }
   if (step === 2 && raw === 'children') {
-    const rows = answers['2_children'];
-    if (!Array.isArray(rows) || !rows.length) return '—';
     const kk = typeof window !== 'undefined' && window.SiteI18n && window.SiteI18n.getLang() === 'kk';
-    const parts = rows
-      .map((r) => {
-        const n = r && r.name ? String(r.name).trim() : '';
-        const age = Number(r && r.age);
-        if (!n || !Number.isFinite(age)) return null;
-        return kk ? `${n} — ${age} жас` : `${n} — ${age} ${ruChildAgeWord(age)}`;
-      })
-      .filter(Boolean);
-    return parts.length ? parts.join('; ') : '—';
+    const n = Number(answers['2_children_count']);
+    if (!Number.isFinite(n) || n < 1) return '—';
+    if (kk) return `${Math.round(n)} бала`;
+    const a = Math.round(n);
+    const m = a % 10;
+    const x = a % 100;
+    const w = (m === 1 && x !== 11) ? 'ребёнок' : ((m >= 2 && m <= 4 && (x < 10 || x > 20)) ? 'ребёнка' : 'детей');
+    return `${a} ${w}`;
   }
   if (step === 1 && raw === 'other') {
     const el = document.getElementById('q1OtherInput');
@@ -1640,7 +1473,7 @@ function openModal() {
       q1Inp.value = '';
       q1Inp.classList.remove('q-other-input--invalid');
     }
-    q2ResetRowsToOneEmpty();
+    q2ResetSlider();
   }
   quizSyncI18n();
 }
@@ -1718,7 +1551,7 @@ function showStep(n) {
   if (el) el.classList.add('active');
 
   updateProgress(step);
-  if (step === 2) q2RefreshStep2ChildrenUI();
+  if (step === 2) q2InitChildrenBlock();
 }
 
 function updateProgress(step) {
@@ -1761,21 +1594,17 @@ function nextStep() {
       if (noBtn && noBtn.classList.contains('selected')) {
         answers[2] = 'no_children';
         delete answers[3];
-        delete answers['2_children'];
-        delete answers['2_visibleRows'];
+        delete answers['2_children_count'];
         currentStep = 4;
         showStep(4);
         quizSaveDraft();
         return;
       }
-      const collected = q2CollectChildrenFromDom();
-      if (!collected.length) {
+      if (!q2HasPickedChildrenCount()) {
         q2ShakeBlock();
         return;
       }
       answers[2] = 'children';
-      answers['2_children'] = collected;
-      answers['2_visibleRows'] = q2VisibleRows;
       currentStep++;
       showStep(currentStep);
       quizSaveDraft();
@@ -1956,7 +1785,6 @@ document.addEventListener('DOMContentLoaded', () => {
   const waCta = document.getElementById('quizWhatsAppCta');
   if (waCta) waCta.addEventListener('click', onQuizWhatsAppCtaClick);
 
-  q2BindChildrenBlockDelegation();
   q2InitChildrenBlock();
 
   // Single-choice: auto-advance (шаг 2 — только «Нет детей»; список детей — «Далее»)
@@ -1968,9 +1796,8 @@ document.addEventListener('DOMContentLoaded', () => {
         document.querySelectorAll('.q-opt.single[data-step="2"]')
           .forEach(b => b.classList.remove('selected'));
         btn.classList.add('selected');
-        q2ResetRowsToOneEmpty();
-        delete answers['2_children'];
-        delete answers['2_visibleRows'];
+        q2ResetSlider();
+        delete answers['2_children_count'];
         delete answers[3];
         answers[2] = 'no_children';
         quizSaveDraft();
