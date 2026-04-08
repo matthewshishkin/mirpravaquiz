@@ -1120,18 +1120,21 @@ async function sendFbLead(phone, eventSourceUrl) {
 
   // Server-side CAPI — стреляет здесь, браузерный Lead — на thank-you странице
   try {
+    const testEventCode = new URLSearchParams(window.location.search).get('fb_test') || '';
+    const capiBody = {
+      eventName: 'Lead',
+      eventId,
+      phone: phone || '',
+      eventSourceUrl: eventSourceUrl || window.location.href,
+      fbp: _fbp || '',
+      fbc: _fbc || '',
+      clientUserAgent: navigator.userAgent || '',
+    };
+    if (testEventCode) capiBody.testEventCode = testEventCode;
     await fetch(FB_CAPI_URL, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        eventName: 'Lead',
-        eventId,
-        phone: phone || '',
-        eventSourceUrl: eventSourceUrl || window.location.href,
-        fbp: _fbp || '',
-        fbc: _fbc || '',
-        clientUserAgent: navigator.userAgent || '',
-      }),
+      body: JSON.stringify(capiBody),
     });
   } catch (_) {}
 }

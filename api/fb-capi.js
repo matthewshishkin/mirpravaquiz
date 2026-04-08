@@ -50,7 +50,7 @@ module.exports = async function handler(req, res) {
     return res.status(400).json({ ok: false, error: 'Invalid JSON' });
   }
 
-  const { eventName = 'Lead', eventId, phone, eventSourceUrl, fbp, fbc, clientUserAgent } = body || {};
+  const { eventName = 'Lead', eventId, phone, eventSourceUrl, fbp, fbc, clientUserAgent, testEventCode } = body || {};
 
   const userData = {};
   if (phone) {
@@ -74,13 +74,16 @@ module.exports = async function handler(req, res) {
   if (eventSourceUrl) event.event_source_url = String(eventSourceUrl);
   if (eventId) event.event_id = String(eventId);
 
+  const payload = { data: [event] };
+  if (testEventCode) payload.test_event_code = String(testEventCode);
+
   const url = `https://graph.facebook.com/v19.0/${FB_PIXEL_ID}/events?access_token=${FB_ACCESS_TOKEN}`;
   let fbRes, fbData;
   try {
     fbRes = await fetch(url, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ data: [event] }),
+      body: JSON.stringify(payload),
     });
     fbData = await fbRes.json().catch(() => ({}));
   } catch (err) {
