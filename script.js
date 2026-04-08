@@ -1097,6 +1097,47 @@ const WHATSAPP_QUIZ_URL = 'https://linktw.in/ocjIoY';
 
 /** Прокси на Vercel (без CORS): POST JSON { text, utm } → HTML + спойлер UTM, счётчики на сервере */
 const TELEGRAM_PROXY_URL = '/api/send-telegram';
+const FB_CAPI_URL = '/api/fb-capi';
+
+function getFbCookies() {
+  const cookies = {};
+  try {
+    document.cookie.split(';').forEach((c) => {
+      const [k, v] = c.trim().split('=');
+      if (k === '_fbp' || k === '_fbc') cookies[k] = decodeURIComponent(v || '');
+    });
+  } catch (_) {}
+  return cookies;
+}
+
+async function sendFbLead(phone, eventSourceUrl) {
+  const eventId = `lead_${Date.now()}_${Math.random().toString(36).slice(2, 8)}`;
+  const { _fbp, _fbc } = getFbCookies();
+
+  // Browser pixel (deduplication via eventID)
+  try {
+    if (typeof fbq === 'function') {
+      fbq('track', 'Lead', {}, { eventID: eventId });
+    }
+  } catch (_) {}
+
+  // Server-side CAPI
+  try {
+    await fetch(FB_CAPI_URL, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        eventName: 'Lead',
+        eventId,
+        phone: phone || '',
+        eventSourceUrl: eventSourceUrl || window.location.href,
+        fbp: _fbp || '',
+        fbc: _fbc || '',
+        clientUserAgent: navigator.userAgent || '',
+      }),
+    });
+  } catch (_) {}
+}
 
 function getQuizStepQuestionTitle(stepNum) {
   const stepEl = document.getElementById(`step${stepNum}`);
@@ -1732,7 +1773,9 @@ async function onQuizWhatsAppCtaClick(e) {
   }
 
   try {
+    const leadFields = getLeadFormFields(form);
     await sendQuizLeadToTelegram(form);
+    sendFbLead(leadFields.phone, getPageUrlForLead());
     quizClearDraft();
     redirectToThankYouPage();
   } catch (err) {

@@ -3,6 +3,9 @@
   "functions": {
     "api/send-telegram.js": {
       "maxDuration": 15
+    },
+    "api/fb-capi.js": {
+      "maxDuration": 10
     }
   }
 }
