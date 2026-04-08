@@ -16,6 +16,25 @@
   </script>
   <noscript><div><img src="https://mc.yandex.ru/watch/108406715" style="position:absolute; left:-9999px;" alt="" /></div></noscript>
   <!-- /Yandex.Metrika counter -->
+  <!-- Meta Pixel Code -->
+  <script>
+    !function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+    n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;
+    n.push=n;n.loaded=!0;n.version='2.0';n.queue=[];t=b.createElement(e);t.async=!0;
+    t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}(window,
+    document,'script','https://connect.facebook.net/en_US/fbevents.js');
+    fbq('init', '1310562527616357');
+    fbq('track', 'PageView');
+    (function() {
+      var eid = '';
+      try { eid = sessionStorage.getItem('fb_lead_event_id') || ''; } catch(_) {}
+      fbq('track', 'Lead', {}, eid ? { eventID: eid } : {});
+      try { sessionStorage.removeItem('fb_lead_event_id'); } catch(_) {}
+    })();
+  </script>
+  <noscript><img height="1" width="1" style="display:none"
+    src="https://www.facebook.com/tr?id=1310562527616357&ev=PageView&noscript=1"/></noscript>
+  <!-- End Meta Pixel Code -->
   <title>Өтініш қабылданды — Мир Права</title>
   <link rel="stylesheet" href="style.css?v=259" />
   <link rel="stylesheet" href="thank-you.css?v=2" />

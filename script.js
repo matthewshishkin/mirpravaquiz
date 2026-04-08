@@ -1114,14 +1114,11 @@ async function sendFbLead(phone, eventSourceUrl) {
   const eventId = `lead_${Date.now()}_${Math.random().toString(36).slice(2, 8)}`;
   const { _fbp, _fbc } = getFbCookies();
 
-  // Browser pixel (deduplication via eventID)
-  try {
-    if (typeof fbq === 'function') {
-      fbq('track', 'Lead', {}, { eventID: eventId });
-    }
-  } catch (_) {}
+  // Сохраняем event_id — thank-you страница использует его для браузерного Lead
+  // (дедупликация с CAPI по одному event_id)
+  try { sessionStorage.setItem('fb_lead_event_id', eventId); } catch (_) {}
 
-  // Server-side CAPI
+  // Server-side CAPI — стреляет здесь, браузерный Lead — на thank-you странице
   try {
     await fetch(FB_CAPI_URL, {
       method: 'POST',
